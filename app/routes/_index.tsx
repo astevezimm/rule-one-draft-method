@@ -1,11 +1,13 @@
 import {ChangeEvent, MouseEvent, useState} from 'react'
 import {Form} from '@remix-run/react'
-import {ActionFunctionArgs} from '@remix-run/node'
+import {ActionFunctionArgs, redirect} from '@remix-run/node'
+import {startDraft} from '~/data/data.server'
 
 export async function action({request}: ActionFunctionArgs) {
-  const body = await request.formData()
-  console.log(body)
-  return null
+  const formData = await request.formData()
+  const body = Object.fromEntries(formData.entries())
+  const gameId = await startDraft(body)
+  return redirect(`/${gameId}`)
 }
 
 type Map = {
