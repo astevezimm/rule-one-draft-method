@@ -18,6 +18,7 @@ type Map = {
 export default function StartPage() {
   const [playerNames, setPlayerNames] = useState<string[]>(["", "", ""])
   const [maps, setMaps] = useState<Map[]>([{name: "Map 1", url: ""}])
+  const [checkboxError, setCheckboxError] = useState<string | null>(null)
   
   function handleChangePlayerName(event: ChangeEvent<HTMLInputElement>) {
     const newNames = [...playerNames]
@@ -52,6 +53,15 @@ export default function StartPage() {
     newMaps.splice(Number((event.target as HTMLButtonElement).dataset.index), 1)
     setMaps(newMaps)
   }
+
+  function validateCheckboxes(event: MouseEvent<HTMLButtonElement>) {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#keleres)')
+    const isChecked = Array.from(checkboxes).some(checkbox => (checkbox as HTMLInputElement).checked)
+    if (!isChecked) {
+      event.preventDefault()
+      setCheckboxError('At least one race type must be selected beyond Keleres.')
+    } else if (checkboxError) setCheckboxError(null)
+  }
   
   return (
     <>
@@ -72,6 +82,7 @@ export default function StartPage() {
                     value={name}
                     data-index={index}
                     onChange={handleChangePlayerName}
+                    required
                   />
                   {index >= 3 && (
                     <button type="button" data-index={index} onClick={handleRemovePlayer}>
@@ -91,6 +102,7 @@ export default function StartPage() {
         
         <h2>Included Factions</h2>
         <section>
+          {checkboxError && <p style={{color: 'red'}}>{checkboxError}</p>}
           <IncludeRaceType name='Base' id='base' />
           <IncludeRaceType name='Prohecy of Kings' id='pok' />
           <IncludeRaceType name='Keleres' id='keleres' />
@@ -99,7 +111,7 @@ export default function StartPage() {
         </section>
         
         <h2>Faction Drafting Pool Size</h2>
-        <input type="number" min={playerNames.length} name="factionPoolSize" />
+        <input type="number" min={playerNames.length} name="factionPoolSize" required />
 
         <h2>Maps</h2>
         <section>
@@ -117,6 +129,7 @@ export default function StartPage() {
                   value={map.name}
                   data-index={index}
                   onChange={handleChangeMapName}
+                  required
                 />
                 <label htmlFor={`map-url-${index}`}>URL</label>
                 <input
@@ -126,6 +139,7 @@ export default function StartPage() {
                   value={map.url}
                   data-index={index}
                   onChange={handleChangeMapUrl}
+                  required
                 />
                 {index >= 1 && (
                   <button type="button" data-index={index} onClick={handleRemoveMap}>
@@ -140,7 +154,7 @@ export default function StartPage() {
           </button>
         </section>
 
-        <button type='submit'>Start Draft</button>
+        <button type='submit' onClick={validateCheckboxes}>Start Draft</button>
       </Form>
     </>
   )
