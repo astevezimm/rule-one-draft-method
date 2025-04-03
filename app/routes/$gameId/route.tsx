@@ -1,10 +1,13 @@
+import {useEffect, useState} from 'react'
 import {LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
+import {loadDraft} from '~/data/data.server'
+import {isPlayerSelected, PlayerSelected} from '~/global'
 import VotingPage from './VotingPage'
 import BanningPage from './BanningPage'
 import SnakeDraftPage from './SnakeDraftPage'
 import ErrorPage from './ErrorPage'
-import {loadDraft} from '~/data/data.server'
+import Players from './Players'
 
 export const loader : LoaderFunction = async ({params}: LoaderFunctionArgs) => {
   const draft = await loadDraft(params.gameId)
@@ -12,12 +15,42 @@ export const loader : LoaderFunction = async ({params}: LoaderFunctionArgs) => {
   return Response.json(draft)
 }
 
-export default function DraftPage() {
+export default function DraftPage(){
+  const [playerSelected, setPlayerSelected] = useState<PlayerSelected>('loading')
+  const {gameId} = useLoaderData() as {gameId: string}
+  const playerSelectedKey = `${gameId}-playerSelected`
+  
+  useEffect(()=>{
+    if (playerSelected === 'loading') {
+      const localPlayerSelected = localStorage.getItem(playerSelectedKey)
+      if (isPlayerSelected(localPlayerSelected)) setPlayerSelected(localPlayerSelected)
+      else {
+        setPlayerSelected('no')
+        localStorage.setItem(playerSelectedKey, 'no')
+      }
+    }
+  }, [])
+  
+  function handleSelectPlayer() {
+    setPlayerSelected('yes')
+    localStorage.setItem(playerSelectedKey, 'yes')
+  }
+  
+  return (
+    <>
+      <Players playerSelected={playerSelected} onSelectPlayer={handleSelectPlayer} />
+      <DraftPageContent playerSelected={playerSelected} />
+    </>
+  )
+}
+
+function DraftPageContent({playerSelected}: {playerSelected: PlayerSelected})
+{
   const {state} = useLoaderData() as {state: string}
   switch (state) {
-    case 'voting': return <VotingPage />
-    case 'banning': return <BanningPage />
-    case 'drafting': return <SnakeDraftPage />
+    case 'voting': return <VotingPage playerSelected={playerSelected} />
+    case 'banning': return <BanningPage playerSelected={playerSelected} />
+    case 'drafting': return <SnakeDraftPage playerSelected={playerSelected} />
     default: return <ErrorPage />
   }
 }

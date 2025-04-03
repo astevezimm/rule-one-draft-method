@@ -1,6 +1,7 @@
 import {config} from 'dotenv'
 import mongoose from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
+import {Player, Map} from '~/global'
 
 config()
 mongoose.connect(process.env.DB_URL as string)
@@ -21,27 +22,22 @@ const gameSchema = new mongoose.Schema({
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
 
 export async function startDraft(data: Record<string, any>) {
-  const players: string[] = []
-  const maps: { name: string; url: string }[] = []
+  const players: Player[] = []
+  const maps: Map[] = []
 
   Object.entries(data).forEach(([key, value]) => {
     if (key.startsWith('player-')) {
-      players.push(value.toString());
+      players.push({ name: value.toString(), mapVote: -1 })
     } else if (key.startsWith('map-name-')) {
       const index = +key.split('-')[2];
-      maps[index] = maps[index] || { name: '', url: '' };
-      maps[index].name = value.toString();
+      maps[index] = maps[index] || { name: '', url: '', votes: 0 }
+      maps[index].name = value.toString()
     } else if (key.startsWith('map-url-')) {
       const index = +key.split('-')[2];
-      maps[index] = maps[index] || { name: '', url: '' };
-      maps[index].url = value.toString();
+      maps[index] = maps[index] || { name: '', url: '', votes: 0 }
+      maps[index].url = value.toString()
     }
   })
-  
-  console.log(data)
-  console.log(data.factionPoolSize)
-  console.log(players)
-  console.log(maps)
   
   const gameData = {
     players,
@@ -72,6 +68,7 @@ export async function loadDraft(gameId: string | undefined) {
     keleres: game.keleres,
     ds: game.ds,
     dsplus: game.dsplus,
-    factionPoolSize: game.factionPoolSize
+    factionPoolSize: game.factionPoolSize,
+    gameId
   }
 }
