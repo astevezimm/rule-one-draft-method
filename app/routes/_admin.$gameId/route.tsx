@@ -2,7 +2,8 @@ import {useEffect, useState} from 'react'
 import {LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import {loadDraft} from '~/data/data.server'
-import {isPlayerSelected, PlayerSelected} from '~/global'
+import {isPlayerSelected, pageHeading, PlayerSelected} from '~/global'
+import {useAdmin} from '~/routes/_admin'
 import VotingPage from './VotingPage'
 import BanningPage from './BanningPage'
 import SnakeDraftPage from './SnakeDraftPage'
@@ -19,14 +20,22 @@ export default function DraftPage(){
   const [playerSelected, setPlayerSelected] = useState<PlayerSelected>('loading')
   const {gameId} = useLoaderData() as {gameId: string}
   const playerSelectedKey = `${gameId}-playerSelected`
+  const {admin} = useAdmin()
   
   useEffect(()=>{
     if (playerSelected === 'loading') {
-      const localPlayerSelected = localStorage.getItem(playerSelectedKey)
-      if (isPlayerSelected(localPlayerSelected)) setPlayerSelected(localPlayerSelected)
+      if (admin) {
+        setPlayerSelected('yes')
+        localStorage.setItem(playerSelectedKey, 'yes')
+        localStorage.setItem("gameid", gameId)
+      }
       else {
-        setPlayerSelected('no')
-        localStorage.setItem(playerSelectedKey, 'no')
+        const localPlayerSelected = localStorage.getItem(playerSelectedKey)
+        if (isPlayerSelected(localPlayerSelected)) setPlayerSelected(localPlayerSelected)
+        else {
+          setPlayerSelected('no')
+          localStorage.setItem(playerSelectedKey, 'no')
+        }
       }
     }
   }, [])
@@ -38,6 +47,7 @@ export default function DraftPage(){
   
   return (
     <>
+      <h1>{pageHeading}</h1>
       <Players playerSelected={playerSelected} onSelectPlayer={handleSelectPlayer} />
       <DraftPageContent playerSelected={playerSelected} />
     </>

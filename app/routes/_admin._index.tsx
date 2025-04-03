@@ -2,6 +2,8 @@ import {ChangeEvent, MouseEvent, useState} from 'react'
 import {Form} from '@remix-run/react'
 import {ActionFunctionArgs, redirect} from '@remix-run/node'
 import {startDraft} from '~/data/data.server'
+import {pageHeading} from '~/global'
+import {useAdmin} from '~/routes/_admin'
 
 export async function action({request}: ActionFunctionArgs) {
   const formData = await request.formData()
@@ -19,6 +21,7 @@ export default function StartPage() {
   const [playerNames, setPlayerNames] = useState<string[]>(["", "", ""])
   const [maps, setMaps] = useState<Map[]>([{name: "Map 1", url: ""}])
   const [checkboxError, setCheckboxError] = useState<string | null>(null)
+  const {setAdmin} = useAdmin()
   
   function handleChangePlayerName(event: ChangeEvent<HTMLInputElement>) {
     const newNames = [...playerNames]
@@ -53,6 +56,11 @@ export default function StartPage() {
     newMaps.splice(Number((event.target as HTMLButtonElement).dataset.index), 1)
     setMaps(newMaps)
   }
+  
+  function handleSubmit(event: MouseEvent<HTMLButtonElement>) {
+    if (!validateCheckboxes(event)) return
+    setAdmin(true)
+  }
 
   function validateCheckboxes(event: MouseEvent<HTMLButtonElement>) {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#keleres)')
@@ -60,12 +68,17 @@ export default function StartPage() {
     if (!isChecked) {
       event.preventDefault()
       setCheckboxError('At least one race type must be selected beyond Keleres.')
-    } else if (checkboxError) setCheckboxError(null)
+      return false
+    }
+    else {
+      if (checkboxError) setCheckboxError(null)
+      return true
+    }
   }
   
   return (
     <>
-      <h1>Welcome to the Rule One Draft Method</h1>
+      <h1>{pageHeading}</h1>
       <Form method="post">
         <h2>Players</h2>
         <section>
@@ -83,6 +96,7 @@ export default function StartPage() {
                     data-index={index}
                     onChange={handleChangePlayerName}
                     required
+                    placeholder={index === 0 ? "Admin: your name here." : ""}
                   />
                   {index >= 3 && (
                     <button type="button" data-index={index} onClick={handleRemovePlayer}>
@@ -154,7 +168,7 @@ export default function StartPage() {
           </button>
         </section>
 
-        <button type='submit' onClick={validateCheckboxes}>Start Draft</button>
+        <button type='submit' onClick={handleSubmit}>Start Draft</button>
       </Form>
     </>
   )

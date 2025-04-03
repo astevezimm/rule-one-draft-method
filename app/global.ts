@@ -9,8 +9,10 @@ export type Player = {
   mapVote: number
 }
 
-export type PlayerSelected = 'yes' | 'no' | 'loading'
+export type PlayerSelected = 'yes' | 'no' | 'loading' | 'admin'
 
 export function isPlayerSelected(value: any): value is PlayerSelected {
-  return value === 'yes' || value === 'no' || value === 'loading';
+  return value === 'yes' || value === 'no' || value === 'loading' || value === 'admin'
 }
+
+export const pageHeading = "Welcome to the Rule One Draft Method"
