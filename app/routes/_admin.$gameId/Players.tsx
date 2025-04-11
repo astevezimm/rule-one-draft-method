@@ -1,5 +1,6 @@
 import {useLoaderData} from '@remix-run/react'
 import {Player, PlayerSelected} from '~/global'
+import {useEffect, useState} from 'react'
 
 type PlayersProps = {
   playerSelected: PlayerSelected
@@ -7,7 +8,35 @@ type PlayersProps = {
 }
 
 export default function Players({playerSelected, onSelectPlayer}: PlayersProps) {
-  const {players} = useLoaderData() as {players: Player[]}
+  const {players, gameId} = useLoaderData() as {players: Player[], gameId: string}
+  const [selectedPlayer, setSelectedPlayer] = useState<string | null>(
+    playerSelected === 'admin' ? players[0].id : null
+  )
   
-  return null
+  useEffect(() => {
+    if (['admin', 'yes'].includes(playerSelected) && !selectedPlayer) {
+      setSelectedPlayer(localStorage.getItem(`${gameId}-player`))
+    }
+  }, [playerSelected, selectedPlayer])
+  
+  function handleClick(player: Player) {
+    setSelectedPlayer(player.id)
+    onSelectPlayer(player)
+  }
+
+  return (
+    <ul>
+      {players.map(player => (
+        <li key={player.id}>
+          <button
+            disabled={['admin', 'yes'].includes(playerSelected)}
+            onClick={() => handleClick(player)}
+            className={player.id === selectedPlayer ? 'selected' : ''}
+          >
+            {player.name}
+          </button>
+        </li>
+      ))}
+    </ul>
+  )
 }

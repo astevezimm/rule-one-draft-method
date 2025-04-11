@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import {loadDraft} from '~/data/data.server'
-import {isPlayerSelected, pageHeading, PlayerSelected} from '~/global'
+import {isPlayerSelected, pageHeading, Player, PlayerSelected} from '~/global'
 import {useAdmin} from '~/routes/_admin'
 import VotingPage from './VotingPage'
 import BanningPage from './BanningPage'
@@ -18,8 +18,9 @@ export const loader : LoaderFunction = async ({params}: LoaderFunctionArgs) => {
 
 export default function DraftPage(){
   const [playerSelected, setPlayerSelected] = useState<PlayerSelected>('loading')
-  const {gameId} = useLoaderData() as {gameId: string}
+  const {gameId, players} = useLoaderData() as {gameId: string, players: Player[]}
   const playerSelectedKey = `${gameId}-playerSelected`
+  const playerKey = `${gameId}-player`
   const {admin} = useAdmin()
   
   useEffect(()=>{
@@ -28,6 +29,7 @@ export default function DraftPage(){
         setPlayerSelected('yes')
         localStorage.setItem(playerSelectedKey, 'yes')
         localStorage.setItem("gameid", gameId)
+        localStorage.setItem(playerKey, players[0].id)
       }
       else {
         const localPlayerSelected = localStorage.getItem(playerSelectedKey)
@@ -40,9 +42,10 @@ export default function DraftPage(){
     }
   }, [])
   
-  function handleSelectPlayer() {
+  function handleSelectPlayer(player: Player) {
     setPlayerSelected('yes')
     localStorage.setItem(playerSelectedKey, 'yes')
+    localStorage.setItem(playerKey, player.id)
   }
   
   return (

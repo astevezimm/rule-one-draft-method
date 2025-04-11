@@ -7,6 +7,7 @@ export type Map = {
 export type Player = {
   name: string
   mapVote: number
+  id: string
 }
 
 export type PlayerSelected = 'yes' | 'no' | 'loading' | 'admin'
