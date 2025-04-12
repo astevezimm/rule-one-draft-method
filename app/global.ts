@@ -17,3 +17,4 @@ export function isPlayerSelected(value: any): value is PlayerSelected {
 }
 
 export const pageHeading = "Welcome to the Rule One Draft Method"
+export const playerKey = (gameId: string) => `${gameId}-player`

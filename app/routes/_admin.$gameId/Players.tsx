@@ -1,5 +1,5 @@
 import {useLoaderData} from '@remix-run/react'
-import {Player, PlayerSelected} from '~/global'
+import {Player, playerKey, PlayerSelected} from '~/global'
 import {useEffect, useState} from 'react'
 
 type PlayersProps = {
@@ -15,7 +15,7 @@ export default function Players({playerSelected, onSelectPlayer}: PlayersProps) 
   
   useEffect(() => {
     if (['admin', 'yes'].includes(playerSelected) && !selectedPlayer) {
-      setSelectedPlayer(localStorage.getItem(`${gameId}-player`))
+      setSelectedPlayer(localStorage.getItem(playerKey(gameId)))
     }
   }, [playerSelected, selectedPlayer])
   
