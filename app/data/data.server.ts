@@ -16,7 +16,8 @@ const gameSchema = new mongoose.Schema({
   keleres: Boolean,
   ds: Boolean,
   dsplus: Boolean,
-  factionPoolSize: Number
+  factionPoolSize: Number,
+  initiativeSet: Boolean
 })
 
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
@@ -39,16 +40,21 @@ export async function startDraft(data: Record<string, any>) {
     }
   })
   
+  const state = maps.length > 1 ? "voting" : (+data.factionPoolSize > players.length ? "banning" : "drafting")
+  
+  if (state !== 'voting') players.sort(() => Math.random() - 0.5)
+  
   const gameData = {
     players,
     maps,
-    state: maps.length > 1 ? "voting" : (+data.factionPoolSize > players.length ? "banning" : "drafting"),
+    state,
     base: !!data.base,
     pok: !!data.pok,
     keleres: !!data.keleres,
     ds: !!data.ds,
     dsplus: !!data.dsplus,
-    factionPoolSize: +data.factionPoolSize
+    factionPoolSize: +data.factionPoolSize,
+    initiativeSet: state !== 'voting'
   }
   
   const game = new Game(gameData)
@@ -71,4 +77,12 @@ export async function loadDraft(gameId: string | undefined) {
     factionPoolSize: game.factionPoolSize,
     gameId
   }
+}
+
+export async function setInitiative(gameId: string | undefined) {
+  const game = await Game.findOne({ gameId })
+  if (!game || game.initiativeSet) return
+  game.initiativeSet = true
+  game.players.sort(() => Math.random() - 0.5)
+  await game.save()
 }
