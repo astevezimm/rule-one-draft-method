@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-image: linear-gradient(to left, darkmagenta, black);
+    color: white;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: yellow;
+    font-family: "Roboto", sans-serif;
+}
+
+h1 {
+    text-align: center;
+    margin: 1rem;
+}
+
+a {
+    color: yellow;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.map input {
+    margin-right: 1.5rem;
+}
+
+button {
+    cursor: pointer;
+    transition: all 100ms;
+    &:hover {
+        background-color: darkgray;
+    }
+}

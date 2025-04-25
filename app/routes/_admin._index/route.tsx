@@ -4,6 +4,12 @@ import {ActionFunctionArgs, redirect} from '@remix-run/node'
 import {startDraft} from '~/data/data.server'
 import {pageHeading} from '~/global'
 import {useAdmin} from '~/routes/_admin'
+import { LinksFunction } from "@remix-run/node"
+import styles from "./start_page.css?url"
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: styles }]
+}
 
 export async function action({request}: ActionFunctionArgs) {
   const formData = await request.formData()
@@ -108,14 +114,14 @@ export default function StartPage() {
             })}
           </ul>
           {playerNames.length < 8 && (
-            <button type="button" onClick={() => setPlayerNames([...playerNames, ""])}>
+            <button type="button" className="add" onClick={() => setPlayerNames([...playerNames, ""])}>
               Add Player
             </button>
           )}
         </section>
         
         <h2>Included Factions</h2>
-        <section>
+        <section className="factions">
           {checkboxError && <p style={{color: 'red'}}>{checkboxError}</p>}
           <IncludeRaceType name='Base' id='base' />
           <IncludeRaceType name='Prohecy of Kings' id='pok' />
@@ -134,7 +140,7 @@ export default function StartPage() {
           </a>
           <ul>
             {maps.map((map, index) => (
-              <li key={`map-${index}`}>
+              <li key={`map-${index}`} className="map">
                 <label htmlFor={`map-name-${index}`}>Name</label>
                 <input
                   type="text"
@@ -163,7 +169,10 @@ export default function StartPage() {
               </li>
             ))}
           </ul>
-          <button type="button" onClick={() => setMaps([...maps, {name: `Map ${maps.length + 1}`, url: ""}])}>
+          <button
+            type="button" className="add"
+            onClick={() => setMaps([...maps, {name: `Map ${maps.length + 1}`, url: ""}])}
+          >
             Add Map
           </button>
         </section>
