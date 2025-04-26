@@ -14,17 +14,19 @@ export const links: LinksFunction = () => {
 export async function action({request}: ActionFunctionArgs) {
   const formData = await request.formData()
   const body = Object.fromEntries(formData.entries())
-  const gameId = await startDraft(body)
+  const gameId = body.continue ? body.continue : await startDraft(body)
   return redirect(`/${gameId}`)
 }
 
 export default function StartPage() {
   const [mode, setMode] = useState<'pending'|'nogameid'|'gameid'>('pending')
+  const [gameId, setGameId] = useState<string | null>(null)
   
   useEffect(() => {
     const gameId = localStorage.getItem('gameid')
     if (gameId) {
       setMode('gameid')
+      setGameId(gameId)
     } else {
       setMode('nogameid')
     }
@@ -41,7 +43,7 @@ export default function StartPage() {
       {
         mode === 'pending' ? <h2>Loading...</h2> :
         mode === 'nogameid' ? <StartDraftForm /> :
-          <ContinueDraftForm onStartNewDraft={handleStartNewDraft} />
+          <ContinueDraftForm onStartNewDraft={handleStartNewDraft} gameid={gameId as string} />
     } </>
   )
 }
