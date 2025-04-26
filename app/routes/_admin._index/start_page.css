@@ -34,10 +34,19 @@ input[type="checkbox"] {
     max-width: 25rem;
 }
 
-button[type="submit"] {
+button[type="submit"], .cont-draft-btns button {
     display: block;
-    margin: 0 auto;
     font-size: 1.2rem;
     padding: .5rem;
     border-radius: 10px;
+}
+
+.start-draft-btn {
+    margin: 0 auto;
+}
+
+.cont-draft-btns {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
 }
