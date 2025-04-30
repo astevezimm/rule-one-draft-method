@@ -40,6 +40,7 @@ export default function StartPage() {
   return (
     <>
       <h1>{pageHeading}</h1>
+      <h2>For Twilight Imperium 4th edition. Rule One is an inside joke of my gaming group.</h2>
       {
         mode === 'pending' ? <h2>Loading...</h2> :
         mode === 'nogameid' ? <StartDraftForm /> :

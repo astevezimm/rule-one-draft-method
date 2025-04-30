@@ -13,6 +13,13 @@ body {
     color: white;
 }
 
+.banner {
+    color: black;
+    background-color: coral;
+    padding: .5rem;
+    text-align: center;
+}
+
 h1,h2,h3,h4,h5,h6 {
     color: yellow;
     font-family: "Roboto", sans-serif;
@@ -21,6 +28,12 @@ h1,h2,h3,h4,h5,h6 {
 h1 {
     text-align: center;
     margin: 1rem;
+}
+
+body > h2 {
+    text-align: center;
+    color: white;
+    font-size: 1.2rem;
 }
 
 a {

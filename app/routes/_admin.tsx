@@ -9,6 +9,7 @@ export default function Admin() {
   
   return (
     <AdminContext.Provider value={{admin, setAdmin}}>
+      <p className="banner">This site is very much a work in progress</p>
       <Outlet />
     </AdminContext.Provider>
   )
