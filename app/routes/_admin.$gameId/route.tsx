@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
+import {LinksFunction, LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import {loadDraft} from '~/data/data.server'
 import {isPlayerSelected, pageHeading, Player, playerKey, PlayerSelected} from '~/global'
@@ -9,6 +9,11 @@ import BanningPage from './BanningPage'
 import SnakeDraftPage from './SnakeDraftPage'
 import ErrorPage from './ErrorPage'
 import Players from './Players'
+import styles from './draft.css?url'
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: styles }]
+}
 
 export const loader : LoaderFunction = async ({params}: LoaderFunctionArgs) => {
   const draft = await loadDraft(params.gameId)

@@ -25,7 +25,7 @@ export default function Players({playerSelected, onSelectPlayer}: PlayersProps) 
   }
 
   return (
-    <ul>
+    <ul className="players">
       {players.map(player => (
         <li key={player.id}>
           <button

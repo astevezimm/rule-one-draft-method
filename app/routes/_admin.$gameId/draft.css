@@ -1,0 +1,52 @@
+.players {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 2rem;
+    row-gap: 1rem;
+    align-items: center;
+    background-color: darkmagenta;
+    width: fit-content;
+    margin: 0 auto 2rem;
+    padding: 1rem 2rem;
+    border-radius: 20px;
+    box-shadow: -4px -4px 40px rgba(255, 255, 0, 0.3) inset;
+    & button {
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 1rem;
+        padding: .4rem .5rem;
+        background-color: beige;
+        &:hover {
+            background-color: darkgray;
+        }
+        &:disabled {
+            cursor: default;
+            background-color: beige;
+            color: black;
+            border-color: black;
+            &.selected {
+                background-color: yellow;
+            }
+        }
+    }
+}
+
+.players:before {
+    content: 'Players:';
+    font-family: "Roboto", sans-serif;
+    font-size: 1.2rem;
+}
+
+.players:not(:has(.selected)) {
+    position: relative;
+    padding-bottom: 3.5rem;
+}
+
+.players:not(:has(.selected)):after {
+    content: 'Select yourself from the list';
+    position: absolute;
+    color: yellow;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
