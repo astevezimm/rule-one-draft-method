@@ -9,7 +9,7 @@ mongoose.connect(process.env.DB_URL as string)
 const gameSchema = new mongoose.Schema({
   gameId: { type: String, default: uuidv4 },
   players: Array,
-  maps: Array,
+  maps: [{ name: String, url: String, votes: Number, image: { type: Buffer, default: null } }],
   state: String,
   base: Boolean,
   pok: Boolean,
@@ -31,11 +31,11 @@ export async function startDraft(data: Record<string, any>) {
       players.push({ name: value.toString(), mapVote: -1, id: uuidv4() })
     } else if (key.startsWith('map-name-')) {
       const index = +key.split('-')[2];
-      maps[index] = maps[index] || { name: '', url: '', votes: 0 }
+      maps[index] = maps[index] || { name: '', url: '', votes: 0, image: null }
       maps[index].name = value.toString()
     } else if (key.startsWith('map-url-')) {
       const index = +key.split('-')[2];
-      maps[index] = maps[index] || { name: '', url: '', votes: 0 }
+      maps[index] = maps[index] || { name: '', url: '', votes: 0, image: null }
       maps[index].url = value.toString()
     }
   })

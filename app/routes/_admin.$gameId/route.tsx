@@ -55,6 +55,7 @@ export default function DraftPage(){
   return (
     <>
       <h1>{pageHeading}</h1>
+      <h2>Share the current URL with players participating in the draft</h2>
       <Players playerSelected={playerSelected} onSelectPlayer={handleSelectPlayer} />
       <DraftPageContent playerSelected={playerSelected} />
     </>

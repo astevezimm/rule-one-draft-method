@@ -2,6 +2,7 @@ export type Map = {
   name: string
   url: string
   votes: number
+  image: Uint8Array<ArrayBufferLike> | null
 }
 
 export type Player = {
