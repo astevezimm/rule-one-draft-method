@@ -1,10 +1,6 @@
 form {
-    background-color: darkmagenta;
     width: fit-content;
     margin: 0 auto;
-    padding: 1rem;
-    border-radius: 20px;
-    box-shadow: -4px -4px 40px rgba(255, 255, 0, 0.3) inset;
 }
 
 h2 {

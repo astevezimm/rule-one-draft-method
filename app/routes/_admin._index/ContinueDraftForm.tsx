@@ -2,7 +2,7 @@ import {Form} from '@remix-run/react'
 
 export default function ContinueDraftForm({onStartNewDraft, gameid}: {onStartNewDraft: () => void, gameid: string}) {
   return (
-    <Form method="post">
+    <Form method="post" className="card">
       <h2>You have an existing draft. Continue this one or Start a new draft?</h2>
       <div className="cont-draft-btns">
         <button type="submit" name="continue" value={gameid}>Continue</button>

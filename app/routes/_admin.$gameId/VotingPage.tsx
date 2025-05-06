@@ -7,5 +7,24 @@ export default function VotingPage({playerSelected}: {playerSelected: PlayerSele
   
   const {maps, players} = useLoaderData() as {maps: Map[], players: Player}
   
-  return "voting page"
+  return (
+    <div className="map-vote main-section card">
+      <h2>Vote for a Map</h2>
+      <ul>
+        {maps.map((map, index) => (
+          <li key={`map-${index}`}>
+            <h3>{map.name}</h3>
+            <h4>Votes: {map.votes}</h4>
+            <a href={map.url} target="_blank" rel="noopener noreferrer">
+              {map.image ?
+                <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} /> :
+                <div className="map-image-placeholder" />
+              }
+            </a>
+            <button>Vote</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }

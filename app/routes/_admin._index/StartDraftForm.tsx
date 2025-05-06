@@ -118,7 +118,7 @@ export default function StartDraftForm() {
 
   return (
     <>
-      <Form method="post">
+      <Form method="post" className="card">
         <h2>Players</h2>
         <section>
           <ul>
