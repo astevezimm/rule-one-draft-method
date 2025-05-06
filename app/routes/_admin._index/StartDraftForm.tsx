@@ -5,6 +5,7 @@ import {Form} from '@remix-run/react'
 type Map = {
   name: string,
   url: string,
+  image?: ArrayBuffer | null
 }
 
 export default function StartDraftForm() {
@@ -39,6 +40,55 @@ export default function StartDraftForm() {
       ...newMaps[Number(event.target.dataset.index)], url: event.target.value
     }
     setMaps(newMaps)
+  }
+
+  function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const img = new Image()
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          const ctx = canvas.getContext('2d')
+          if (!ctx) return
+
+          const maxSize = 800
+          let width = img.width;
+          let height = img.height;
+          if (width > maxSize || height > maxSize) {
+            if (width > height) {
+              height = (maxSize / width) * height;
+              width = maxSize;
+            } else {
+              width = (maxSize / height) * width;
+              height = maxSize;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            async (blob) => {
+              if (blob) {
+                const arrayBuffer = await blob.arrayBuffer()
+                const newMaps = [...maps];
+                newMaps[Number((event.target as HTMLInputElement).dataset.index)] = {
+                  ...newMaps[Number((event.target as HTMLInputElement).dataset.index)],
+                  image: arrayBuffer,
+                }
+                setMaps(newMaps)
+              }
+            },
+            'image/jpeg',
+            0.5
+          )
+        }
+        img.src = reader.result as string
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   function handleRemoveMap(event: MouseEvent<HTMLButtonElement>) {
@@ -121,7 +171,7 @@ export default function StartDraftForm() {
           <a href="https://keeganw.github.io/ti4/" target="_blank">
             Generate maps here and paste the links below
           </a>
-          <ul>
+          <ul className="maps">
             {maps.map((map, index) => (
               <li key={`map-${index}`} className="map">
                 <label htmlFor={`map-name-${index}`}>Name</label>
@@ -144,8 +194,23 @@ export default function StartDraftForm() {
                   onChange={handleChangeMapUrl}
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => document.getElementById(`map-file-${index}`)?.click()}
+                  title={map.image ? "Update screenshot" : "Upload a screenshot"}
+                >
+                  {map.image ? '✅' : '📷'}
+                </button>
+                <input
+                  type="file"
+                  id={`map-file-${index}`}
+                  style={{ display: 'none' }}
+                  accept="image/*"
+                  data-index={index}
+                  onChange={handleChangeMapImage}
+                />
                 {index >= 1 && (
-                  <button type="button" data-index={index} onClick={handleRemoveMap}>
+                  <button type="button" data-index={index} onClick={handleRemoveMap} className="remove-map">
                     Remove
                   </button>
                 )}

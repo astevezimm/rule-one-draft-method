@@ -35,6 +35,27 @@ input[type="checkbox"] {
     max-width: 25rem;
 }
 
+.maps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 26rem;
+}
+
+.map {
+    max-width: 12rem;
+    border: 1px solid black;
+    padding: .5rem;
+    & input[type="text"] {
+        width: 100%;
+        margin-bottom: .5rem;
+    }
+}
+
+.remove-map {
+    float: right;
+}
+
 button[type="submit"], .cont-draft-btns button {
     display: block;
     font-size: 1.2rem;
