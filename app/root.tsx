@@ -7,9 +7,11 @@ import {
 } from "@remix-run/react"
 import { LinksFunction } from "@remix-run/node"
 import styles from "./index.css?url"
+import Stars from '~/Stars'
+import star_styles from '~/stars.css?url'
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: styles }]
+  return [{ rel: "stylesheet", href: styles }, { rel: "stylesheet", href: star_styles }]
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -22,6 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <Stars />
         {children}
         <ScrollRestoration />
         <Scripts />
