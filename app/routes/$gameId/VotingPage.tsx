@@ -7,7 +7,7 @@ export default function VotingPage({playerSelected}: {playerSelected: PlayerSele
   // admin of draft determines when to move on
   
   const {maps, players} = useLoaderData() as {maps: Map[], players: Player}
-  console.log(maps)
+  console.log(playerSelected)
   
   return (
     <div className="map-vote main-section card">

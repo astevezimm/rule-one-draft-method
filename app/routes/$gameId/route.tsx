@@ -3,7 +3,6 @@ import {LinksFunction, LoaderFunction, LoaderFunctionArgs} from '@remix-run/node
 import {useLoaderData} from '@remix-run/react'
 import {loadDraft} from '~/data/data.server'
 import {isPlayerSelected, pageHeading, Player, playerKey, PlayerSelected} from '~/global'
-import {useAdmin} from '~/routes/_admin'
 import VotingPage from './VotingPage'
 import BanningPage from './BanningPage'
 import SnakeDraftPage from './SnakeDraftPage'
@@ -25,13 +24,13 @@ export default function DraftPage(){
   const [playerSelected, setPlayerSelected] = useState<PlayerSelected>('loading')
   const {gameId, players} = useLoaderData() as {gameId: string, players: Player[]}
   const playerSelectedKey = `${gameId}-playerSelected`
-  const {admin} = useAdmin()
   
   useEffect(()=>{
     if (playerSelected === 'loading') {
-      if (admin) {
-        setPlayerSelected('yes')
-        localStorage.setItem(playerSelectedKey, 'yes')
+      console.log(playerSelected)
+      if (localStorage.getItem('admin') === gameId) {
+        setPlayerSelected('admin')
+        localStorage.setItem(playerSelectedKey, 'admin')
         localStorage.setItem("gameid", gameId)
         localStorage.setItem(playerKey(gameId), players[0].id)
       }

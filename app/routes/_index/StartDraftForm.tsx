@@ -1,5 +1,4 @@
 import {ChangeEvent, MouseEvent, useState} from 'react'
-import {useAdmin} from '~/routes/_admin'
 import {Form} from '@remix-run/react'
 import UploadScreenshot from '~/components/UploadScreenshot'
 import {Buffer} from 'buffer'
@@ -14,7 +13,6 @@ export default function StartDraftForm() {
   const [playerNames, setPlayerNames] = useState<string[]>(["", "", ""])
   const [maps, setMaps] = useState<Map[]>([{name: "Map 1", url: ""}])
   const [checkboxError, setCheckboxError] = useState<string | null>(null)
-  const {setAdmin} = useAdmin()
 
   function handleChangePlayerName(event: ChangeEvent<HTMLInputElement>) {
     const newNames = [...playerNames]
@@ -112,15 +110,15 @@ export default function StartDraftForm() {
         formData.append(`map-image-${i}`, Buffer.from(map.image).toString('base64'))
       }
     }
-    
-    console.log(form.action, form.method)
 
     fetch(form.action, {
       method: form.method,
       body: formData,
     }).then(response => {
-      if (response.redirected) window.location.href = response.url
-      else setAdmin(true)
+      if (response.redirected) {
+        window.location.href = response.url
+        localStorage.setItem('admin', response.url.slice(-36))
+      }
     })
   }
 

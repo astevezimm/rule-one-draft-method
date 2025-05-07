@@ -24,6 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <p className="banner">This site is very much a work in progress</p>
         <Stars />
         {children}
         <ScrollRestoration />
