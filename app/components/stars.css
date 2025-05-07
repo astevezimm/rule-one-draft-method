@@ -2,10 +2,6 @@
     --twinkle-speed: 1; /* Adjust this value to control the twinkling speed */
 }
 
-body {
-    overflow: hidden;
-}
-
 .stars {
     position: fixed;
     top: 0;

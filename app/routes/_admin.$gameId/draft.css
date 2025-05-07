@@ -76,7 +76,8 @@ body > h2 {
         gap: .1rem;
     }
     & img {
-        width: 10rem;
+        width: 100%;
+        max-width: 30rem;
     }
     & button {
         margin: 0 auto;

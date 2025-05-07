@@ -30,13 +30,17 @@ export async function startDraft(data: Record<string, any>) {
     if (key.startsWith('player-')) {
       players.push({ name: value.toString(), mapVote: -1, id: uuidv4() })
     } else if (key.startsWith('map-name-')) {
-      const index = +key.split('-')[2];
+      const index = +key.split('-')[2]
       maps[index] = maps[index] || { name: '', url: '', votes: 0, image: null }
       maps[index].name = value.toString()
     } else if (key.startsWith('map-url-')) {
-      const index = +key.split('-')[2];
+      const index = +key.split('-')[2]
       maps[index] = maps[index] || { name: '', url: '', votes: 0, image: null }
       maps[index].url = value.toString()
+    } else if (key.startsWith('map-image-')) {
+      const index = +key.split('-')[2]
+      maps[index] = maps[index] || {name: '', url: '', votes: 0, image: null}
+      maps[index].image = Buffer.from(value as string, 'base64')
     }
   })
   

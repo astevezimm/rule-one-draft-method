@@ -1,11 +1,13 @@
 import {useLoaderData} from '@remix-run/react'
 import {Map, Player, PlayerSelected} from '~/global'
+import {Buffer} from 'buffer'
 
 export default function VotingPage({playerSelected}: {playerSelected: PlayerSelected}) {
   // button to vote, if voted, button to change vote
   // admin of draft determines when to move on
   
   const {maps, players} = useLoaderData() as {maps: Map[], players: Player}
+  console.log(maps)
   
   return (
     <div className="map-vote main-section card">
@@ -16,11 +18,14 @@ export default function VotingPage({playerSelected}: {playerSelected: PlayerSele
             <h3>{map.name}</h3>
             <h4>Votes: {map.votes}</h4>
             <a href={map.url} target="_blank" rel="noopener noreferrer">
-              {map.image ?
+              {map.image && ((map.image as unknown) as {data: {length: number}}).data.length > 0 ?
                 <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} /> :
                 <div className="map-image-placeholder" />
               }
             </a>
+            {playerSelected === 'admin' && (
+              <button></button>
+            )}
             <button>Vote</button>
           </li>
         ))}

@@ -1,6 +1,8 @@
 import {ChangeEvent, MouseEvent, useState} from 'react'
 import {useAdmin} from '~/routes/_admin'
 import {Form} from '@remix-run/react'
+import UploadScreenshot from '~/components/UploadScreenshot'
+import {Buffer} from 'buffer'
 
 type Map = {
   name: string,
@@ -98,15 +100,34 @@ export default function StartDraftForm() {
   }
 
   function handleSubmit(event: MouseEvent<HTMLButtonElement>) {
+    event.preventDefault()
     if (!validateCheckboxes(event)) return
-    setAdmin(true)
+
+    const form = event.currentTarget.closest('form') as HTMLFormElement
+    const formData = new FormData(form)
+    formData.set('customField', 'customValue')
+    for (let i = 0; i < maps.length; i++) {
+      const map = maps[i]
+      if (map.image) {
+        formData.append(`map-image-${i}`, Buffer.from(map.image).toString('base64'))
+      }
+    }
+    
+    console.log(form.action, form.method)
+
+    fetch(form.action, {
+      method: form.method,
+      body: formData,
+    }).then(response => {
+      if (response.redirected) window.location.href = response.url
+      else setAdmin(true)
+    })
   }
 
   function validateCheckboxes(event: MouseEvent<HTMLButtonElement>) {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#keleres)')
     const isChecked = Array.from(checkboxes).some(checkbox => (checkbox as HTMLInputElement).checked)
     if (!isChecked) {
-      event.preventDefault()
       setCheckboxError('At least one race type must be selected beyond Keleres.')
       return false
     }
@@ -194,20 +215,10 @@ export default function StartDraftForm() {
                   onChange={handleChangeMapUrl}
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => document.getElementById(`map-file-${index}`)?.click()}
-                  title={map.image ? "Update screenshot" : "Upload a screenshot"}
-                >
-                  {map.image ? '✅' : '📷'}
-                </button>
-                <input
-                  type="file"
-                  id={`map-file-${index}`}
-                  style={{ display: 'none' }}
-                  accept="image/*"
-                  data-index={index}
-                  onChange={handleChangeMapImage}
+                <UploadScreenshot
+                  image={map.image}
+                  index={index}
+                  onChangeImage={handleChangeMapImage}
                 />
                 {index >= 1 && (
                   <button type="button" data-index={index} onClick={handleRemoveMap} className="remove-map">

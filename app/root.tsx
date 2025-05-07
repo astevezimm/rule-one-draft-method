@@ -7,8 +7,8 @@ import {
 } from "@remix-run/react"
 import { LinksFunction } from "@remix-run/node"
 import styles from "./index.css?url"
-import Stars from '~/Stars'
-import star_styles from '~/stars.css?url'
+import Stars from '~/components/Stars'
+import star_styles from '~/components/stars.css?url'
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }, { rel: "stylesheet", href: star_styles }]
