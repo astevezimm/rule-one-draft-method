@@ -83,6 +83,12 @@ export async function loadDraft(gameId: string | undefined) {
   }
 }
 
+export async function removeDraft(gameId: string | undefined) {
+  const game = await Game.findOne({gameId})
+  if (!game) return
+  await Game.deleteOne({gameId})
+}
+
 export async function updateMapImage(gameId: string | undefined, index: number, image: Buffer) {
   const game = await Game.findOne({ gameId })
   if (!game) return

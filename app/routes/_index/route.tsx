@@ -35,6 +35,7 @@ export default function StartPage() {
   function handleStartNewDraft() {
     localStorage.removeItem('gameid')
     setMode('nogameid')
+    fetch ('/api/remove-draft', { method: 'PUT', body: JSON.stringify(gameId) })
   }
   
   return (
@@ -44,7 +45,7 @@ export default function StartPage() {
       {
         mode === 'pending' ? <h2>Loading...</h2> :
         mode === 'nogameid' ? <StartDraftForm /> :
-          <ContinueDraftForm onStartNewDraft={handleStartNewDraft} gameid={gameId as string} />
+          <ContinueDraftForm onStartNewDraft={handleStartNewDraft} gameId={gameId as string} />
     } </>
   )
 }

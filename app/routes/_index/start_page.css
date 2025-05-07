@@ -76,4 +76,5 @@ button[type="submit"], .cont-draft-btns button {
     display: flex;
     justify-content: center;
     gap: 1rem;
+    margin-top: 1.2rem;
 }
