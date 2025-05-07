@@ -83,6 +83,14 @@ export async function loadDraft(gameId: string | undefined) {
   }
 }
 
+export async function updateMapImage(gameId: string | undefined, index: number, image: Buffer) {
+  const game = await Game.findOne({ gameId })
+  if (!game) return
+  if (index < 0 || index >= game.maps.length) return
+  game.maps[index].image = image
+  await game.save()
+}
+
 export async function setInitiative(gameId: string | undefined) {
   const game = await Game.findOne({ gameId })
   if (!game || game.initiativeSet) return

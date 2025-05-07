@@ -5,14 +5,16 @@ import UploadScreenshot from '~/components/UploadScreenshot'
 import {ChangeEvent} from 'react'
 
 export default function VotingPage({playerSelected}: {playerSelected: PlayerSelected}) {
-  // button to vote, if voted, button to change vote
-  // admin of draft determines when to move on
-  
-  const {maps, players} = useLoaderData() as {maps: Map[], players: Player}
+  const {maps, players, gameId} = useLoaderData() as {maps: Map[], players: Player, gameId: string}
   console.log(playerSelected)
   
-  function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
-    
+  async function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
+    const data = {
+      gameId,
+      index: event.target.dataset.index,
+      
+    }
+    await fetch('/api/update-map-image', { method: 'PUT', body: JSON.stringify(data) })
   }
   
   return (
