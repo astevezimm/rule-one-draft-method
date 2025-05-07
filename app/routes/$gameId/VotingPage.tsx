@@ -1,6 +1,8 @@
 import {useLoaderData} from '@remix-run/react'
 import {Map, Player, PlayerSelected} from '~/global'
 import {Buffer} from 'buffer'
+import UploadScreenshot from '~/components/UploadScreenshot'
+import {ChangeEvent} from 'react'
 
 export default function VotingPage({playerSelected}: {playerSelected: PlayerSelected}) {
   // button to vote, if voted, button to change vote
@@ -8,6 +10,10 @@ export default function VotingPage({playerSelected}: {playerSelected: PlayerSele
   
   const {maps, players} = useLoaderData() as {maps: Map[], players: Player}
   console.log(playerSelected)
+  
+  function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
+    
+  }
   
   return (
     <div className="map-vote main-section card">
@@ -24,7 +30,11 @@ export default function VotingPage({playerSelected}: {playerSelected: PlayerSele
               }
             </a>
             {playerSelected === 'admin' && (
-              <button></button>
+              <UploadScreenshot
+                index={index}
+                image={map.image}
+                onChangeImage={handleChangeMapImage}
+              />
             )}
             <button>Vote</button>
           </li>
