@@ -76,6 +76,9 @@ body > h2 {
         gap: .1rem;
         position: relative;
     }
+    & h4 {
+        text-decoration: underline;
+    }
     & img {
         width: 100%;
         max-width: 30rem;

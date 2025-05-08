@@ -32,6 +32,11 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
       .catch((error) => console.error('Error:', error))
   }
   
+  function listPlayerVotes(map: Map) {
+    return players.filter(player => player.mapVote === maps.indexOf(map))
+      .map(player => player.name).join('\n')
+  }
+  
   return (
     <div className="map-vote main-section card">
       <h2>Vote for a Map</h2>
@@ -39,7 +44,7 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
         {maps.map((map, index) => (
           <li key={`map-${index}`}>
             <h3>{map.name}</h3>
-            <h4>Votes: {map.votes}</h4>
+            <h4 title={listPlayerVotes(map)}>Votes: {map.votes}</h4>
             <a href={map.url} target="_blank" rel="noopener noreferrer">
               {map.image && ((map.image as unknown) as {data: {length: number}}).data.length > 0 ?
                 <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} /> :
