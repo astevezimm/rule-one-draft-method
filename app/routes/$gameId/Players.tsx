@@ -4,25 +4,12 @@ import {useEffect, useState} from 'react'
 
 type PlayersProps = {
   playerSelected: PlayerSelected
+  selectedPlayer: string | null
   onSelectPlayer: (player: Player) => void
 }
 
-export default function Players({playerSelected, onSelectPlayer}: PlayersProps) {
+export default function Players({playerSelected, selectedPlayer, onSelectPlayer}: PlayersProps) {
   const {players, gameId} = useLoaderData() as {players: Player[], gameId: string}
-  const [selectedPlayer, setSelectedPlayer] = useState<string | null>(
-    playerSelected === 'admin' ? players[0].id : null
-  )
-  
-  useEffect(() => {
-    if (['admin', 'yes'].includes(playerSelected) && !selectedPlayer) {
-      setSelectedPlayer(localStorage.getItem(playerKey(gameId)))
-    }
-  }, [playerSelected, selectedPlayer])
-  
-  function handleClick(player: Player) {
-    setSelectedPlayer(player.id)
-    onSelectPlayer(player)
-  }
 
   return (
     <ul className="players card">
@@ -30,8 +17,8 @@ export default function Players({playerSelected, onSelectPlayer}: PlayersProps) 
         <li key={player.id}>
           <button
             disabled={['admin', 'yes'].includes(playerSelected)}
-            onClick={() => handleClick(player)}
-            className={player.id === selectedPlayer ? 'selected' : ''}
+            onClick={() => onSelectPlayer(player)}
+            className={!selectedPlayer || player.id === selectedPlayer ? 'selected' : ''}
           >
             {player.name}
           </button>

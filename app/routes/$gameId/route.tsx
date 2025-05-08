@@ -24,6 +24,9 @@ export default function DraftPage(){
   const [playerSelected, setPlayerSelected] = useState<PlayerSelected>('loading')
   const {gameId, players} = useLoaderData() as {gameId: string, players: Player[]}
   const playerSelectedKey = `${gameId}-playerSelected`
+  const [selectedPlayer, setSelectedPlayer] = useState<string | null>(
+    playerSelected === 'admin' ? players[0].id : null
+  )
   
   useEffect(()=>{
     if (playerSelected === 'loading') {
@@ -43,9 +46,16 @@ export default function DraftPage(){
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (['admin', 'yes'].includes(playerSelected) && !selectedPlayer) {
+      setSelectedPlayer(localStorage.getItem(playerKey(gameId)))
+    }
+  }, [playerSelected, selectedPlayer])
   
   function handleSelectPlayer(player: Player) {
     setPlayerSelected('yes')
+    setSelectedPlayer(player.id)
     localStorage.setItem(playerSelectedKey, 'yes')
     localStorage.setItem(playerKey(gameId), player.id)
   }
@@ -54,19 +64,28 @@ export default function DraftPage(){
     <>
       <h1>{pageHeading}</h1>
       <h2>Share the current URL with players participating in the draft</h2>
-      <Players playerSelected={playerSelected} onSelectPlayer={handleSelectPlayer} />
-      <DraftPageContent playerSelected={playerSelected} />
+      <Players
+        playerSelected={playerSelected}
+        selectedPlayer={selectedPlayer}
+        onSelectPlayer={handleSelectPlayer}
+      />
+      <DraftPageContent playerSelected={playerSelected} selectedPlayer={selectedPlayer} />
     </>
   )
 }
 
-function DraftPageContent({playerSelected}: {playerSelected: PlayerSelected})
+export type DraftPageContentProps = {
+  playerSelected: PlayerSelected
+  selectedPlayer: string | null
+}
+
+function DraftPageContent(props: DraftPageContentProps)
 {
   const {state} = useLoaderData() as {state: string}
   switch (state) {
-    case 'voting': return <VotingPage playerSelected={playerSelected} />
-    case 'banning': return <BanningPage playerSelected={playerSelected} />
-    case 'drafting': return <SnakeDraftPage playerSelected={playerSelected} />
+    case 'voting': return <VotingPage {...props} />
+    case 'banning': return <BanningPage {...props} />
+    case 'drafting': return <SnakeDraftPage {...props} />
     default: return <ErrorPage />
   }
 }

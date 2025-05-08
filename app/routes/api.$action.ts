@@ -12,7 +12,7 @@ export const action: ActionFunction = async ({params, request}) => {
       await removeDraft(removeDraftGameId)
       return new Response(null, {status: 204})
     case 'vote':
-      const {voteGameId, player, mapIndex} = await request.json()
+      const {gameId: voteGameId, player, mapIndex} = await request.json()
       await vote(voteGameId, player, mapIndex)
       return new Response(null, {status: 204})
     default: return new Response(null, {status: 400, statusText: 'Bad Request'})

@@ -3,8 +3,9 @@ import {extractMapImage, Map, Player, PlayerSelected} from '~/global'
 import {Buffer} from 'buffer'
 import UploadScreenshot from '~/components/UploadScreenshot'
 import {ChangeEvent, MouseEvent} from 'react'
+import {DraftPageContentProps} from '~/routes/$gameId/route'
 
-export default function VotingPage({playerSelected}: {playerSelected: PlayerSelected}) {
+export default function VotingPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
   const {maps, players, gameId} = useLoaderData() as {maps: Map[], players: Player[], gameId: string}
   
   async function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
@@ -22,7 +23,7 @@ export default function VotingPage({playerSelected}: {playerSelected: PlayerSele
     const mapIndex = Number((event.target as HTMLButtonElement).dataset.index)
     const data = {
       gameId,
-      player: players[0],
+      player: players[players.findIndex(player => player.id === selectedPlayer)],
       mapIndex
     }
     fetch('/api/vote', { method: 'POST', body: JSON.stringify(data) })
@@ -51,7 +52,7 @@ export default function VotingPage({playerSelected}: {playerSelected: PlayerSele
                 onChangeImage={handleChangeMapImage}
               />
             )}
-            <button onClick={handleVote}>Vote</button>
+            <button onClick={handleVote} data-index={index}>Vote</button>
           </li>
         ))}
       </ul>

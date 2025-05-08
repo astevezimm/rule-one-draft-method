@@ -90,7 +90,6 @@ export async function removeDraft(gameId: string | undefined) {
 }
 
 export async function updateMapImage(gameId: string | undefined, index: number, image: ArrayBuffer) {
-  console.log('updateMapImage', gameId, index, image)
   const game = await Game.findOne({ gameId })
   if (!game) return
   if (index < 0 || index >= game.maps.length) return
@@ -102,7 +101,19 @@ export async function vote(gameId: string | undefined, player: Player, mapIndex:
   const game = await Game.findOne({gameId})
   if (!game) return
   if (game.state !== 'voting') return
-  // todo continue from here
+  
+  const map = game.maps[mapIndex]
+  if (!map) return
+  map.votes++
+  
+  if (player.mapVote >= 0) {
+    const previousMap = game.maps[player.mapVote]
+    if (previousMap) previousMap.votes--
+  }
+  player.mapVote = mapIndex
+  game.players[game.players.findIndex((p: Player) => p.id === player.id)] = player
+  
+  await game.save()
 }
   
 
