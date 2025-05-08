@@ -119,3 +119,10 @@ a:has(.map-image-placeholder) {
         display: block;
     }
 }
+
+.vote-feedback {
+    text-align: center;
+    margin-top: 1rem;
+    font-family: "Roboto", sans-serif;
+    color: yellow;
+}

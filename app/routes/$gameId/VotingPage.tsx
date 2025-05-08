@@ -7,6 +7,7 @@ import {DraftPageContentProps} from '~/routes/$gameId/route'
 
 export default function VotingPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
   const {maps, players, gameId} = useLoaderData() as {maps: Map[], players: Player[], gameId: string}
+  const player = players.find(player => player.id === selectedPlayer)
   
   async function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
     const image = await extractMapImage(event.target.files?.[0]) as ArrayBuffer | null
@@ -23,7 +24,7 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
     const mapIndex = Number((event.target as HTMLButtonElement).dataset.index)
     const data = {
       gameId,
-      player: players[players.findIndex(player => player.id === selectedPlayer)],
+      player,
       mapIndex
     }
     fetch('/api/vote', { method: 'POST', body: JSON.stringify(data) })
@@ -52,11 +53,13 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
                 onChangeImage={handleChangeMapImage}
               />
             )}
-            <button onClick={handleVote} data-index={index}>Vote</button>
+            <button onClick={handleVote} data-index={index} disabled={!player}>Vote</button>
           </li>
         ))}
       </ul>
-      {/* Display current player's vote */}
+      {player && player.mapVote >= 0 && (
+        <p className="vote-feedback">You're vote is for {maps[player?.mapVote].name}</p>
+      )}
     </div>
   )
 }
