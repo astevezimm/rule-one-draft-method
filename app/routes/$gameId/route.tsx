@@ -27,7 +27,6 @@ export default function DraftPage(){
   
   useEffect(()=>{
     if (playerSelected === 'loading') {
-      console.log(playerSelected)
       if (localStorage.getItem('admin') === gameId) {
         setPlayerSelected('admin')
         localStorage.setItem(playerSelectedKey, 'admin')

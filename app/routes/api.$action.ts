@@ -5,7 +5,7 @@ export const action: ActionFunction = async ({params, request}) => {
   switch (params.action) {
     case 'update-map-image':
       const {gameId, index, image} = await request.json()
-      await updateMapImage(gameId, index, image)
+      await updateMapImage(gameId, index, Buffer.from(image, 'base64'))
       return new Response(null, {status: 204})
     case 'remove-draft':
       const _gameId = await request.json()

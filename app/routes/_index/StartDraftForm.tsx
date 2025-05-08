@@ -2,6 +2,7 @@ import {ChangeEvent, MouseEvent, useState} from 'react'
 import {Form} from '@remix-run/react'
 import UploadScreenshot from '~/components/UploadScreenshot'
 import {Buffer} from 'buffer'
+import {extractMapImage} from '~/global'
 
 type Map = {
   name: string,
@@ -42,53 +43,14 @@ export default function StartDraftForm() {
     setMaps(newMaps)
   }
 
-  function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const img = new Image()
-        img.onload = () => {
-          const canvas = document.createElement('canvas')
-          const ctx = canvas.getContext('2d')
-          if (!ctx) return
-
-          const maxSize = 800
-          let width = img.width;
-          let height = img.height;
-          if (width > maxSize || height > maxSize) {
-            if (width > height) {
-              height = (maxSize / width) * height;
-              width = maxSize;
-            } else {
-              width = (maxSize / height) * width;
-              height = maxSize;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
-          canvas.toBlob(
-            async (blob) => {
-              if (blob) {
-                const arrayBuffer = await blob.arrayBuffer()
-                const newMaps = [...maps];
-                newMaps[Number((event.target as HTMLInputElement).dataset.index)] = {
-                  ...newMaps[Number((event.target as HTMLInputElement).dataset.index)],
-                  image: arrayBuffer,
-                }
-                setMaps(newMaps)
-              }
-            },
-            'image/jpeg',
-            0.5
-          )
-        }
-        img.src = reader.result as string
-      }
-      reader.readAsDataURL(file)
+  async function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
+    const arrayBuffer = await extractMapImage(event.target.files?.[0]) as ArrayBuffer | null
+    const newMaps = [...maps];
+    newMaps[Number((event.target as HTMLInputElement).dataset.index)] = {
+      ...newMaps[Number((event.target as HTMLInputElement).dataset.index)],
+      image: arrayBuffer,
     }
+    setMaps(newMaps)
   }
 
   function handleRemoveMap(event: MouseEvent<HTMLButtonElement>) {

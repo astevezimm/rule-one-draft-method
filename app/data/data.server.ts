@@ -89,7 +89,8 @@ export async function removeDraft(gameId: string | undefined) {
   await Game.deleteOne({gameId})
 }
 
-export async function updateMapImage(gameId: string | undefined, index: number, image: Buffer) {
+export async function updateMapImage(gameId: string | undefined, index: number, image: ArrayBuffer) {
+  console.log('updateMapImage', gameId, index, image)
   const game = await Game.findOne({ gameId })
   if (!game) return
   if (index < 0 || index >= game.maps.length) return

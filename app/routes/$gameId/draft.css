@@ -86,7 +86,7 @@ body > h2 {
     }
     & button:has(+ input[type="file"]) {
         position: absolute;
-        bottom: 1.7rem;
+        top: 7.8rem;
         display: none;
         &:hover {
             display: block;
