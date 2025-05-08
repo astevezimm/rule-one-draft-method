@@ -2,10 +2,10 @@ import {useLoaderData} from '@remix-run/react'
 import {extractMapImage, Map, Player, PlayerSelected} from '~/global'
 import {Buffer} from 'buffer'
 import UploadScreenshot from '~/components/UploadScreenshot'
-import {ChangeEvent} from 'react'
+import {ChangeEvent, MouseEvent} from 'react'
 
 export default function VotingPage({playerSelected}: {playerSelected: PlayerSelected}) {
-  const {maps, players, gameId} = useLoaderData() as {maps: Map[], players: Player, gameId: string}
+  const {maps, players, gameId} = useLoaderData() as {maps: Map[], players: Player[], gameId: string}
   
   async function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
     const image = await extractMapImage(event.target.files?.[0]) as ArrayBuffer | null
@@ -16,6 +16,18 @@ export default function VotingPage({playerSelected}: {playerSelected: PlayerSele
     }
     await fetch('/api/update-map-image', { method: 'PUT', body: JSON.stringify(data) })
     window.location.reload()
+  }
+  
+  function handleVote(event: MouseEvent<HTMLButtonElement>) {
+    const mapIndex = Number((event.target as HTMLButtonElement).dataset.index)
+    const data = {
+      gameId,
+      player: players[0],
+      mapIndex
+    }
+    fetch('/api/vote', { method: 'POST', body: JSON.stringify(data) })
+      .then(() => window.location.reload())
+      .catch((error) => console.error('Error:', error))
   }
   
   return (
@@ -39,10 +51,11 @@ export default function VotingPage({playerSelected}: {playerSelected: PlayerSele
                 onChangeImage={handleChangeMapImage}
               />
             )}
-            <button>Vote</button>
+            <button onClick={handleVote}>Vote</button>
           </li>
         ))}
       </ul>
+      {/* Display current player's vote */}
     </div>
   )
 }

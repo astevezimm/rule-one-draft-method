@@ -98,6 +98,14 @@ export async function updateMapImage(gameId: string | undefined, index: number, 
   await game.save()
 }
 
+export async function vote(gameId: string | undefined, player: Player, mapIndex: number) {
+  const game = await Game.findOne({gameId})
+  if (!game) return
+  if (game.state !== 'voting') return
+  // todo continue from here
+}
+  
+
 export async function setInitiative(gameId: string | undefined) {
   const game = await Game.findOne({ gameId })
   if (!game || game.initiativeSet) return
