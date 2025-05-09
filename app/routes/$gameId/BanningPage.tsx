@@ -7,5 +7,10 @@ export default function BanningPage({playerSelected}: {playerSelected: PlayerSel
   // final submission of bans
   // number to ban determined by races to keep on start page
   // after all bans are in, move to snake draft page
-  return "banning page"
+  
+  return (
+    <>
+      <h2>Players are now listed in initiative order</h2>
+    </>
+  )
 }

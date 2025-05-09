@@ -29,6 +29,7 @@ export async function startDraft(data: Record<string, any>) {
   Object.entries(data).forEach(([key, value]) => {
     if (key.startsWith('player-')) {
       players.push({ name: value.toString(), mapVote: -1, id: uuidv4() })
+      if (players.length === 1) players[0].admin = true
     } else if (key.startsWith('map-name-')) {
       const index = +key.split('-')[2]
       maps[index] = maps[index] || { name: '', url: '', votes: 0, image: null }

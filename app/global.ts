@@ -9,6 +9,7 @@ export type Player = {
   name: string
   mapVote: number
   id: string
+  admin?: boolean
 }
 
 export type PlayerSelected = 'yes' | 'no' | 'loading' | 'admin'

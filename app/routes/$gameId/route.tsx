@@ -24,8 +24,10 @@ export default function DraftPage(){
   const [playerSelected, setPlayerSelected] = useState<PlayerSelected>('loading')
   const {gameId, players} = useLoaderData() as {gameId: string, players: Player[]}
   const playerSelectedKey = `${gameId}-playerSelected`
+  
+  const adminPlayer = players.find(player => player.admin)
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(
-    playerSelected === 'admin' ? players[0].id : null
+    playerSelected === 'admin' && adminPlayer ? adminPlayer.id : null
   )
   
   useEffect(()=>{
@@ -34,7 +36,7 @@ export default function DraftPage(){
         setPlayerSelected('admin')
         localStorage.setItem(playerSelectedKey, 'admin')
         localStorage.setItem("gameid", gameId)
-        localStorage.setItem(playerKey(gameId), players[0].id)
+        localStorage.setItem(playerKey(gameId), adminPlayer ? adminPlayer.id : '')
       }
       else {
         const localPlayerSelected = localStorage.getItem(playerSelectedKey)
