@@ -11,6 +11,9 @@ export default function BanningPage({playerSelected}: {playerSelected: PlayerSel
   return (
     <>
       <h2>Players are now listed in initiative order</h2>
+      <div className="main-section card">
+        <h2>Ban X factions from the following</h2>
+      </div>
     </>
   )
 }

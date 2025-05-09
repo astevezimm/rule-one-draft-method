@@ -2,6 +2,7 @@ import {config} from 'dotenv'
 import mongoose from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 import {Player, Map} from '~/global'
+import factions from './factions.json'
 
 config()
 mongoose.connect(process.env.DB_URL as string)
@@ -28,7 +29,9 @@ export async function startDraft(data: Record<string, any>) {
 
   Object.entries(data).forEach(([key, value]) => {
     if (key.startsWith('player-')) {
-      players.push({ name: value.toString(), mapVote: -1, id: uuidv4() })
+      players.push({
+        name: value.toString(), mapVote: -1, id: uuidv4(), factions_to_ban: [], number_of_bans: 0
+      })
       if (players.length === 1) players[0].admin = true
     } else if (key.startsWith('map-name-')) {
       const index = +key.split('-')[2]
@@ -62,7 +65,7 @@ export async function startDraft(data: Record<string, any>) {
     initiativeSet: state !== 'voting'
   }
   
-  const game = new Game(gameData)
+  const game = new Game(state === 'banning' ? _distributeFactionsToBan(gameData) : gameData)
   await game.save()
   return game.gameId
 }
@@ -124,4 +127,42 @@ export async function setInitiative(gameId: string | undefined) {
   game.initiativeSet = true
   game.players.sort(() => Math.random() - 0.5)
   await game.save()
+}
+
+export async function distributeFactionsToBan(gameId: string | undefined) {
+  const game = await Game.findOne({gameId})
+  if (!game) return
+  if (game.state !== 'banning') return
+  const updatedGame = _distributeFactionsToBan(game)
+  await updatedGame.save()
+}
+
+function _distributeFactionsToBan(game: any) {
+  const initFactionPool = []
+  if (game.base) initFactionPool.push(...factions[0].factions)
+  if (game.pok) initFactionPool.push(...factions[1].factions)
+  if (game.keleres) initFactionPool.push(...factions[2].factions)
+  if (game.ds) initFactionPool.push(...factions[3].factions)
+  if (game.dsplus) initFactionPool.push(...factions[4].factions)
+  initFactionPool.sort(() => Math.random() - 0.5)
+  
+  const players = game.players
+  const factionDivision = Math.floor(initFactionPool.length / players.length)
+  const factionRemainder = initFactionPool.length % players.length
+  
+  let i
+  for (i = 0; i < factionRemainder; i++) {
+    players[i].number_of_bans = factionDivision + 1
+    players[i].factions_to_ban = initFactionPool.slice(
+      i * (factionDivision + 1), (i + 1) * (factionDivision + 1)
+    )
+  }
+  for (; i < players.length; i++) {
+    players[i].number_of_bans = factionDivision
+    players[i].factions_to_ban = initFactionPool.slice(
+      i * factionDivision + factionRemainder, (i + 1) * factionDivision + factionRemainder
+    )
+  }
+  
+  return game
 }

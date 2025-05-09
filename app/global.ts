@@ -10,6 +10,8 @@ export type Player = {
   mapVote: number
   id: string
   admin?: boolean
+  factions_to_ban: string[]
+  number_of_bans: number
 }
 
 export type PlayerSelected = 'yes' | 'no' | 'loading' | 'admin'
