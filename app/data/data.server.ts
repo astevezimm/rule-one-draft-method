@@ -149,16 +149,22 @@ function _distributeFactionsToBan(game: any) {
   const players = game.players
   const factionDivision = Math.floor(initFactionPool.length / players.length)
   const factionRemainder = initFactionPool.length % players.length
+  const factionPoolDivision = Math.floor(game.factionPoolSize / players.length)
+  const factionPoolRemainder = game.factionPoolSize % players.length
+  
+  const calcNumberOfBans = (i: number) => {
+    return game.factionPoolSize - (factionPoolDivision + (i < factionPoolRemainder ? 1 : 0))
+  }
   
   let i
   for (i = 0; i < factionRemainder; i++) {
-    players[i].number_of_bans = factionDivision + 1
+    players[i].number_of_bans = calcNumberOfBans(i)
     players[i].factions_to_ban = initFactionPool.slice(
       i * (factionDivision + 1), (i + 1) * (factionDivision + 1)
     )
   }
   for (; i < players.length; i++) {
-    players[i].number_of_bans = factionDivision
+    players[i].number_of_bans = calcNumberOfBans(i)
     players[i].factions_to_ban = initFactionPool.slice(
       i * factionDivision + factionRemainder, (i + 1) * factionDivision + factionRemainder
     )
