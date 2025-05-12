@@ -1,11 +1,8 @@
 import {Player} from '~/global'
 import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useLoaderData} from '@remix-run/react'
-import factions from '~/data/factions.json'
 
 export default function BanningPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
-  // sent races tied to player
-  // button to ban, if banned, button to change ban
   // final submission of bans
   // number to ban determined by races to keep on start page
   // after all bans are in, move to snake draft page
@@ -19,11 +16,11 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
       <div className="main-section card">
         {['yes', 'admin'].includes(playerSelected) ? (
             <>
-              <h2>Ban ${player?.number_of_bans} factions from the following</h2>
+              <h2>Ban {player?.number_of_bans} factions from the following</h2>
               <ul>
                 {player?.factions_to_ban.map((faction, index) => (
                   <li key={`ban-${index}`}>
-                    <Faction id={faction} index={index} />
+                    <Faction faction={faction} index={index} />
                   </li>
                 ))}
               </ul>
@@ -35,14 +32,15 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
   )
 }
 
-function Faction({id, index}: {id: string, index: number}) {
-  function findFaction(id: string) {
-    for (const category of factions) {
-      const faction = category.factions.find(faction => faction.id === id)
-      if (faction) return faction
-    }
-  }
-  const faction = findFaction(id)
+function Faction({faction, index}: {faction: {wiki: string, id: string, name: string}, index: number}) {
   if (!faction) return null
-  return <></> // continue from here
+  return (
+    <>
+      <a href={faction.wiki} target="_blank" rel="noopener noreferrer">
+        <img src={`images/${faction.id}.jpg`} alt={faction.name} />
+      </a>
+      <label htmlFor={`ban-${index}`}>Ban</label>
+      <input type="checkbox" id={`ban-${index}`} />
+    </>
+  )
 }

@@ -10,7 +10,7 @@ export type Player = {
   mapVote: number
   id: string
   admin?: boolean
-  factions_to_ban: string[]
+  factions_to_ban: {wiki: string, id: string, name: string}[]
   number_of_bans: number
 }
 

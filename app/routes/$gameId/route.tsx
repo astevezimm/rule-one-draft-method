@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {LinksFunction, LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
+import {ActionFunctionArgs, LinksFunction, LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import {loadDraft} from '~/data/data.server'
 import {isPlayerSelected, pageHeading, Player, playerKey, PlayerSelected} from '~/global'
@@ -12,6 +12,10 @@ import styles from './draft.css?url'
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }]
+}
+
+export async function action({request}: ActionFunctionArgs) {
+  
 }
 
 export const loader : LoaderFunction = async ({params}: LoaderFunctionArgs) => {
