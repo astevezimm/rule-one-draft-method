@@ -13,10 +13,10 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
   return (
     <>
       <h2>Players are now listed in initiative order</h2>
-      <div className="main-section card">
+      <div className="banning main-section card">
         {['yes', 'admin'].includes(playerSelected) ? (
             <>
-              <h2>Ban {player?.number_of_bans} factions from the following</h2>
+              <h2>Ban <span>{player?.number_of_bans}</span> factions from the following</h2>
               <ul>
                 {player?.factions_to_ban.map((faction, index) => (
                   <li key={`ban-${index}`}>

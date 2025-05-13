@@ -132,3 +132,69 @@ a:has(.map-image-placeholder) {
     font-family: "Roboto", sans-serif;
     color: yellow;
 }
+
+.banning {
+    & h2 span {
+        font-size: 1.9rem;
+        padding: 0 0.25rem;
+        color: white;
+    }
+    & ul {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 1rem;
+        row-gap: 2rem;
+        justify-content: center;
+        max-width: 71rem;
+        @media (max-width: 74rem) {
+            max-width: min-content;
+        }
+    }
+    & li {
+        text-align: center;
+    }
+    & a:has(img) {
+        display: block;
+        width: min(35rem, 100vw - 4rem);
+        aspect-ratio: 35 / 25;
+        background-color: #600060;
+        border-radius: 20px;
+        transition: all 0.2s;
+        margin-bottom: 1rem;
+        & img {
+            transition: all 0.2s;
+        }
+        &:hover {
+            background-color: #530053;
+            & img {
+                transform: scale(1.05);
+            }
+        }
+    }
+    & img {
+        width: 100%;
+        border-radius: 20px;
+    }
+    & label:has(+ input[type="checkbox"]) {
+        font-family: "Roboto", sans-serif;
+        background-color: yellow;
+        color: black;
+        padding: 0.5rem;
+        font-size: 2rem;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+        &:hover {
+            background-color: orange;
+        }
+        &:has(+ input[type="checkbox"]:checked) {
+            background-color: #00ff00;
+            &:hover {
+                background-color: #00bb00;
+            }
+        }
+    }
+    & input[type="checkbox"] {
+        display: none;
+    }
+}
