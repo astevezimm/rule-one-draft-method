@@ -19,9 +19,10 @@ const gameSchema = new mongoose.Schema({
   dsplus: Boolean,
   factionPoolSize: Number,
   initiativeSet: Boolean,
-  bannedFactions: Array,
+  bannedFactions: { type: [String], default: [] },
 })
 
+// delete mongoose.models.Game // uncomment this line to reset the model
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
 
 export async function startDraft(data: Record<string, any>) {
@@ -64,10 +65,10 @@ export async function startDraft(data: Record<string, any>) {
     dsplus: !!data.dsplus,
     factionPoolSize: +data.factionPoolSize,
     initiativeSet: state !== 'voting',
-    bannedFactions: []
   }
   
   const game = new Game(state === 'banning' ? _distributeFactionsToBan(gameData) : gameData)
+  console.log('Game data before save:', game);
   await game.save()
   return game.gameId
 }
@@ -85,6 +86,7 @@ export async function loadDraft(gameId: string | undefined) {
     ds: game.ds,
     dsplus: game.dsplus,
     factionPoolSize: game.factionPoolSize,
+    bannedFactions: game.bannedFactions,
     gameId
   }
 }
