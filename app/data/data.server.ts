@@ -68,7 +68,6 @@ export async function startDraft(data: Record<string, any>) {
   }
   
   const game = new Game(state === 'banning' ? _distributeFactionsToBan(gameData) : gameData)
-  console.log('Game data before save:', game);
   await game.save()
   return game.gameId
 }

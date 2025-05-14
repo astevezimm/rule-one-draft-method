@@ -92,7 +92,7 @@ function Faction({faction, index, onCheckboxChange}: FactionProps) {
         <img src={`images/${faction.id}.jpg`} alt={faction.name} />
       </a>
       <label htmlFor={`ban-${index}`}>Ban</label>
-      <input type="checkbox" id={`ban-${index}`} onChange={onCheckboxChange} />
+      <input type="checkbox" id={`ban-${index}`} name={faction.id} onChange={onCheckboxChange} />
     </>
   )
 }
