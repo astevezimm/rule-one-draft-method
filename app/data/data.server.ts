@@ -122,22 +122,15 @@ export async function vote(gameId: string | undefined, player: Player, mapIndex:
   
   await game.save()
 }
-  
 
-export async function setInitiative(gameId: string | undefined) {
-  const game = await Game.findOne({ gameId })
-  if (!game || game.initiativeSet) return
-  game.initiativeSet = true
-  game.players.sort(() => Math.random() - 0.5)
-  await game.save()
-}
-
-export async function distributeFactionsToBan(gameId: string | undefined) {
+export async function submitVoting(gameId: string | undefined) {
   const game = await Game.findOne({gameId})
   if (!game) return
-  if (game.state !== 'banning') return
-  const updatedGame = _distributeFactionsToBan(game)
-  await updatedGame.save()
+  if (game.state !== 'voting') return
+  game.state = +game.factionPoolSize > game.players.length ? "banning" : "drafting"
+  game.players.sort(() => Math.random() - 0.5)
+  const newGame = game.state === 'banning' ? _distributeFactionsToBan(game) : game
+  await newGame.save()
 }
 
 function _distributeFactionsToBan(game: any) {
