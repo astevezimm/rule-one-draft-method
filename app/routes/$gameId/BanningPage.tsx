@@ -11,17 +11,23 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
     .players.find(player => player.id === selectedPlayer)
   
   const [banCount, setBanCount] = useState(0)
+  const [bans, setBans] = useState<string[]>([])
   
   function handleCheckboxChange(event: ChangeEvent<HTMLInputElement>) {
-    const index = event.currentTarget.dataset.index
     const checked = event.currentTarget.checked
     if (checked) {
       if (player?.number_of_bans && banCount >= player?.number_of_bans) {
         event.currentTarget.checked = false
       }
-      else setBanCount(banCount + 1)
+      else {
+        setBanCount(banCount + 1)
+        setBans([...bans, event.currentTarget.name])
+      }
     }
-    else setBanCount(banCount - 1)
+    else {
+      setBanCount(banCount - 1)
+      setBans(bans.filter(ban => ban !== event.currentTarget.name))
+    }
   }
   
   const readyToSubmit = player?.number_of_bans && player.number_of_bans === banCount
@@ -67,7 +73,7 @@ function Faction({faction, index, onCheckboxChange}: FactionProps) {
         <img src={`images/${faction.id}.jpg`} alt={faction.name} />
       </a>
       <label htmlFor={`ban-${index}`}>Ban</label>
-      <input type="checkbox" id={`ban-${index}`} onChange={onCheckboxChange} data-index={index} />
+      <input type="checkbox" id={`ban-${index}`} onChange={onCheckboxChange} />
     </>
   )
 }
