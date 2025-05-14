@@ -1,14 +1,30 @@
 import {Player} from '~/global'
 import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useLoaderData} from '@remix-run/react'
+import {ChangeEvent, ChangeEventHandler, useState} from 'react'
 
 export default function BanningPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
   // final submission of bans
-  // number to ban determined by races to keep on start page
   // after all bans are in, move to snake draft page
 
   const player = (useLoaderData() as {players: Player[]})
     .players.find(player => player.id === selectedPlayer)
+  
+  const [banCount, setBanCount] = useState(0)
+  
+  function handleCheckboxChange(event: ChangeEvent<HTMLInputElement>) {
+    const index = event.currentTarget.dataset.index
+    const checked = event.currentTarget.checked
+    if (checked) {
+      if (player?.number_of_bans && banCount >= player?.number_of_bans) {
+        event.currentTarget.checked = false
+      }
+      else setBanCount(banCount + 1)
+    }
+    else setBanCount(banCount - 1)
+  }
+  
+  const readyToSubmit = player?.number_of_bans && player.number_of_bans === banCount
   
   return (
     <>
@@ -20,10 +36,15 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
               <ul>
                 {player?.factions_to_ban.map((faction, index) => (
                   <li key={`ban-${index}`}>
-                    <Faction faction={faction} index={index} />
+                    <Faction faction={faction} index={index} onCheckboxChange={handleCheckboxChange} />
                   </li>
                 ))}
               </ul>
+              <button
+                disabled={!readyToSubmit}
+              >
+                {readyToSubmit ? 'Submit Bans' : `(${banCount}/${player?.number_of_bans}) Bans so far`}
+              </button>
             </>
           ) : <h2>Select name above to reveal factions to ban</h2>
         }
@@ -32,7 +53,13 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
   )
 }
 
-function Faction({faction, index}: {faction: {wiki: string, id: string, name: string}, index: number}) {
+type FactionProps = {
+  faction: {wiki: string, id: string, name: string}
+  index: number
+  onCheckboxChange: ChangeEventHandler<HTMLInputElement>
+}
+
+function Faction({faction, index, onCheckboxChange}: FactionProps) {
   if (!faction) return null
   return (
     <>
@@ -40,7 +67,7 @@ function Faction({faction, index}: {faction: {wiki: string, id: string, name: st
         <img src={`images/${faction.id}.jpg`} alt={faction.name} />
       </a>
       <label htmlFor={`ban-${index}`}>Ban</label>
-      <input type="checkbox" id={`ban-${index}`} />
+      <input type="checkbox" id={`ban-${index}`} onChange={onCheckboxChange} data-index={index} />
     </>
   )
 }
