@@ -18,7 +18,8 @@ const gameSchema = new mongoose.Schema({
   ds: Boolean,
   dsplus: Boolean,
   factionPoolSize: Number,
-  initiativeSet: Boolean
+  initiativeSet: Boolean,
+  bannedFactions: Array,
 })
 
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
@@ -62,7 +63,8 @@ export async function startDraft(data: Record<string, any>) {
     ds: !!data.ds,
     dsplus: !!data.dsplus,
     factionPoolSize: +data.factionPoolSize,
-    initiativeSet: state !== 'voting'
+    initiativeSet: state !== 'voting',
+    bannedFactions: []
   }
   
   const game = new Game(state === 'banning' ? _distributeFactionsToBan(gameData) : gameData)
@@ -171,4 +173,18 @@ function _distributeFactionsToBan(game: any) {
   }
   
   return game
+}
+
+export async function submitBans(gameId: string | undefined, player: string, bans: string[]) {
+  const game = await Game.findOne({gameId})
+  if (!game) return
+  if (game.state !== 'banning') return
+  
+  const playerIndex = game.players.findIndex((p: Player) => p.id === player)
+  game.players[playerIndex].factions_to_ban = []
+  if (!game.players.find((p: Player) => p.factions_to_ban.length > 0)) {
+    game.state = 'drafting'
+  }
+  game.bannedFactions.push(...bans)
+  await game.save()
 }

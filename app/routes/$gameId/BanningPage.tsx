@@ -4,11 +4,8 @@ import {useLoaderData} from '@remix-run/react'
 import {ChangeEvent, ChangeEventHandler, useState} from 'react'
 
 export default function BanningPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
-  // final submission of bans
-  // after all bans are in, move to snake draft page
-
-  const player = (useLoaderData() as {players: Player[]})
-    .players.find(player => player.id === selectedPlayer)
+  const {players, gameId} = (useLoaderData() as {players: Player[], gameId: string})
+  const player = players.find(player => player.id === selectedPlayer)
   
   const [banCount, setBanCount] = useState(0)
   const [bans, setBans] = useState<string[]>([])
@@ -30,17 +27,37 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
     }
   }
   
+  function handleSubmitBans() {
+    if (player) {
+      fetch(`/api/${gameId}/submit-bans`, {
+        method: 'POST',
+        body: JSON.stringify({
+          gameId,
+          player: player.id,
+          bans
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) window.location.reload()
+      })
+    }
+  }
+  
   const readyToSubmit = player?.number_of_bans && player.number_of_bans === banCount
   
   return (
     <>
       <h2>Players are now listed in initiative order</h2>
       <div className="banning main-section card">
-        {['yes', 'admin'].includes(playerSelected) ? (
+        {['yes', 'admin'].includes(playerSelected) && player ? (
+          player.factions_to_ban.length > 0 ? (
             <>
-              <h2>Ban <span>{player?.number_of_bans}</span> factions from the following</h2>
+              <h2>Ban <span>{player.number_of_bans}</span> factions from the following</h2>
               <ul>
-                {player?.factions_to_ban.map((faction, index) => (
+                {player.factions_to_ban.map((faction, index) => (
                   <li key={`ban-${index}`}>
                     <Faction faction={faction} index={index} onCheckboxChange={handleCheckboxChange} />
                   </li>
@@ -48,11 +65,13 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
               </ul>
               <button
                 disabled={!readyToSubmit}
+                onClick={handleSubmitBans}
               >
-                {readyToSubmit ? 'Submit Bans' : `(${banCount}/${player?.number_of_bans}) Bans so far`}
+                {readyToSubmit ? 'Submit Bans' : `(${banCount}/${player.number_of_bans}) Bans so far`}
               </button>
             </>
-          ) : <h2>Select name above to reveal factions to ban</h2>
+          ) : <h2>Waiting for other players to select their factions to ban</h2>
+        ) : <h2>Select name above to reveal factions to ban</h2>
         }
       </div>
     </>

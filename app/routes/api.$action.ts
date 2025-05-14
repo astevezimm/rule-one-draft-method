@@ -1,5 +1,5 @@
 import {ActionFunction} from '@remix-run/node'
-import {removeDraft, updateMapImage, vote} from '~/data/data.server'
+import {removeDraft, submitBans, updateMapImage, vote} from '~/data/data.server'
 
 export const action: ActionFunction = async ({params, request}) => {
   switch (params.action) {
@@ -12,8 +12,12 @@ export const action: ActionFunction = async ({params, request}) => {
       await removeDraft(removeDraftGameId)
       return new Response(null, {status: 204})
     case 'vote':
-      const {gameId: voteGameId, player, mapIndex} = await request.json()
-      await vote(voteGameId, player, mapIndex)
+      const {gameId: voteGameId, player: votePlayer, mapIndex} = await request.json()
+      await vote(voteGameId, votePlayer, mapIndex)
+      return new Response(null, {status: 204})
+    case 'submit-bans':
+      const {gameId: submitBansGameId, player: banPlayer, bans} = await request.json()
+      await submitBans(submitBansGameId, banPlayer, bans)
       return new Response(null, {status: 204})
     default: return new Response(null, {status: 400, statusText: 'Bad Request'})
   }
