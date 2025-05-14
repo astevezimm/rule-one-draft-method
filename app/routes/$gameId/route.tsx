@@ -14,10 +14,6 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }]
 }
 
-export async function action({request}: ActionFunctionArgs) {
-  
-}
-
 export const loader : LoaderFunction = async ({params}: LoaderFunctionArgs) => {
   const draft = await loadDraft(params.gameId)
   if (!draft) throw new Response("", {status: 404})

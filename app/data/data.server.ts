@@ -149,42 +149,44 @@ function _distributeFactionsToBan(game: any) {
   initFactionPool.sort(() => Math.random() - 0.5)
   
   const players = game.players
-  const factionDivision = Math.floor(initFactionPool.length / players.length)
-  const factionRemainder = initFactionPool.length % players.length
-  const factionPoolDivision = Math.floor(game.factionPoolSize / players.length)
-  const factionPoolRemainder = game.factionPoolSize % players.length
+  const factionDivision = Math.floor(initFactionPool.length / players.length) //4
+  const factionRemainder = initFactionPool.length % players.length //1
+  const factionPoolDivision = Math.floor(game.factionPoolSize / players.length) //1
+  const factionPoolRemainder = game.factionPoolSize % players.length //3
   
-  const calcNumberOfBans = (i: number) => {
-    return game.factionPoolSize - (factionPoolDivision + (i < factionPoolRemainder ? 1 : 0))
+  const calcNumberOfBans = (i: number, totalFactions: number) => {
+    return totalFactions - (factionPoolDivision + (i < factionPoolRemainder ? 1 : 0))
   }
   
   let i
   for (i = 0; i < factionRemainder; i++) {
-    players[i].number_of_bans = calcNumberOfBans(i)
     players[i].factions_to_ban = initFactionPool.slice(
       i * (factionDivision + 1), (i + 1) * (factionDivision + 1)
     )
+    players[i].number_of_bans = calcNumberOfBans(i, players[i].factions_to_ban.length)
   }
   for (; i < players.length; i++) {
-    players[i].number_of_bans = calcNumberOfBans(i)
     players[i].factions_to_ban = initFactionPool.slice(
       i * factionDivision + factionRemainder, (i + 1) * factionDivision + factionRemainder
     )
+    players[i].number_of_bans = calcNumberOfBans(i, players[i].factions_to_ban.length)
   }
   
   return game
 }
 
 export async function submitBans(gameId: string | undefined, player: string, bans: string[]) {
+  console.log('submitBans', gameId, player, bans)
   const game = await Game.findOne({gameId})
   if (!game) return
   if (game.state !== 'banning') return
   
   const playerIndex = game.players.findIndex((p: Player) => p.id === player)
   game.players[playerIndex].factions_to_ban = []
+  game.markModified(`players.${playerIndex}.factions_to_ban`)
   if (!game.players.find((p: Player) => p.factions_to_ban.length > 0)) {
     game.state = 'drafting'
   }
-  game.bannedFactions.push(...bans)
+  game.bannedFactions = [...bans]
   await game.save()
 }

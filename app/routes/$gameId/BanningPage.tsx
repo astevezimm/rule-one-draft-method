@@ -29,7 +29,7 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
   
   function handleSubmitBans() {
     if (player) {
-      fetch(`/api/${gameId}/submit-bans`, {
+      fetch(`/api/submit-bans`, {
         method: 'POST',
         body: JSON.stringify({
           gameId,
@@ -70,8 +70,8 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
                 {readyToSubmit ? 'Submit Bans' : `(${banCount}/${player.number_of_bans}) Bans so far`}
               </button>
             </>
-          ) : <h2>Waiting for other players to select their factions to ban</h2>
-        ) : <h2>Select name above to reveal factions to ban</h2>
+          ) : <h2 className="message">Waiting for other players to select their factions to ban</h2>
+        ) : <h2 className="message">Select name above to reveal factions to ban</h2>
         }
       </div>
     </>
