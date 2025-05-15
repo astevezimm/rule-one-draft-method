@@ -37,6 +37,24 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
       .map(player => player.name).join('\n')
   }
   
+  function winningMap() {
+    const firstPlace = Math.max(...maps.map(map => map.votes), 0)
+    if (maps.filter(map => map.votes === firstPlace).length > 1) {
+      return !!players.find(player => player.mapVote < 0)
+    }
+    const secondPlace = Math.max(
+      ...maps.filter(map => map.votes !== firstPlace).map(map => map.votes), 0
+    )
+    return firstPlace - secondPlace <= players.filter(player => player.mapVote < 0).length
+  }
+
+  function handleSubmit() {
+    fetch('/api/submit-voting', { method: 'POST', body: JSON.stringify(gameId) })
+      .then(response => {
+        if (response.ok) window.location.reload()
+      })
+  }
+
   return (
     <div className="map-vote main-section card">
       <h2>Vote for a Map</h2>
@@ -64,6 +82,9 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
       </ul>
       {player && player.mapVote >= 0 && (
         <p className="vote-feedback">You're vote is for {maps[player?.mapVote].name}</p>
+      )}
+      {playerSelected === 'admin' && winningMap() && (
+        <button className="conclude-voting" onClick={handleSubmit}>Conclude Voting</button>
       )}
     </div>
   )
