@@ -20,7 +20,10 @@ export const action: ActionFunction = async ({params, request}) => {
       await submitBans(submitBansGameId, banPlayer, bans)
       return new Response(null, {status: 204})
     case 'submit-voting':
-      const submitVotingGameId = await request.json()
+      const {gameId: submitVotingGameId, breakTie} = await request.json()
+      if (breakTie) {
+        await vote(submitVotingGameId, breakTie.player, breakTie.mapIndex, true)
+      }
       await submitVoting(submitVotingGameId)
       return new Response(null, {status: 204})
     default: return new Response(null, {status: 400, statusText: 'Bad Request'})

@@ -12,7 +12,7 @@ export default function Players({playerSelected, selectedPlayer, onSelectPlayer}
   const {players, gameId} = useLoaderData() as {players: Player[], gameId: string}
 
   return (
-    <ul className="players card">
+    <ul className={`players card ${['admin', 'yes'].includes(playerSelected) ? "" : "unselected"}`}>
       {players.map(player => (
         <li key={player.id}>
           <button

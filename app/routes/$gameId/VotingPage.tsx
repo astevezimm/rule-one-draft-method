@@ -2,12 +2,13 @@ import {useLoaderData} from '@remix-run/react'
 import {extractMapImage, Map, Player, PlayerSelected} from '~/global'
 import {Buffer} from 'buffer'
 import UploadScreenshot from '~/components/UploadScreenshot'
-import {ChangeEvent, MouseEvent} from 'react'
+import {ChangeEvent, MouseEvent, useState} from 'react'
 import {DraftPageContentProps} from '~/routes/$gameId/route'
 
 export default function VotingPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
   const {maps, players, gameId} = useLoaderData() as {maps: Map[], players: Player[], gameId: string}
   const player = players.find(player => player.id === selectedPlayer)
+  const [showBreakTieDialog, setShowBreakTieDialog] = useState(false)
   
   async function handleChangeMapImage(event: ChangeEvent<HTMLInputElement>) {
     const image = await extractMapImage(event.target.files?.[0]) as ArrayBuffer | null
@@ -40,19 +41,33 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
   function winningMap() {
     const firstPlace = Math.max(...maps.map(map => map.votes), 0)
     if (maps.filter(map => map.votes === firstPlace).length > 1) {
-      return !!players.find(player => player.mapVote < 0)
+      return !players.find(player => player.mapVote < 0)
     }
     const secondPlace = Math.max(
       ...maps.filter(map => map.votes !== firstPlace).map(map => map.votes), 0
     )
-    return firstPlace - secondPlace <= players.filter(player => player.mapVote < 0).length
+    return firstPlace - secondPlace > players.filter(player => player.mapVote < 0).length
   }
 
   function handleSubmit() {
-    fetch('/api/submit-voting', { method: 'POST', body: JSON.stringify(gameId) })
+    const firstPlace = Math.max(...maps.map(map => map.votes), 0)
+    if (maps.filter(map => map.votes === firstPlace).length > 1) {
+      setShowBreakTieDialog(!showBreakTieDialog)
+    }
+    else submit()
+  }
+  
+  function submit(breakTie?: {player: Player, mapIndex: number}) {
+    const data = {gameId, breakTie}
+    fetch('/api/submit-voting', { method: 'POST', body: JSON.stringify(data) })
       .then(response => {
         if (response.ok) window.location.reload()
       })
+  }
+  
+  function handleBreakTie(map: Map) {
+    if (!player) return
+    submit({player, mapIndex: maps.indexOf(map)})
   }
 
   return (
@@ -84,8 +99,29 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
         <p className="vote-feedback">You're vote is for {maps[player?.mapVote].name}</p>
       )}
       {playerSelected === 'admin' && winningMap() && (
-        <button className="conclude-voting" onClick={handleSubmit}>Conclude Voting</button>
+        <button className="conclude-voting" onClick={handleSubmit}>
+          {showBreakTieDialog && <BreakTieDialog maps={maps} onSelectMap={handleBreakTie} />}
+          Conclude Voting
+        </button>
       )}
+    </div>
+  )
+}
+
+function BreakTieDialog({maps, onSelectMap}: {maps: Map[], onSelectMap: (map: Map) => void}) {
+  const firstPlace = Math.max(...maps.map(map => map.votes), 0)
+  const tiedMaps = maps.filter(map => map.votes === firstPlace)
+  
+  return (
+    <div className="break-tie-dialog" onClick={(e) => e.stopPropagation()}>
+      <h2>Admin: Break Tie</h2>
+      <ul>
+        {tiedMaps.map((map, index) => (
+          <li key={`map-${index}`}>
+            <button onClick={() => onSelectMap(map)}>{map.name}</button>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

@@ -104,7 +104,7 @@ export async function updateMapImage(gameId: string | undefined, index: number, 
   await game.save()
 }
 
-export async function vote(gameId: string | undefined, player: Player, mapIndex: number) {
+export async function vote(gameId: string | undefined, player: Player, mapIndex: number, breakTie = false) {
   const game = await Game.findOne({gameId})
   if (!game) return
   if (game.state !== 'voting') return
@@ -113,7 +113,7 @@ export async function vote(gameId: string | undefined, player: Player, mapIndex:
   if (!map) return
   map.votes++
   
-  if (player.mapVote >= 0) {
+  if (player.mapVote >= 0 && !breakTie) {
     const previousMap = game.maps[player.mapVote]
     if (previousMap) previousMap.votes--
   }

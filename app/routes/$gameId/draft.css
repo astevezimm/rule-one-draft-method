@@ -38,12 +38,12 @@ body > h2 {
     font-size: 1.2rem;
 }
 
-.players:not(:has(.selected)) {
+.players.unselected {
     position: relative;
     padding-bottom: 3.5rem;
 }
 
-.players:not(:has(.selected)):after {
+.players.unselected:after {
     content: 'Select yourself from the list';
     position: absolute;
     color: yellow;
@@ -89,6 +89,11 @@ body > h2 {
     & button {
         margin: 0 auto;
         padding: .2rem;
+    }
+    & button:disabled:hover {
+        background-color: inherit;
+        cursor: default;
+        border: inherit;
     }
     & button:has(+ input[type="file"]) {
         position: absolute;
@@ -139,6 +144,24 @@ a:has(.map-image-placeholder) {
     padding: .7rem;
     font-size: 1.4rem;
     border-radius: 15px;
+    position: relative;
+}
+
+.break-tie-dialog {
+    position: absolute;
+    background-color: #bc00bc;
+    top: 0;
+    left: 50%;
+    translate: -50% -105%;
+    padding: .5rem;
+    border-radius: 15px;
+    cursor: default;
+    & h2 {
+        font-size: 1.5rem;
+        width: max-content;
+        margin-bottom: .5rem;
+        color: white;
+    }
 }
 
 .banning {
