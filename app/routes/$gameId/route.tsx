@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {ActionFunctionArgs, LinksFunction, LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
+import {LinksFunction, LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import {loadDraft} from '~/data/data.server'
 import {isPlayerSelected, pageHeading, Player, playerKey, PlayerSelected} from '~/global'
@@ -17,12 +17,19 @@ export const links: LinksFunction = () => {
 export const loader : LoaderFunction = async ({params}: LoaderFunctionArgs) => {
   const draft = await loadDraft(params.gameId)
   if (!draft) throw new Response("", {status: 404})
-  return Response.json(draft)
+  return Response.json({...draft, domain: process.env.DOMAIN, port: process.env.PORT})
+}
+
+type DraftPageData = {
+  gameId: string
+  players: Player[]
+  domain: string
+  port: string
 }
 
 export default function DraftPage(){
   const [playerSelected, setPlayerSelected] = useState<PlayerSelected>('loading')
-  const {gameId, players} = useLoaderData() as {gameId: string, players: Player[]}
+  const {gameId, players, domain, port} = useLoaderData() as DraftPageData
   const playerSelectedKey = `${gameId}-playerSelected`
   
   const adminPlayer = players.find(player => player.admin)
@@ -54,6 +61,19 @@ export default function DraftPage(){
       setSelectedPlayer(localStorage.getItem(playerKey(gameId)))
     }
   }, [playerSelected, selectedPlayer])
+
+  useEffect(() => {
+    const ws = new WebSocket(`ws://${domain}:${port}/`)
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      if (data.type === 'update' && data.gameId === gameId) {
+        window.location.reload()
+      }
+    }
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    }
+  }, [])
   
   function handleSelectPlayer(player: Player) {
     setPlayerSelected('yes')

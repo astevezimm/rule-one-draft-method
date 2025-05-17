@@ -1,8 +1,10 @@
 import {config} from 'dotenv'
 import mongoose from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
+import { WebSocketServer, WebSocket } from 'ws'
 import {Player, Map} from '~/global'
 import factions from './factions.json'
+import * as process from 'node:process'
 
 config()
 mongoose.connect(process.env.DB_URL as string)
@@ -24,6 +26,16 @@ const gameSchema = new mongoose.Schema({
 
 // delete mongoose.models.Game // uncomment this line to reset the model
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
+
+const ws = new WebSocketServer({ port: +(process.env.PORT || 3000) })
+
+function broadcast(gameId: string | undefined) {
+  ws.clients.forEach((client: any)=> {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({type: 'update', gameId}))
+    }
+  })
+}
 
 export async function startDraft(data: Record<string, any>) {
   const players: Player[] = []
@@ -102,6 +114,7 @@ export async function updateMapImage(gameId: string | undefined, index: number, 
   if (index < 0 || index >= game.maps.length) return
   game.maps[index].image = image
   await game.save()
+  broadcast(gameId)
 }
 
 export async function vote(gameId: string | undefined, player: Player, mapIndex: number, breakTie = false) {
@@ -121,6 +134,7 @@ export async function vote(gameId: string | undefined, player: Player, mapIndex:
   game.players[game.players.findIndex((p: Player) => p.id === player.id)] = player
   
   await game.save()
+  if (!breakTie) broadcast(gameId)
 }
 
 export async function submitVoting(gameId: string | undefined) {
@@ -131,6 +145,7 @@ export async function submitVoting(gameId: string | undefined) {
   game.players.sort(() => Math.random() - 0.5)
   const newGame = game.state === 'banning' ? _distributeFactionsToBan(game) : game
   await newGame.save()
+  broadcast(gameId)
 }
 
 function _distributeFactionsToBan(game: any) {
@@ -170,7 +185,6 @@ function _distributeFactionsToBan(game: any) {
 }
 
 export async function submitBans(gameId: string | undefined, player: string, bans: string[]) {
-  console.log('submitBans', gameId, player, bans)
   const game = await Game.findOne({gameId})
   if (!game) return
   if (game.state !== 'banning') return
@@ -183,4 +197,5 @@ export async function submitBans(gameId: string | undefined, player: string, ban
   }
   game.bannedFactions = [...game.bannedFactions, ...bans]
   await game.save()
+  broadcast(gameId)
 }
