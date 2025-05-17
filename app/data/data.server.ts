@@ -181,6 +181,6 @@ export async function submitBans(gameId: string | undefined, player: string, ban
   if (!game.players.find((p: Player) => p.factions_to_ban.length > 0)) {
     game.state = 'drafting'
   }
-  game.bannedFactions = [...bans]
+  game.bannedFactions = [...game.bannedFactions, ...bans]
   await game.save()
 }
