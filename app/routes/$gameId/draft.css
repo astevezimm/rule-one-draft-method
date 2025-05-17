@@ -250,3 +250,33 @@ a:has(.map-image-placeholder) {
         }
     }
 }
+
+.draft-page {
+    & h2, & h3 {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    & h3 {
+        color: white;
+    }
+    & .card {
+        width: fit-content;
+        margin: 0 auto 1rem;
+
+        & img {
+            width: min(35rem, 100vw - 4rem);
+        }
+    }
+}
+
+.draft-page-factions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    max-width: 71rem;
+    margin: 0 auto;
+    @media (max-width: 74rem) {
+        max-width: min-content;
+    }
+}
