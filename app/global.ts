@@ -12,9 +12,17 @@ export type Player = {
   admin?: boolean
   factions_to_ban: {wiki: string, id: string, name: string}[]
   number_of_bans: number
+  speaker?: boolean
+  faction?: string
+  slice?: number
 }
 
 export type PlayerSelected = 'yes' | 'no' | 'loading' | 'admin'
+
+export type DraftItem = {
+  type: 'faction' | 'slice' | 'speaker'
+  value: string
+}
 
 export function isPlayerSelected(value: any): value is PlayerSelected {
   return value === 'yes' || value === 'no' || value === 'loading' || value === 'admin'

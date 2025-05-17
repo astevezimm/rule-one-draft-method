@@ -2,7 +2,7 @@ import {config} from 'dotenv'
 import mongoose from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 import { WebSocketServer, WebSocket } from 'ws'
-import {Player, Map} from '~/global'
+import {Player, Map, DraftItem} from '~/global'
 import factions from './factions.json'
 import * as process from 'node:process'
 
@@ -22,9 +22,11 @@ const gameSchema = new mongoose.Schema({
   factionPoolSize: Number,
   initiativeSet: Boolean,
   bannedFactions: { type: [String], default: [] },
+  draftDirection: { type: String, default: 'forward' },
+  currentPlayer: { type: Number, default: 0 },
 })
 
-// delete mongoose.models.Game // uncomment this line to reset the model
+delete mongoose.models.Game // uncomment this line to reset the model
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
 
 const ws = new WebSocketServer({ port: +(process.env.PORT || 3000) })
@@ -196,6 +198,39 @@ export async function submitBans(gameId: string | undefined, player: string, ban
     game.state = 'drafting'
   }
   game.bannedFactions = [...game.bannedFactions, ...bans]
+  await game.save()
+  broadcast(gameId)
+}
+
+export async function draftItem(gameId: string | undefined, player: string, item: DraftItem) {
+  const game = await Game.findOne({gameId})
+  if (!game) return
+  if (game.state !== 'drafting') return
+  
+  const playerIndex = game.players.findIndex((p: Player) => p.id === player)
+  switch (item.type) {
+    case 'faction':
+      game.players[playerIndex].faction = item.value
+      game.markModified(`players.${playerIndex}.faction`)
+      break
+    case 'slice':
+      game.players[playerIndex].slice = +item.value
+      game.markModified(`players.${playerIndex}.slice`)
+      break
+    case 'speaker':
+      game.players[playerIndex].speaker = true
+      game.markModified(`players.${playerIndex}.speaker`)
+      break
+  }
+  
+  game.currentPlayer = game.draftDirection === 'forward' ? playerIndex + 1 : playerIndex - 1
+  if (game.draftDirection === 'forward' && game.players.length === game.currentPlayer + 1) {
+    game.draftDirection = 'backward'
+  }
+  else if (game.draftDirection === 'backward' && game.currentPlayer === 0) {
+    game.draftDirection = 'forward'
+  }
+  
   await game.save()
   broadcast(gameId)
 }
