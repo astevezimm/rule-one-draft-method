@@ -100,7 +100,8 @@ export async function loadDraft(gameId: string | undefined) {
     dsplus: game.dsplus,
     factionPoolSize: game.factionPoolSize,
     bannedFactions: game.bannedFactions,
-    gameId
+    gameId,
+    currentPlayer: game.currentPlayer,
   }
 }
 

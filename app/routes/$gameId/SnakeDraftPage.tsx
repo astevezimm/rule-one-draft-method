@@ -1,18 +1,23 @@
 import {Player, Map, PlayerSelected} from '~/global'
 import {useLoaderData} from '@remix-run/react'
 import factions from '~/data/factions.json'
+import Players from '~/routes/$gameId/Players'
 
 export default function SnakeDraftPage({playerSelected}: {playerSelected: PlayerSelected}) {
   // view of draft order with current player selected
   // nothing for user to do if not their turn
   // otherwise choice of speaker, slice, or race
   
-  const {map, factionPool, players} = useDraftData()
+  const {map, factionPool, currentPlayer} = useDraftData()
+  const choices = []
+  if (!currentPlayer.faction) choices.push('faction')
+  if (!currentPlayer.slice) choices.push('slice')
+  if (!currentPlayer.speaker) choices.push('speaker')
+  choices[choices.length - 1] = `or ${choices[choices.length - 1]}!`
   
   return (
     <div className="draft-page">
-      <h2>Snake Draft to Be Implemented</h2>
-      <h3>This is a reference page for now.</h3>
+      <h2><span>{currentPlayer?.name}:</span> Choose {choices.join(', ')}</h2>
       {map && (
         <div className="card">
           <h3>{map.name}</h3>
@@ -42,7 +47,6 @@ export default function SnakeDraftPage({playerSelected}: {playerSelected: Player
 
 function useDraftData() {
   type DraftData = {
-    players: Player[]
     maps: Map[]
     base: boolean
     pok: boolean
@@ -50,9 +54,11 @@ function useDraftData() {
     ds: boolean
     dsplus: boolean
     bannedFactions: string[]
+    currentPlayer: number
+    players: Player[]
   }
   
-  const {maps, base, pok, keleres, ds, dsplus, bannedFactions, players} = useLoaderData() as DraftData
+  const {maps, base, pok, keleres, ds, dsplus, bannedFactions, currentPlayer, players} = useLoaderData() as DraftData
   
   const map = maps.find(map => map.votes = Math.max(...maps.map(m => m.votes)))
   
@@ -66,5 +72,5 @@ function useDraftData() {
     faction => !bannedFactions.includes(faction.id)
   )
   
-  return {map, factionPool: filteredFactionPool, players}
+  return {map, factionPool: filteredFactionPool, currentPlayer: players[currentPlayer]}
 }

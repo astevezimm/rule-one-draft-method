@@ -29,6 +29,24 @@ body > h2 {
                 background-color: yellow;
             }
         }
+        &.current {
+            scale: 1.1;
+            outline: 3px solid black;
+            outline-offset: 0;
+            border: none;
+            animation: border-blink 1.3s infinite ease-in-out;
+        }
+    }
+}
+
+@keyframes border-blink {
+    0%, 100% {
+        outline-color: black;
+        outline-offset: 0px;
+    }
+    50% {
+        outline-color: transparent;
+        outline-offset: 0px;
     }
 }
 
@@ -252,12 +270,14 @@ a:has(.map-image-placeholder) {
 }
 
 .draft-page {
-    & h2, & h3 {
+    & h2 {
         text-align: center;
         margin-bottom: 1rem;
-    }
-    & h3 {
-        color: white;
+        & span {
+            font-size: 1.9rem;
+            color: white;
+            padding-right: .5rem;
+        }
     }
     & .card {
         width: fit-content;
