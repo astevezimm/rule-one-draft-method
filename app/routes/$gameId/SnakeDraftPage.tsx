@@ -8,7 +8,8 @@ export default function SnakeDraftPage({playerSelected}: {playerSelected: Player
   // nothing for user to do if not their turn
   // otherwise choice of speaker, slice, or race
   
-  const {map, factionPool, currentPlayer} = useDraftData()
+  const {map, factionPool, currentPlayer, speaker} = useDraftData()
+  
   const choices = []
   if (!currentPlayer.faction) choices.push('faction')
   if (!currentPlayer.slice) choices.push('slice')
@@ -18,9 +19,19 @@ export default function SnakeDraftPage({playerSelected}: {playerSelected: Player
   return (
     <div className="draft-page">
       <h2><span>{currentPlayer?.name}:</span> Choose {choices.join(', ')}</h2>
+      <div className="card speaker">
+        <h3>Speaker</h3>
+        {speaker ? (
+          <p>{speaker.name}</p>
+        ) : (
+          <button>
+            <img src={`images/gavel.jpg`} alt="gavel" />
+          </button>
+        )}
+      </div>
       {map && (
         <div className="card">
-          <h3>{map.name}</h3>
+          <h3>Slices</h3>
           <a href={map.url} target="_blank" rel="noopener noreferrer">
             {map.image && ((map.image as unknown) as {data: {length: number}}).data.length > 0 ?
               <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} /> :
@@ -30,7 +41,7 @@ export default function SnakeDraftPage({playerSelected}: {playerSelected: Player
         </div>
       )}
       <div className="card">
-        <h3>Faction Pool</h3>
+        <h3>Factions</h3>
         <ul className="draft-page-factions">
           {factionPool.map(faction => (
             <li key={faction.id}>
@@ -73,5 +84,7 @@ function useDraftData() {
     faction => !bannedFactions.includes(faction.id)
   )
   
-  return {map, factionPool: filteredFactionPool, currentPlayer: players[currentPlayer]}
+  const speaker = players.find(player => player.speaker)
+  
+  return {map, factionPool: filteredFactionPool, currentPlayer: players[currentPlayer], speaker}
 }

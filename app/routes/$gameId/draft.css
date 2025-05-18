@@ -270,6 +270,7 @@ a:has(.map-image-placeholder) {
 }
 
 .draft-page {
+    margin: 0 1rem;
     & h2 {
         text-align: center;
         margin-bottom: 1rem;
@@ -281,10 +282,32 @@ a:has(.map-image-placeholder) {
     }
     & .card {
         width: fit-content;
-        margin: 0 auto 1rem;
+        margin-bottom: 1rem;
 
         & img {
-            width: min(35rem, 100vw - 4rem);
+            width: 15rem;
+        }
+        
+        &.speaker {
+            & button {
+                border: none;
+                background-color: transparent;
+                margin-top: .2rem;
+            }
+            & img {
+                width: 10rem;
+                border-radius: 5px;
+                box-shadow: 2px 2px 6px #222;
+                transition: all 0.2s;
+                &:hover {
+                    translate: 1px 1px;
+                    box-shadow: none;
+                }
+            }
+            & p {
+                text-align: center;
+                font-family: "Roboto", sans-serif;
+            }
         }
     }
 }
@@ -294,7 +317,7 @@ a:has(.map-image-placeholder) {
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
-    max-width: 71rem;
+    max-width: 31rem;
     margin: 0 auto;
     @media (max-width: 74rem) {
         max-width: min-content;
