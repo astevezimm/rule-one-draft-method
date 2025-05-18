@@ -54,7 +54,8 @@ function useDraftData() {
   
   const {maps, base, pok, keleres, ds, dsplus, bannedFactions, players} = useLoaderData() as DraftData
   
-  const map = maps.find(map => map.votes = Math.max(...maps.map(m => m.votes)))
+  const map = maps.length === 1 ? maps[0] :
+    maps.find(map => map.votes = Math.max(...maps.map(m => m.votes)))
   
   const factionPool = []
   if (base) factionPool.push(...factions[0].factions)
