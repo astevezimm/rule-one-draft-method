@@ -15,6 +15,7 @@
     "@remix-run/react": "^2.16.3",
     "@remix-run/serve": "^2.16.3",
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "isbot": "^4.1.0",
     "mongoose": "^8.13.1",
     "react": "^18.2.0",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@remix-run/dev": "^2.16.3",
+    "@types/express": "^5.0.2",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@types/ws": "^8.18.1",

@@ -5,6 +5,8 @@ import { WebSocketServer, WebSocket } from 'ws'
 import {Player, Map, DraftItem} from '~/global'
 import factions from './factions.json'
 import * as process from 'node:process'
+import express from 'express'
+import * as http from 'node:http'
 
 config()
 mongoose.connect(process.env.DB_URL as string)
@@ -29,7 +31,9 @@ const gameSchema = new mongoose.Schema({
 delete mongoose.models.Game // uncomment this line to reset the model
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
 
-const ws = new WebSocketServer({ port: +(process.env.PORT || 3000) })
+const app = express()
+const server = http.createServer(app)
+const ws = new WebSocketServer({ server })
 
 function broadcast(gameId: string | undefined) {
   ws.clients.forEach((client: any)=> {
