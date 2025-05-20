@@ -92,6 +92,14 @@ export default function StartDraftForm() {
       return false
     }
     else {
+      if (playerNames.length === 8) {
+        const notPok = document.querySelectorAll('input[type="checkbox"]:not(#pok)')
+        const beyondPokChecked = Array.from(notPok).some(checkbox => (checkbox as HTMLInputElement).checked)
+        if (!beyondPokChecked) {
+          setCheckboxError('For 8 players, more than just POK factions must be selected.')
+          return false
+        }
+      }
       if (checkboxError) setCheckboxError(null)
       return true
     }
