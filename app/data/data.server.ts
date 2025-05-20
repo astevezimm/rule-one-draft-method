@@ -68,7 +68,7 @@ export async function startDraft(data: Record<string, any>) {
     }
   })
   
-  const state = maps.length > 1 ? "voting" : (+data.factionPoolSize > players.length ? "banning" : "drafting")
+  const state = maps.length > 1 ? "voting" : (banningNeeded(data) ? "banning" : "drafting")
   
   if (state !== 'voting') players.sort(() => Math.random() - 0.5)
   
@@ -88,6 +88,16 @@ export async function startDraft(data: Record<string, any>) {
   const game = new Game(state === 'banning' ? _distributeFactionsToBan(gameData) : gameData)
   await game.save()
   return game.gameId
+}
+
+function banningNeeded(data: any) {
+  let includedFactions = 0
+  if (data.base) includedFactions += factions[0].factions.length
+  if (data.pok) includedFactions += factions[1].factions.length
+  if (data.keleres) includedFactions += factions[2].factions.length
+  if (data.ds) includedFactions += factions[3].factions.length
+  if (data.dsplus) includedFactions += factions[4].factions.length
+  return includedFactions <= +data.factionPoolSize
 }
 
 export async function loadDraft(gameId: string | undefined) {
@@ -148,7 +158,7 @@ export async function submitVoting(gameId: string | undefined) {
   const game = await Game.findOne({gameId})
   if (!game) return
   if (game.state !== 'voting') return
-  game.state = +game.factionPoolSize > game.players.length ? "banning" : "drafting"
+  game.state = banningNeeded(game) ? "banning" : "drafting"
   game.players.sort(() => Math.random() - 0.5)
   const newGame = game.state === 'banning' ? _distributeFactionsToBan(game) : game
   await newGame.save()
