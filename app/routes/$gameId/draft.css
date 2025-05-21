@@ -270,7 +270,6 @@ a:has(.map-image-placeholder) {
 }
 
 .draft-page {
-    margin: 0 1rem;
     & h2 {
         text-align: center;
         margin-bottom: 1rem;
@@ -282,12 +281,8 @@ a:has(.map-image-placeholder) {
     }
     & .card {
         width: fit-content;
-        margin-bottom: 1rem;
+        margin: 0 auto 1rem;
 
-        & img {
-            width: 15rem;
-        }
-        
         &.speaker {
             & button {
                 border: none;
@@ -308,7 +303,83 @@ a:has(.map-image-placeholder) {
                 text-align: center;
                 font-family: "Roboto", sans-serif;
             }
+            & button {
+                position: relative;
+                &:hover::after {
+                    content: 'Select';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: white;
+                    font-size: 1.5rem;
+                    text-shadow: 2px 2px 6px black;
+                    opacity: 0;
+                    animation: speaker-fade-in 0.2s forwards;
+                }
+            }
         }
+        
+        &.slices {
+            width: fit-content;
+            @media (max-width: 512px) {
+                width: 100%;
+            }
+            & .map-image-placeholder, & img {
+                width: 30rem;
+                @media (max-width: 512px) {
+                    width: 100%;
+                }
+            }
+            & .map-image-placeholder {
+                position: relative;
+                height: 30rem;
+                border-radius: 10px;
+            }
+            & a:hover {
+                position: relative;
+                & img {
+                    opacity: 0.3;
+                }
+            }
+            & a:hover::after, & .map-image-placeholder::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-color: #530053;
+                border-radius: 10px;
+                box-shadow: inset 0 0 20px #220022;
+            }
+        }
+
+        &.factions img {
+            width: 15rem;
+        }
+        &.factions button {
+            border: none;
+            background-color: transparent;
+            position: relative;
+            &:hover::after {
+                content: 'Expand';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 2rem;
+                text-shadow: 0 0 3px yellow;
+            }
+        }
+    }
+}
+
+@keyframes speaker-fade-in {
+    from {
+        opacity: 0;
+        translate: 0 0;
+    }
+    to {
+        opacity: 1;
+        translate: 1px 1px;
     }
 }
 
@@ -319,7 +390,7 @@ a:has(.map-image-placeholder) {
     justify-content: center;
     max-width: 31rem;
     margin: 0 auto;
-    @media (max-width: 74rem) {
-        max-width: min-content;
+    @media (max-width: 527px) {
+        max-width: 15rem;
     }
 }

@@ -4,11 +4,11 @@ import factions from '~/data/factions.json'
 import Players from '~/routes/$gameId/Players'
 
 export default function SnakeDraftPage({playerSelected}: {playerSelected: PlayerSelected}) {
-  // view of draft order with current player selected
-  // nothing for user to do if not their turn
-  // otherwise choice of speaker, slice, or race
-  
   const {map, factionPool, currentPlayer, speaker} = useDraftData()
+  
+  // When no player selected or the player selected is not the current player
+  // then they are not allowed to select anything
+  // next thing to implement
   
   const choices = []
   if (!currentPlayer.faction) choices.push('faction')
@@ -30,7 +30,7 @@ export default function SnakeDraftPage({playerSelected}: {playerSelected: Player
         )}
       </div>
       {map && (
-        <div className="card">
+        <div className="card slices">
           <h3>Slices</h3>
           <a href={map.url} target="_blank" rel="noopener noreferrer">
             {map.image && ((map.image as unknown) as {data: {length: number}}).data.length > 0 ?
@@ -40,14 +40,16 @@ export default function SnakeDraftPage({playerSelected}: {playerSelected: Player
           </a>
         </div>
       )}
-      <div className="card">
+      <div className="card factions">
         <h3>Factions</h3>
         <ul className="draft-page-factions">
           {factionPool.map(faction => (
             <li key={faction.id}>
-              <a href={faction.wiki} target="_blank" rel="noopener noreferrer">
+              {/*<a href={faction.wiki} target="_blank" rel="noopener noreferrer">*/}
+              <button>
                 <img src={`images/${faction.id}.jpg`} alt={faction.name} />
-              </a>
+              </button>
+              {/*</a>*/}
             </li>
           ))}
         </ul>
