@@ -82,6 +82,13 @@ export default function DraftPage(){
     localStorage.setItem(playerKey(gameId), player.id)
   }
   
+  function handleCancelSelection() {
+    setPlayerSelected('no')
+    setSelectedPlayer(null)
+    localStorage.setItem(playerSelectedKey, 'no')
+    localStorage.removeItem(playerKey(gameId))
+  }
+  
   return (
     <>
       <h1>{pageHeading}</h1>
@@ -90,6 +97,7 @@ export default function DraftPage(){
         playerSelected={playerSelected}
         selectedPlayer={selectedPlayer}
         onSelectPlayer={handleSelectPlayer}
+        onCancelSelection={handleCancelSelection}
       />
       <DraftPageContent playerSelected={playerSelected} selectedPlayer={selectedPlayer} />
     </>

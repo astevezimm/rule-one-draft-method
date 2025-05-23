@@ -6,16 +6,16 @@ type PlayersProps = {
   playerSelected: PlayerSelected
   selectedPlayer: string | null
   onSelectPlayer: (player: Player) => void
+  onCancelSelection: () => void
 }
 
 type PlayersData = {
   players: Player[]
   currentPlayer: number
-  state: string
 }
 
-export default function Players({playerSelected, selectedPlayer, onSelectPlayer}: PlayersProps) {
-  const {players, currentPlayer, state} = useLoaderData() as PlayersData
+export default function Players({playerSelected, selectedPlayer, onSelectPlayer, onCancelSelection}: PlayersProps) {
+  const {players, currentPlayer} = useLoaderData() as PlayersData
   
   function selected(player: Player) {
     return !selectedPlayer || player.id === selectedPlayer ? 'selected' : ''
@@ -24,18 +24,23 @@ export default function Players({playerSelected, selectedPlayer, onSelectPlayer}
   function current(player: Player) {
     return player.id === players[currentPlayer].id ? 'current' : ''
   }
+  
+  const selectionDone = ['admin', 'yes'].includes(playerSelected)
 
   return (
-    <ul className={`players card ${['admin', 'yes'].includes(playerSelected) ? "" : "unselected"}`}>
+    <ul className={`players card ${selectionDone ? "" : "unselected"}`}>
       {players.map(player => (
         <li key={player.id}>
           <button
-            disabled={['admin', 'yes'].includes(playerSelected)}
+            disabled={selectionDone}
             onClick={() => onSelectPlayer(player)}
             className={`${selected(player)} ${current(player)}`}
           >
             {player.name}
           </button>
+          {playerSelected === "yes" && selectedPlayer === player.id && (
+            <button className="cancel-selection" onClick={onCancelSelection}>x</button>
+          )}
         </li>
       ))}
     </ul>
