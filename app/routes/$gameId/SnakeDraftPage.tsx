@@ -1,30 +1,38 @@
 import {Player, Map, PlayerSelected} from '~/global'
 import {useLoaderData} from '@remix-run/react'
 import factions from '~/data/factions.json'
-import Players from '~/routes/$gameId/Players'
+import {DraftPageContentProps} from '~/routes/$gameId/route'
+import {useState} from 'react'
 
-export default function SnakeDraftPage({playerSelected}: {playerSelected: PlayerSelected}) {
+export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
   const {map, factionPool, currentPlayer, speaker} = useDraftData()
+  const [expandedFaction, setExpandedFaction] = useState<{id: string, name: string, wiki: string} | null>(null)
   
   // When no player selected or the player selected is not the current player
   // then they are not allowed to select anything
   // next thing to implement
   
-  const choices = []
-  if (!currentPlayer.faction) choices.push('faction')
-  if (!currentPlayer.slice) choices.push('slice')
-  if (!currentPlayer.speaker) choices.push('speaker')
-  choices[choices.length - 1] = `or ${choices[choices.length - 1]}!`
+  const isActivePlayer = ['admin', 'yes'].includes(playerSelected) && selectedPlayer === currentPlayer.id
+  
+  function handleSelection(type: string, value: string | number | null = null) {
+    if (!isActivePlayer) return
+  }
+  
+  const choicesText = []
+  if (!currentPlayer.faction) choicesText.push('faction')
+  if (!currentPlayer.slice) choicesText.push('slice')
+  if (!currentPlayer.speaker) choicesText.push('speaker')
+  choicesText[choicesText.length - 1] = `or ${choicesText[choicesText.length - 1]}!`
   
   return (
     <div className="draft-page">
-      <h2><span>{currentPlayer?.name}:</span> Choose {choices.join(', ')}</h2>
+      <h2><span>{currentPlayer?.name}:</span> Choose {choicesText.join(', ')}</h2>
       <div className="card speaker">
         <h3>Speaker</h3>
         {speaker ? (
           <p>{speaker.name}</p>
         ) : (
-          <button>
+          <button disabled={!isActivePlayer} onClick={() => handleSelection('speaker')}>
             <img src={`images/gavel.jpg`} alt="gavel" />
           </button>
         )}
@@ -45,15 +53,27 @@ export default function SnakeDraftPage({playerSelected}: {playerSelected: Player
         <ul className="draft-page-factions">
           {factionPool.map(faction => (
             <li key={faction.id}>
-              {/*<a href={faction.wiki} target="_blank" rel="noopener noreferrer">*/}
-              <button>
+              <button onClick={() => setExpandedFaction(faction)}>
                 <img src={`images/${faction.id}.jpg`} alt={faction.name} />
               </button>
-              {/*</a>*/}
             </li>
           ))}
         </ul>
       </div>
+      {expandedFaction && (
+        <div className="expanded-faction-view">
+          <button className="close" onClick={() => setExpandedFaction(null)}>X</button>
+          <a href={expandedFaction.wiki} target="_blank" rel="noopener noreferrer">
+            <img src={`images/${expandedFaction.id}.jpg`} alt={expandedFaction.name} />
+          </a>
+          <button
+            onClick={() => handleSelection('faction', expandedFaction.id)}
+            disabled={!isActivePlayer}
+          >
+            Select
+          </button>
+        </div>
+      )}
     </div>
   )
 }

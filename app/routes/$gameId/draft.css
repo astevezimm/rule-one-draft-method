@@ -297,28 +297,22 @@ a:has(.map-image-placeholder) {
         margin: 0 auto 1rem;
 
         &.speaker {
-            & button {
-                border: none;
-                background-color: transparent;
-                margin-top: .2rem;
-            }
             & img {
                 width: 10rem;
                 border-radius: 5px;
                 box-shadow: 2px 2px 6px #222;
                 transition: all 0.2s;
-                &:hover {
-                    translate: 1px 1px;
-                    box-shadow: none;
-                }
             }
             & p {
                 text-align: center;
                 font-family: "Roboto", sans-serif;
             }
             & button {
+                border: none;
+                background-color: transparent;
+                margin-top: .2rem;
                 position: relative;
-                &:hover::after {
+                &:enabled:hover::after {
                     content: 'Select';
                     position: absolute;
                     top: 50%;
@@ -329,6 +323,17 @@ a:has(.map-image-placeholder) {
                     text-shadow: 2px 2px 6px black;
                     opacity: 0;
                     animation: speaker-fade-in 0.2s forwards;
+                    pointer-events: none;
+                }
+                &:enabled img:hover {
+                    translate: 1px 1px;
+                    box-shadow: none;
+                }
+                &:disabled {
+                    cursor: default;
+                    img {
+                        opacity: 0.6;
+                    }
                 }
             }
         }
@@ -380,6 +385,47 @@ a:has(.map-image-placeholder) {
                 transform: translate(-50%, -50%);
                 font-size: 2rem;
                 text-shadow: 0 0 3px yellow;
+            }
+        }
+    }
+    & .expanded-faction-view {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
+        display: flex;
+        flex-direction: column;
+        & img {
+            width: 100%;
+            max-width: 40rem;
+        }
+        & button {
+            display: block;
+            margin: 0 auto;
+            padding: .5rem;
+            font-size: 2rem;
+            border-radius: 15px;
+            color: black;
+            background-color: orange;
+            transition: all 0.2s;
+            &:hover {
+                background-color: #ffbb00;
+            }
+            &:disabled {
+                background-color: darkgray;
+                color: black;
+                cursor: default;
+                opacity: .8;
+                &:hover {
+                    background-color: darkgray;
+                    opacity: .8;
+                }
+            }
+            &.close {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                padding: 0 .5rem;
             }
         }
     }
