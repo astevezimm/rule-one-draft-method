@@ -5,17 +5,29 @@ import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useState} from 'react'
 
 export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
-  const {map, factionPool, currentPlayer, speaker} = useDraftData()
+  const {map, factionPool, currentPlayer, speaker, gameId} = useDraftData()
   const [expandedFaction, setExpandedFaction] = useState<{id: string, name: string, wiki: string} | null>(null)
-  
-  // When no player selected or the player selected is not the current player
-  // then they are not allowed to select anything
-  // next thing to implement
   
   const isActivePlayer = ['admin', 'yes'].includes(playerSelected) && selectedPlayer === currentPlayer.id
   
   function handleSelection(type: string, value: string | number | null = null) {
     if (!isActivePlayer) return
+    fetch("/api/draft-item", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        gameId,
+        player: currentPlayer.id,
+        type,
+        value
+      })
+    }).then(response => {
+      if (response.ok) {
+        window.location.reload()
+      }
+    })
   }
   
   const choicesText = []
@@ -89,9 +101,12 @@ function useDraftData() {
     bannedFactions: string[]
     currentPlayer: number
     players: Player[]
+    gameId: string
   }
   
-  const {maps, base, pok, keleres, ds, dsplus, bannedFactions, currentPlayer, players} = useLoaderData() as DraftData
+  const {
+    maps, base, pok, keleres, ds, dsplus, bannedFactions, currentPlayer, players, gameId
+  } = useLoaderData() as DraftData
   
   const map = maps.length === 1 ? maps[0] :
     maps.find(map => map.votes = Math.max(...maps.map(m => m.votes)))
@@ -108,5 +123,5 @@ function useDraftData() {
   
   const speaker = players.find(player => player.speaker)
   
-  return {map, factionPool: filteredFactionPool, currentPlayer: players[currentPlayer], speaker}
+  return {map, factionPool: filteredFactionPool, currentPlayer: players[currentPlayer], speaker, gameId}
 }
