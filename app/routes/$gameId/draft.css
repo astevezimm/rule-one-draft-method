@@ -341,18 +341,27 @@ a:has(.map-image-placeholder) {
         &.slices {
             width: fit-content;
             @media (max-width: 512px) {
-                width: 100%;
-            }
-            & .map-image-placeholder, & img {
-                width: 30rem;
-                @media (max-width: 512px) {
-                    width: 100%;
-                }
+                /*width: 100%;*/
             }
             & .map-image-placeholder {
                 position: relative;
-                height: 30rem;
+                height: 34rem;
                 border-radius: 10px;
+            }
+            & .map-image-placeholder, & img {
+                width: 30rem;
+                @media (max-width: 550px) {
+                    width: 24rem;
+                    height: 27rem;
+                }
+                @media (max-width: 425px) {
+                    width: 20rem;
+                    height: 23rem;
+                }
+                @media (max-width: 355px) {
+                    width: 15rem;
+                    height: 17rem;
+                }
             }
             & a:hover {
                 position: relative;
@@ -365,6 +374,9 @@ a:has(.map-image-placeholder) {
                 position: absolute;
                 inset: 0;
                 background-color: #530053;
+                background-image: url("/images/grid-4-6.png");
+                background-position: 0 130%;
+                background-size: 100%;
                 border-radius: 10px;
                 box-shadow: inset 0 0 20px #220022;
             }
