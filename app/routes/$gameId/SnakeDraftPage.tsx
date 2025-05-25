@@ -5,7 +5,7 @@ import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useState} from 'react'
 
 export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
-  const {map, factionPool, currentPlayer, speaker, gameId} = useDraftData()
+  const {map, factionPool, currentPlayer, speaker, gameId, playerCount} = useDraftData()
   const [expandedFaction, setExpandedFaction] = useState<{id: string, name: string, wiki: string} | null>(null)
   
   const isActivePlayer = ['admin', 'yes'].includes(playerSelected) && selectedPlayer === currentPlayer.id
@@ -50,7 +50,7 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
         )}
       </div>
       {map && (
-        <div className="card slices">
+        <div className={`card slices ${playerCount >= 7 ? 'large' : ''}`}>
           <h3>Slices</h3>
           <a href={map.url} target="_blank" rel="noopener noreferrer">
             {map.image && ((map.image as unknown) as {data: {length: number}}).data.length > 0 ?
@@ -123,5 +123,9 @@ function useDraftData() {
   
   const speaker = players.find(player => player.speaker)
   
-  return {map, factionPool: filteredFactionPool, currentPlayer: players[currentPlayer], speaker, gameId}
+  return {
+    map, factionPool: filteredFactionPool,
+    currentPlayer: players[currentPlayer], playerCount: players.length,
+    speaker, gameId
+  }
 }
