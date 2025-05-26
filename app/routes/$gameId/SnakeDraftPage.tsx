@@ -186,7 +186,6 @@ type SeatButtonProps = {
 }
 
 function SeatButton({fourPlayer = false, seatPosition, seatNumber, active, onSelect}: SeatButtonProps) {
-  console.log(active)
   const className = `seat-hex ${fourPlayer ? 'p4-' : ''}seat-${seatPosition}`
   return <button disabled={!active} className={className} onClick={onSelect}>P{seatNumber}</button>
 }
