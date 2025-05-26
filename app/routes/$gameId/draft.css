@@ -486,7 +486,8 @@ a:has(.map-image-placeholder) {
                 width: 5.3rem;
                 height: 5.3rem;
                 background-color: black;
-                cursor: pointer;
+                border: none;
+                transition: all 0.2s;
                 
                 color: yellow;
                 font-size: 1.5rem;
@@ -495,7 +496,12 @@ a:has(.map-image-placeholder) {
                 justify-content: center;
                 align-items: center;
                 
-                &:hover {
+                &:disabled {
+                    cursor: default;
+                    opacity: 0.4;
+                }
+                
+                &:enabled:hover {
                     background-color: orange;
                     color: transparent;
                     &::after {

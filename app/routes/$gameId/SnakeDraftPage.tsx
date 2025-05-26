@@ -45,16 +45,34 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
         break
       case 4: return (
         <>
-          <div className="seat-hex p4-seat-1">P1</div>
-          <div className="seat-hex p4-seat-2">P2</div>
-          <div className="seat-hex p4-seat-3">P3</div>
-          <div className="seat-hex p4-seat-4">P4</div>
+          <SeatButton
+            fourPlayer seatPosition={1} seatNumber={1} active={isActivePlayer}
+            onSelect={() => handleSelection('slice', 1)}
+          />
+          <SeatButton
+            fourPlayer seatPosition={2} seatNumber={2} active={isActivePlayer}
+            onSelect={() => handleSelection('slice', 2)}
+          />
+          <SeatButton
+            fourPlayer seatPosition={3} seatNumber={3} active={isActivePlayer}
+            onSelect={() => handleSelection('slice', 3)}
+          />
+          <SeatButton
+            fourPlayer seatPosition={4} seatNumber={4} active={isActivePlayer}
+            onSelect={() => handleSelection('slice', 4)}
+          />
         </>
       )
     }
     
     return seats.map((seat, index) => {
-      return <div key={`seat-${index}`} className={`seat-hex seat-${seat}`}>P{index}</div>
+      return (
+        <SeatButton
+          seatPosition={seat} seatNumber={index + 1} active={isActivePlayer}
+          onSelect={() => handleSelection('slice', index + 1)}
+          key={`seat-${seat}-${index}`}
+        />
+      )
     })
   }
   
@@ -157,4 +175,18 @@ function useDraftData() {
     currentPlayer: players[currentPlayer], playerCount: players.length,
     speaker, gameId
   }
+}
+
+type SeatButtonProps = {
+  fourPlayer?: boolean
+  seatPosition: number
+  seatNumber: number
+  active: boolean
+  onSelect: () => void
+}
+
+function SeatButton({fourPlayer = false, seatPosition, seatNumber, active, onSelect}: SeatButtonProps) {
+  console.log(active)
+  const className = `seat-hex ${fourPlayer ? 'p4-' : ''}seat-${seatPosition}`
+  return <button disabled={!active} className={className} onClick={onSelect}>P{seatNumber}</button>
 }
