@@ -30,6 +30,34 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
     })
   }
   
+  function generateSeats() {
+    let seats: number[] = []
+    switch (playerCount) {
+      case 3: seats = [2, 4, 6]
+        break
+      case 5: seats = [1, 2, 3, 5, 6]
+        break
+      case 6: seats = [1, 2, 3, 4, 5, 6]
+        break
+      case 7: seats = [1, 2, 3, 4, 6, 7, 8]
+        break
+      case 8: seats = [1, 2, 3, 4, 5, 6, 7, 8]
+        break
+      case 4: return (
+        <>
+          <div className="seat-hex p4-seat-1">P1</div>
+          <div className="seat-hex p4-seat-2">P2</div>
+          <div className="seat-hex p4-seat-3">P3</div>
+          <div className="seat-hex p4-seat-4">P4</div>
+        </>
+      )
+    }
+    
+    return seats.map((seat, index) => {
+      return <div key={`seat-${index}`} className={`seat-hex seat-${seat}`}>P{index}</div>
+    })
+  }
+  
   const choicesText = []
   if (!currentPlayer.faction) choicesText.push('faction')
   if (!currentPlayer.slice) choicesText.push('slice')
@@ -58,6 +86,7 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
               <div className="map-image-placeholder" />
             }
           </a>
+          {generateSeats()}
         </div>
       )}
       <div className="card factions">

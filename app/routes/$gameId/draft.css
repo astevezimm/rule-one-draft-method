@@ -486,6 +486,7 @@ a:has(.map-image-placeholder) {
                 width: 5.3rem;
                 height: 5.3rem;
                 background-color: black;
+                cursor: pointer;
                 
                 color: yellow;
                 font-size: 1.5rem;
@@ -560,6 +561,72 @@ a:has(.map-image-placeholder) {
             & .seat-6 {
                 top: var(--second-row);
                 left: var(--side);
+            }
+            
+            /* 4 player games are a special case */
+            & .p4-seat-1 {
+                top: 14.4rem;
+                right: var(--side);
+            }
+            & .p4-seat-2 {
+                bottom: 3.8rem;
+                right: 9.3rem;
+            }
+            & .p4-seat-3 {
+                bottom: 13rem;
+                left: var(--side);
+            }
+            & .p4-seat-4 {
+                top: 5.3rem;
+                left: 9.4rem;
+            }
+            @media (max-width: 550px) {
+                .p4-seat-1 {
+                    top: 11.9rem;
+                }
+                .p4-seat-2 {
+                    bottom: 3.2rem;
+                    right: 7.6rem;
+                }
+                .p4-seat-3 {
+                    bottom: 10.5rem;
+                }
+                .p4-seat-4 {
+                    top: 4.5rem;
+                    left: 7.6rem;
+                }
+            }
+            @media (max-width: 425px) {
+                .p4-seat-1 {
+                    top: 10.9rem;
+                }
+                .p4-seat-2 {
+                    bottom: 2.7rem;
+                    right: 6.5rem;
+                }
+                .p4-seat-3 {
+                    bottom: 8.9rem;
+                }
+                .p4-seat-4 {
+                    top: 4.7rem;
+                    left: 6.5rem;
+                }
+            }
+            @media (max-width: 355px) {
+                .p4-seat-1 {
+                    top: 8.3rem;
+                }
+                .p4-seat-2 {
+                    bottom: 2.3rem;
+                    right: 5rem;
+                }
+                .p4-seat-3 {
+                    bottom: 7rem;
+                }
+                .p4-seat-4 {
+                    top: 3.8rem;
+                    left: 5.1rem;
+                }
             }
         }
 
