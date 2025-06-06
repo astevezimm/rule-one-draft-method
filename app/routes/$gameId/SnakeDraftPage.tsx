@@ -3,6 +3,7 @@ import {useLoaderData} from '@remix-run/react'
 import factions from '~/data/factions.json'
 import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useState} from 'react'
+import {Buffer} from 'buffer'
 
 export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
   const {map, factionPool, currentPlayer, speaker, gameId, playerCount} = useDraftData()
@@ -82,6 +83,8 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
   if (!currentPlayer.speaker) choicesText.push('speaker')
   choicesText[choicesText.length - 1] = `or ${choicesText[choicesText.length - 1]}!`
   
+  const hasMapImage = map && map.image && ((map.image as unknown) as {data: {length: number}}).data.length > 0
+  
   return (
     <div className="draft-page">
       <h2><span>{currentPlayer?.name}:</span> Choose {choicesText.join(', ')}</h2>
@@ -98,8 +101,8 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
       {map && (
         <div className={`card slices ${playerCount >= 7 ? 'large' : ''}`}>
           <h3>Slices</h3>
-          <a href={map.url} target="_blank" rel="noopener noreferrer">
-            {map.image && ((map.image as unknown) as {data: {length: number}}).data.length > 0 ?
+          <a href={map.url} target="_blank" rel="noopener noreferrer" className={hasMapImage ? 'has-image' : ''}>
+            {hasMapImage ?
               <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} /> :
               <div className="map-image-placeholder" />
             }

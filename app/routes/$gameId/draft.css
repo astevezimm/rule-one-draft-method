@@ -344,6 +344,9 @@ a:has(.map-image-placeholder) {
             @media (max-width: 512px) {
                 /*width: 100%;*/
             }
+            & img {
+                border-radius: 10px;
+            }
             & .map-image-placeholder {
                 position: relative;
                 height: 34rem;
@@ -364,13 +367,10 @@ a:has(.map-image-placeholder) {
                     height: 17rem;
                 }
             }
-            & a:hover {
+            & .has-image:hover {
                 position: relative;
-                & img {
-                    opacity: 0.3;
-                }
             }
-            & a:hover::after, & .map-image-placeholder::after {
+            & .has-image:hover::after, & .map-image-placeholder::after {
                 content: '';
                 position: absolute;
                 inset: 0;
@@ -380,6 +380,24 @@ a:has(.map-image-placeholder) {
                 background-size: 100%;
                 border-radius: 10px;
                 box-shadow: inset 0 0 20px #220022;
+            }
+            & .has-image:hover::after {
+                top: -32.5rem;
+                background-position: 3px 125%;
+                background-size: 99%;
+                @media (max-width: 550px) {
+                    top: -26rem;
+                    background-position: -3px 130%;
+                    background-size: 101%;
+                }
+                @media (max-width: 425px) {
+                    top: -22rem;
+                    background-position: -2px 130%;
+                }
+                @media (max-width: 355px) {
+                    top: -16rem;
+                    background-size: 102%;
+                }
             }
             &.large {
                 & a:hover::after, & .map-image-placeholder::after {
@@ -487,7 +505,8 @@ a:has(.map-image-placeholder) {
                 height: 5.3rem;
                 background-color: black;
                 border: none;
-                transition: all 0.2s;
+                visibility: hidden;
+                transition: opacity, background-color, color 0.2s;
                 
                 color: yellow;
                 font-size: 1.5rem;
@@ -497,8 +516,8 @@ a:has(.map-image-placeholder) {
                 align-items: center;
                 
                 &:disabled {
-                    cursor: default;
                     opacity: 0.4;
+                    pointer-events: none;
                 }
                 
                 &:enabled:hover {
@@ -539,6 +558,9 @@ a:has(.map-image-placeholder) {
                     height: 2.8rem;
                     font-size: 0.8rem;
                 }
+            }
+            & a:hover ~ .seat-hex {
+                visibility: visible !important;
             }
             
             /* defined as a seat would be if a 6-player map */
