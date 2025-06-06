@@ -2,7 +2,7 @@ import {Player, Map, PlayerSelected} from '~/global'
 import {useLoaderData} from '@remix-run/react'
 import factions from '~/data/factions.json'
 import {DraftPageContentProps} from '~/routes/$gameId/route'
-import {useState} from 'react'
+import {useState, MouseEvent} from 'react'
 import {Buffer} from 'buffer'
 
 export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
@@ -10,6 +10,7 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
   const [expandedFaction, setExpandedFaction] = useState<{id: string, name: string, wiki: string} | null>(null)
   
   const isActivePlayer = ['admin', 'yes'].includes(playerSelected) && selectedPlayer === currentPlayer.id
+  const [mapHover, setMapHover] = useState(false)
   
   function handleSelection(type: string, value: string | number | null = null) {
     if (!isActivePlayer) return
@@ -76,6 +77,15 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
       )
     })
   }
+
+  function handleMapEnter() {
+    setMapHover(true)
+  }
+
+  function handleMapLeave(event: MouseEvent) {
+    if ((event.relatedTarget as HTMLElement)?.closest('.seat-hex')) return
+    setMapHover(false)
+  }
   
   const choicesText = []
   if (!currentPlayer.faction) choicesText.push('faction')
@@ -101,8 +111,12 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
       {map && (
         <div className={`card slices ${playerCount >= 7 ? 'large' : ''}`}>
           <h3>Slices</h3>
-          <a href={map.url} target="_blank" rel="noopener noreferrer" className={hasMapImage ? 'has-image' : ''}>
-            {hasMapImage ?
+          <a
+            href={map.url} target="_blank" rel="noopener noreferrer"
+            className={`${hasMapImage ? 'has-image' : ''} ${mapHover ? 'hover' : ''}`}
+            onMouseEnter={handleMapEnter} onMouseLeave={handleMapLeave}
+          >
+            {hasMapImage && map.image ?
               <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} /> :
               <div className="map-image-placeholder" />
             }

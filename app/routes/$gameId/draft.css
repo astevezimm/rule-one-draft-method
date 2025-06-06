@@ -367,10 +367,10 @@ a:has(.map-image-placeholder) {
                     height: 17rem;
                 }
             }
-            & .has-image:hover {
+            & .has-image.hover {
                 position: relative;
             }
-            & .has-image:hover::after, & .map-image-placeholder::after {
+            & .has-image.hover::after, & .map-image-placeholder::after {
                 content: '';
                 position: absolute;
                 inset: 0;
@@ -381,7 +381,7 @@ a:has(.map-image-placeholder) {
                 border-radius: 10px;
                 box-shadow: inset 0 0 20px #220022;
             }
-            & .has-image:hover::after {
+            & .has-image.hover::after {
                 top: -32.5rem;
                 background-position: 3px 125%;
                 background-size: 99%;
@@ -559,8 +559,8 @@ a:has(.map-image-placeholder) {
                     font-size: 0.8rem;
                 }
             }
-            & a:hover ~ .seat-hex {
-                visibility: visible !important;
+            & .has-image.hover ~ .seat-hex {
+                visibility: visible;
             }
             
             /* defined as a seat would be if a 6-player map */
