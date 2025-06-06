@@ -53,7 +53,7 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
       <h2>Players are now listed in initiative order</h2>
       <div className="banning main-section card">
         {['yes', 'admin'].includes(playerSelected) && player ? (
-          player.factions_to_ban.length > 0 ? (
+          player.factions_to_ban.length > 0 && player.number_of_bans > 0 ? (
             <>
               <h2>Ban <span>{player.number_of_bans}</span> factions from the following</h2>
               <ul>

@@ -97,7 +97,7 @@ function banningNeeded(data: any) {
   if (data.keleres) includedFactions += factions[2].factions.length
   if (data.ds) includedFactions += factions[3].factions.length
   if (data.dsplus) includedFactions += factions[4].factions.length
-  return includedFactions <= +data.factionPoolSize
+  return includedFactions > +data.factionPoolSize
 }
 
 export async function loadDraft(gameId: string | undefined) {
