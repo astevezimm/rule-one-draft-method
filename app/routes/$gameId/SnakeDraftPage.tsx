@@ -140,13 +140,16 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
       <div className="card factions">
         <h3>Factions</h3>
         <ul className="draft-page-factions">
-          {factionPool.map(faction => (
-            <li key={faction.id}>
-              <button onClick={() => setExpandedFaction(faction)}>
-                <img src={`images/${faction.id}.jpg`} alt={faction.name} />
-              </button>
-            </li>
-          ))}
+          {factionPool.map(faction => {
+            const dataLabel = players.find(player => player.faction === faction.id)?.name || ''
+            return (
+              <li key={faction.id}>
+                <button onClick={() => setExpandedFaction(faction)} data-label={dataLabel}>
+                  <img src={`images/${faction.id}.jpg`} alt={faction.name}/>
+                </button>
+              </li>
+            )
+          })}
         </ul>
       </div>
       {expandedFaction && (
@@ -157,7 +160,9 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
           </a>
           <button
             onClick={() => handleSelection('faction', expandedFaction.id)}
-            disabled={!isActivePlayer}
+            disabled={
+              !isActivePlayer || !!currentPlayer.faction || !!players.find(player => player.faction === expandedFaction.id)
+            }
           >
             Select
           </button>
