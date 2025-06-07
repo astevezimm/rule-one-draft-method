@@ -589,7 +589,7 @@ a:has(.map-image-placeholder) {
                     font-size: 0.8rem;
                 }
             }
-            & .has-image.hover ~ .seat-hex {
+            & .has-image.hover ~ .seat-hex, & a:not(.has-image) ~ .seat-hex {
                 visibility: visible;
             }
             
