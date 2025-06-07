@@ -219,7 +219,8 @@ function SeatButton({
   fourPlayer = false, seatPosition, seatNumber, active, onSelect, player, factionPool
 }: SeatButtonProps)
 {
-  const className = `seat-hex ${fourPlayer ? 'p4-' : ''}seat-${seatPosition} ${player ? 'occupied' : ''}`
+  const occupiedClasses = player ? `occupied ${nameLengthClass(player.name)}` : ''
+  const className = `seat-hex ${fourPlayer ? 'p4-' : ''}seat-${seatPosition} ${occupiedClasses}`
   
   const faction = factionPool.find(f => f.id === player?.faction)
   const factionText = faction ? `Faction: ${faction.name}` : ''
@@ -231,4 +232,9 @@ function SeatButton({
       {player ? player.name : `P${seatNumber}`}
     </button>
   )
+}
+
+function nameLengthClass(name: string): string {
+  if (name.length < 5) return ''
+  return name.length < 7 ? 'md-name' : 'lg-name'
 }
