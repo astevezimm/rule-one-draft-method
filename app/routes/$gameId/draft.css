@@ -696,6 +696,7 @@ a:has(.map-image-placeholder) {
         translate: -50% -50%;
         display: flex;
         flex-direction: column;
+        z-index: 3;
         & img {
             width: 100%;
             max-width: 40rem;
