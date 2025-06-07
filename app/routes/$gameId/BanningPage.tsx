@@ -62,12 +62,13 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
               {map && (
                 <div className="banning-reference-map">
                   <a href={map.url} target="_blank" rel="noopener noreferrer"><h3>Map to reference</h3></a>
-                  <div className="banning-reference-image">
-                    {map.image && ((map.image as unknown) as {data: {length: number}}).data.length > 0 ?
-                      <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} /> :
-                      <div className="map-image-placeholder" />
-                    }
-                  </div>
+                  {map.image && (
+                    <div className="banning-reference-image">
+                      {((map.image as unknown) as {data: {length: number}}).data.length > 0 &&
+                        <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} />
+                      }
+                    </div>
+                  )}
                 </div>
               )}
               <ul>
