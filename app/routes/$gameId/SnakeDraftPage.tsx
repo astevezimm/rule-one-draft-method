@@ -38,6 +38,8 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
   }
   
   function generateSeats() {
+    const active = isActivePlayer && !currentPlayer.slice
+    
     let seats: number[] = []
     switch (playerCount) {
       case 3: seats = [2, 4, 6]
@@ -53,22 +55,22 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
       case 4: return (
         <>
           <SeatButton
-            fourPlayer seatPosition={1} seatNumber={1} active={isActivePlayer}
+            fourPlayer seatPosition={1} seatNumber={1} active={active}
             onSelect={() => handleSelection('slice', 1)}
             player={getSeatPlayer(1)} factionPool={factionPool}
           />
           <SeatButton
-            fourPlayer seatPosition={2} seatNumber={2} active={isActivePlayer}
+            fourPlayer seatPosition={2} seatNumber={2} active={active}
             onSelect={() => handleSelection('slice', 2)}
             player={getSeatPlayer(2)} factionPool={factionPool}
           />
           <SeatButton
-            fourPlayer seatPosition={3} seatNumber={3} active={isActivePlayer}
+            fourPlayer seatPosition={3} seatNumber={3} active={active}
             onSelect={() => handleSelection('slice', 3)}
             player={getSeatPlayer(3)} factionPool={factionPool}
           />
           <SeatButton
-            fourPlayer seatPosition={4} seatNumber={4} active={isActivePlayer}
+            fourPlayer seatPosition={4} seatNumber={4} active={active}
             onSelect={() => handleSelection('slice', 4)}
             player={getSeatPlayer(4)} factionPool={factionPool}
           />
@@ -79,7 +81,7 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
     return seats.map((seat, index) => {
       return (
         <SeatButton
-          seatPosition={seat} seatNumber={index + 1} active={isActivePlayer}
+          seatPosition={seat} seatNumber={index + 1} active={active}
           onSelect={() => handleSelection('slice', index + 1)}
           key={`seat-${seat}-${index}`}
           player={getSeatPlayer(index + 1)}
