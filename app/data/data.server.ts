@@ -238,12 +238,21 @@ export async function draftItem(gameId: string | undefined, player: string, item
       break
   }
   
-  game.currentPlayer = game.draftDirection === 'forward' ? playerIndex + 1 : playerIndex - 1
-  if (game.draftDirection === 'forward' && game.players.length === game.currentPlayer + 1) {
-    game.draftDirection = 'backward'
+  if (game.draftDirection === 'forward') {
+    if (game.currentPlayer + 1 < game.players.length) {
+      game.currentPlayer++
+    }
+    else {
+      game.draftDirection = 'backward'
+    }
   }
-  else if (game.draftDirection === 'backward' && game.currentPlayer === 0) {
-    game.draftDirection = 'forward'
+  else {
+    if (game.currentPlayer > 0) {
+      game.currentPlayer--
+    }
+    else {
+      game.draftDirection = 'forward'
+    }
   }
   
   await game.save()
