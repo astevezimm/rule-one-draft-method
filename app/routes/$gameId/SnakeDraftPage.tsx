@@ -229,13 +229,8 @@ function SeatButton({
   const occupiedClasses = player ? `occupied ${nameLengthClass(player.name)}` : ''
   const className = `seat-hex ${fourPlayer ? 'p4-' : ''}seat-${seatPosition} ${occupiedClasses}`
   
-  const faction = factionPool.find(f => f.id === player?.faction)
-  const factionText = faction ? `Faction: ${faction.name}` : ''
-  const speakerText = player && player.speaker ? 'Speaker' : ''
-  const tooltip = [factionText, speakerText].filter(Boolean).join('\n')
-  
   return (
-    <button disabled={!active || !!player} className={className} onClick={onSelect} title={tooltip}>
+    <button disabled={!active || !!player} className={className} onClick={onSelect}>
       {player ? player.name : `P${seatNumber}`}
     </button>
   )
