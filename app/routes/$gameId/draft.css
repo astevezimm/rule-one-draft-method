@@ -196,6 +196,7 @@ a:has(.map-image-placeholder) {
 }
 
 .banning {
+    position: relative;
     & h2 span {
         font-size: 1.9rem;
         padding: 0 0.25rem;
@@ -277,6 +278,29 @@ a:has(.map-image-placeholder) {
             cursor: default;
             &:hover {
                 background-color: darkgray;
+            }
+        }
+    }
+    & .banning-reference-map {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        text-decoration: underline;
+        & .banning-reference-image {
+            opacity: 0;
+            margin-top: 1.3rem;
+            transition: opacity 0.3s 0.2s;
+            .banning-reference-image:hover {
+                opacity: 1;
+            }
+        }
+        & a {
+            position: absolute;
+            right: 0;
+            display: inline-block;
+            width: max-content;
+            &:hover + .banning-reference-image {
+                opacity: 1;
             }
         }
     }

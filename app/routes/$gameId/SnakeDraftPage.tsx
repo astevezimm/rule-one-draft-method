@@ -1,4 +1,4 @@
-import {Player, Map, PlayerSelected} from '~/global'
+import {Player, Map} from '~/global'
 import {useLoaderData} from '@remix-run/react'
 import factions from '~/data/factions.json'
 import {DraftPageContentProps} from '~/routes/$gameId/route'
