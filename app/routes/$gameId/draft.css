@@ -288,10 +288,12 @@ a:has(.map-image-placeholder) {
         text-decoration: underline;
         & .banning-reference-image {
             opacity: 0;
+            display: none;
             margin-top: 1.3rem;
             transition: opacity 0.3s 0.2s;
             .banning-reference-image:hover {
                 opacity: 1;
+                display: block;
             }
         }
         & a {
@@ -301,6 +303,7 @@ a:has(.map-image-placeholder) {
             width: max-content;
             &:hover + .banning-reference-image {
                 opacity: 1;
+                display: block;
             }
         }
         @media (max-width: 1184px) {
