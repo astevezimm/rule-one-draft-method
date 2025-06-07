@@ -228,7 +228,7 @@ function SeatButton({
   const tooltip = [factionText, speakerText].filter(Boolean).join('\n')
   
   return (
-    <button disabled={!active} className={className} onClick={onSelect} title={tooltip}>
+    <button disabled={!active || !!player} className={className} onClick={onSelect} title={tooltip}>
       {player ? player.name : `P${seatNumber}`}
     </button>
   )
