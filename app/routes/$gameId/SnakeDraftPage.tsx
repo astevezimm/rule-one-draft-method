@@ -5,7 +5,7 @@ import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useState, MouseEvent} from 'react'
 import {Buffer} from 'buffer'
 
-export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
+export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: DraftPageContentProps & {state: string}) {
   const {map, factionPool, currentPlayer, speaker, gameId, playerCount, players} = useDraftData()
   const [expandedFaction, setExpandedFaction] = useState<{id: string, name: string, wiki: string} | null>(null)
   
@@ -100,17 +100,24 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
     setMapHover(false)
   }
   
-  const choicesText = []
-  if (!currentPlayer.faction) choicesText.push('faction')
-  if (!currentPlayer.slice) choicesText.push('slice')
-  if (!currentPlayer.speaker) choicesText.push('speaker')
-  choicesText[choicesText.length - 1] = `or ${choicesText[choicesText.length - 1]}!`
+  let h2Text = null
+  if (state === 'drafting') {
+    const choicesText = []
+    if (!currentPlayer.faction) choicesText.push('faction')
+    if (!currentPlayer.slice) choicesText.push('slice')
+    if (!currentPlayer.speaker) choicesText.push('speaker')
+    choicesText[choicesText.length - 1] = `or ${choicesText[choicesText.length - 1]}!`
+    h2Text = <><span>{currentPlayer?.name}:</span> Choose {choicesText.join(', ')}</>
+  }
+  else {
+    h2Text = "The Draft is now DONE! Stick a fork in it!"
+  }
   
   const hasMapImage = map && map.image && ((map.image as unknown) as {data: {length: number}}).data.length > 0
   
   return (
     <div className="draft-page">
-      <h2><span>{currentPlayer?.name}:</span> Choose {choicesText.join(', ')}</h2>
+      <h2>{h2Text}</h2>
       <div className="card speaker">
         <h3>Speaker</h3>
         {speaker ? (

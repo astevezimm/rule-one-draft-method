@@ -115,7 +115,9 @@ function DraftPageContent(props: DraftPageContentProps)
   switch (state) {
     case 'voting': return <VotingPage {...props} />
     case 'banning': return <BanningPage {...props} />
-    case 'drafting': return <SnakeDraftPage {...props} />
+    case 'drafting':
+    case 'finished':
+      return <SnakeDraftPage state={state} {...props} />
     default: return <ErrorPage />
   }
 }

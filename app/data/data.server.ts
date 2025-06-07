@@ -165,13 +165,18 @@ export async function submitVoting(gameId: string | undefined) {
   broadcast(gameId)
 }
 
+function getFactionPool(game: any) {
+  const factionPool = []
+  if (game.base) factionPool.push(...factions[0].factions)
+  if (game.pok) factionPool.push(...factions[1].factions)
+  if (game.keleres) factionPool.push(...factions[2].factions)
+  if (game.ds) factionPool.push(...factions[3].factions)
+  if (game.dsplus) factionPool.push(...factions[4].factions)
+  return factionPool
+}
+
 function _distributeFactionsToBan(game: any) {
-  const initFactionPool = []
-  if (game.base) initFactionPool.push(...factions[0].factions)
-  if (game.pok) initFactionPool.push(...factions[1].factions)
-  if (game.keleres) initFactionPool.push(...factions[2].factions)
-  if (game.ds) initFactionPool.push(...factions[3].factions)
-  if (game.dsplus) initFactionPool.push(...factions[4].factions)
+  const initFactionPool = getFactionPool(game)
   initFactionPool.sort(() => Math.random() - 0.5)
   
   const players = game.players
@@ -238,23 +243,62 @@ export async function draftItem(gameId: string | undefined, player: string, item
       break
   }
   
-  if (game.draftDirection === 'forward') {
-    if (game.currentPlayer + 1 < game.players.length) {
-      game.currentPlayer++
+  let nextPlayerAttempts = 0
+  const maxNextPlayerAttempts = game.players.length
+  do {
+    if (game.draftDirection === 'forward') {
+      if (game.currentPlayer + 1 < game.players.length) {
+        game.currentPlayer++
+        populateLeftOverChoices(game.players[game.currentPlayer], game)
+        nextPlayerAttempts++
+      } else {
+        game.draftDirection = 'backward'
+      }
+    } else {
+      if (game.currentPlayer > 0) {
+        game.currentPlayer--
+        populateLeftOverChoices(game.players[game.currentPlayer], game)
+        nextPlayerAttempts++
+      } else {
+        game.draftDirection = 'forward'
+      }
     }
-    else {
-      game.draftDirection = 'backward'
+    if (nextPlayerAttempts >= maxNextPlayerAttempts) {
+      game.state = 'finished'
+      break
     }
-  }
-  else {
-    if (game.currentPlayer > 0) {
-      game.currentPlayer--
-    }
-    else {
-      game.draftDirection = 'forward'
-    }
-  }
+  } while (playerFinishedDrafting(game.players[game.currentPlayer], speakerChosen(game)))
   
   await game.save()
   broadcast(gameId)
+}
+
+function speakerChosen(game: any) {
+  return game.players.some((player: Player) => player.speaker)
+}
+
+function playerFinishedDrafting(player: Player, speakerChosen: boolean | undefined) {
+  return player.faction && player.slice !== undefined && speakerChosen
+}
+
+function populateLeftOverChoices(player: Player, game: any) {
+  if (player.faction && player.slice !== undefined && !speakerChosen(game)) {
+    player.speaker = true
+  }
+  if (!player.slice) {
+    const takenSlices = game.players.map((p: Player) => p.slice).filter((s: number | undefined) => s !== undefined)
+    const allSlices = Array.from({ length: game.players.length }, (_, i) => i + 1)
+    const availableSlices = allSlices.filter(s => !takenSlices.includes(s))
+    if (availableSlices.length === 1) {
+      player.slice = availableSlices[0]
+    }
+  }
+  if (!player.faction) {
+    const takenFactions = game.players.map((p: Player) => p.faction).filter((f: string | undefined) => f !== undefined)
+    const factionPool = getFactionPool(game).filter((faction: {id: string}) => !game.bannedFactions.includes(faction.id))
+    const availableFactions = factionPool.filter((f: {id: string}) => !takenFactions.includes(f.id))
+    if (availableFactions.length === 1) {
+      player.faction = availableFactions[0].id
+    }
+  }
 }
