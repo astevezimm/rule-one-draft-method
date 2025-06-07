@@ -303,6 +303,9 @@ a:has(.map-image-placeholder) {
                 opacity: 1;
             }
         }
+        @media (max-width: 1184px) {
+            top: -1.3rem;
+        }
     }
 }
 
