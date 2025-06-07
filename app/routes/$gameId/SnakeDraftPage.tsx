@@ -6,7 +6,7 @@ import {useState, MouseEvent} from 'react'
 import {Buffer} from 'buffer'
 
 export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
-  const {map, factionPool, currentPlayer, speaker, gameId, playerCount} = useDraftData()
+  const {map, factionPool, currentPlayer, speaker, gameId, playerCount, players} = useDraftData()
   const [expandedFaction, setExpandedFaction] = useState<{id: string, name: string, wiki: string} | null>(null)
   
   const isActivePlayer = ['admin', 'yes'].includes(playerSelected) && selectedPlayer === currentPlayer.id
@@ -32,6 +32,11 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
     })
   }
   
+  function getSeatPlayer(seatNumber: number): Player | null {
+    const seatPlayer = players.find(player => player.slice === seatNumber)
+    return seatPlayer || null
+  }
+  
   function generateSeats() {
     let seats: number[] = []
     switch (playerCount) {
@@ -50,18 +55,22 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
           <SeatButton
             fourPlayer seatPosition={1} seatNumber={1} active={isActivePlayer}
             onSelect={() => handleSelection('slice', 1)}
+            player={getSeatPlayer(1)} factionPool={factionPool}
           />
           <SeatButton
             fourPlayer seatPosition={2} seatNumber={2} active={isActivePlayer}
             onSelect={() => handleSelection('slice', 2)}
+            player={getSeatPlayer(2)} factionPool={factionPool}
           />
           <SeatButton
             fourPlayer seatPosition={3} seatNumber={3} active={isActivePlayer}
             onSelect={() => handleSelection('slice', 3)}
+            player={getSeatPlayer(3)} factionPool={factionPool}
           />
           <SeatButton
             fourPlayer seatPosition={4} seatNumber={4} active={isActivePlayer}
             onSelect={() => handleSelection('slice', 4)}
+            player={getSeatPlayer(4)} factionPool={factionPool}
           />
         </>
       )
@@ -73,6 +82,8 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer}: DraftPa
           seatPosition={seat} seatNumber={index + 1} active={isActivePlayer}
           onSelect={() => handleSelection('slice', index + 1)}
           key={`seat-${seat}-${index}`}
+          player={getSeatPlayer(index + 1)}
+          factionPool={factionPool}
         />
       )
     })
@@ -190,7 +201,7 @@ function useDraftData() {
   return {
     map, factionPool: filteredFactionPool,
     currentPlayer: players[currentPlayer], playerCount: players.length,
-    speaker, gameId
+    speaker, gameId, players
   }
 }
 
@@ -200,9 +211,24 @@ type SeatButtonProps = {
   seatNumber: number
   active: boolean
   onSelect: () => void
+  player: Player | null
+  factionPool: {id: string, name: string}[]
 }
 
-function SeatButton({fourPlayer = false, seatPosition, seatNumber, active, onSelect}: SeatButtonProps) {
-  const className = `seat-hex ${fourPlayer ? 'p4-' : ''}seat-${seatPosition}`
-  return <button disabled={!active} className={className} onClick={onSelect}>P{seatNumber}</button>
+function SeatButton({
+  fourPlayer = false, seatPosition, seatNumber, active, onSelect, player, factionPool
+}: SeatButtonProps)
+{
+  const className = `seat-hex ${fourPlayer ? 'p4-' : ''}seat-${seatPosition} ${player ? 'occupied' : ''}`
+  
+  const faction = factionPool.find(f => f.id === player?.faction)
+  const factionText = faction ? `Faction: ${faction.name}` : ''
+  const speakerText = player && player.speaker ? 'Speaker' : ''
+  const tooltip = [factionText, speakerText].filter(Boolean).join('\n')
+  
+  return (
+    <button disabled={!active} className={className} onClick={onSelect} title={tooltip}>
+      {player ? player.name : `P${seatNumber}`}
+    </button>
+  )
 }
