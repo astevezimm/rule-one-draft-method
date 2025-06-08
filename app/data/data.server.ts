@@ -231,15 +231,12 @@ export async function draftItem(gameId: string | undefined, player: string, item
   switch (item.type) {
     case 'faction':
       game.players[playerIndex].faction = item.value
-      game.markModified(`players.${playerIndex}.faction`)
       break
     case 'slice':
       game.players[playerIndex].slice = +item.value
-      game.markModified(`players.${playerIndex}.slice`)
       break
     case 'speaker':
       game.players[playerIndex].speaker = true
-      game.markModified(`players.${playerIndex}.speaker`)
       break
   }
   
@@ -249,7 +246,7 @@ export async function draftItem(gameId: string | undefined, player: string, item
     if (game.draftDirection === 'forward') {
       if (game.currentPlayer + 1 < game.players.length) {
         game.currentPlayer++
-        populateLeftOverChoices(game.players[game.currentPlayer], game)
+        game.players[game.currentPlayer] = populateLeftOverChoices(game.players[game.currentPlayer], game)
         nextPlayerAttempts++
       } else {
         game.draftDirection = 'backward'
@@ -257,7 +254,7 @@ export async function draftItem(gameId: string | undefined, player: string, item
     } else {
       if (game.currentPlayer > 0) {
         game.currentPlayer--
-        populateLeftOverChoices(game.players[game.currentPlayer], game)
+        game.players[game.currentPlayer] = populateLeftOverChoices(game.players[game.currentPlayer], game)
         nextPlayerAttempts++
       } else {
         game.draftDirection = 'forward'
@@ -269,6 +266,7 @@ export async function draftItem(gameId: string | undefined, player: string, item
     }
   } while (playerFinishedDrafting(game.players[game.currentPlayer], speakerChosen(game)))
   
+  game.markModified("players")
   await game.save()
   broadcast(gameId)
 }
@@ -301,4 +299,5 @@ function populateLeftOverChoices(player: Player, game: any) {
       player.faction = availableFactions[0].id
     }
   }
+  return player
 }
