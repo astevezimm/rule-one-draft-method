@@ -63,7 +63,7 @@ export default function DraftPage(){
   }, [playerSelected, selectedPlayer])
 
   useEffect(() => {
-    const ws = new WebSocket(`wss://${domain}`)
+    const ws = new WebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${domain}:${port}`)
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
       if (data.type === 'update' && data.gameId === gameId) {
@@ -71,7 +71,7 @@ export default function DraftPage(){
       }
     }
     ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
+      console.error('WebSocket error:', error)
     }
   }, [])
   

@@ -34,6 +34,9 @@ const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
 const app = express()
 const server = http.createServer(app)
 const ws = new WebSocketServer({ server })
+server.listen(process.env.PORT, () => {
+  console.log('Server running on port', process.env.PORT)
+})
 
 function broadcast(gameId: string | undefined) {
   ws.clients.forEach((client: any)=> {
