@@ -31,18 +31,12 @@ const gameSchema = new mongoose.Schema({
 // delete mongoose.models.Game // uncomment this line to reset the model
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
 
-let isWebSocketSetup = false
-let ws: WebSocketServer | null = null
-
-if (!isWebSocketSetup) {
-  const app = express()
-  const server = http.createServer(app)
-  ws = new WebSocketServer({server})
-  server.listen(process.env.PORT, () => {
-    console.log('Server running on port', process.env.PORT)
-  })
-  isWebSocketSetup = true
-}
+const app = express()
+const server = http.createServer(app)
+const ws = new WebSocketServer({server})
+server.listen(process.env.PORT, () => {
+  console.log('Server running on port', process.env.PORT)
+})
 
 function broadcast(gameId: string | undefined) {
   if (!ws) return
