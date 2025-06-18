@@ -37,6 +37,17 @@ const ws = new WebSocketServer({server})
 server.listen(process.env.PORT, () => {
   console.log('Server running on port', process.env.PORT)
 })
+server.on('error', (e) => {
+  if ((e as NodeJS.ErrnoException).code === 'EADDRINUSE') {
+    console.error('Address in use, retrying...')
+    setTimeout(() => {
+      server.close()
+      server.listen(process.env.PORT, () => {
+        console.log('Server running on port', process.env.PORT)
+      })
+    }, 1000)
+  }
+})
 
 function broadcast(gameId: string | undefined) {
   if (!ws) return
