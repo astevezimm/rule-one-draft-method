@@ -28,17 +28,24 @@ const gameSchema = new mongoose.Schema({
   currentPlayer: { type: Number, default: 0 },
 })
 
-delete mongoose.models.Game // uncomment this line to reset the model
+// delete mongoose.models.Game // uncomment this line to reset the model
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
 
-const app = express()
-const server = http.createServer(app)
-const ws = new WebSocketServer({ server })
-server.listen(process.env.PORT, () => {
-  console.log('Server running on port', process.env.PORT)
-})
+let isWebSocketSetup = false
+let ws: WebSocketServer | null = null
+
+if (!isWebSocketSetup) {
+  const app = express()
+  const server = http.createServer(app)
+  ws = new WebSocketServer({server})
+  server.listen(process.env.PORT, () => {
+    console.log('Server running on port', process.env.PORT)
+  })
+  isWebSocketSetup = true
+}
 
 function broadcast(gameId: string | undefined) {
+  if (!ws) return
   ws.clients.forEach((client: any)=> {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify({type: 'update', gameId}))

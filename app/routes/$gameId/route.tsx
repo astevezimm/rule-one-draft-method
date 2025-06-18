@@ -17,7 +17,7 @@ export const links: LinksFunction = () => {
 export const loader : LoaderFunction = async ({params}: LoaderFunctionArgs) => {
   const draft = await loadDraft(params.gameId)
   if (!draft) throw new Response("", {status: 404})
-  return Response.json({...draft, domain: process.env.DOMAIN, port: process.env.PORT})
+  return Response.json({...draft, domain: process.env.DOMAIN})
 }
 
 type DraftPageData = {
@@ -29,7 +29,7 @@ type DraftPageData = {
 
 export default function DraftPage(){
   const [playerSelected, setPlayerSelected] = useState<PlayerSelected>('loading')
-  const {gameId, players, domain, port} = useLoaderData() as DraftPageData
+  const {gameId, players, domain} = useLoaderData() as DraftPageData
   const playerSelectedKey = `${gameId}-playerSelected`
   
   const adminPlayer = players.find(player => player.admin)
