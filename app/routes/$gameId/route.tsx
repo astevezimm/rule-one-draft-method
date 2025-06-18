@@ -63,16 +63,14 @@ export default function DraftPage(){
   }, [playerSelected, selectedPlayer])
 
   useEffect(() => {
-    const ws = new WebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${domain}`)
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      if (data.type === 'update' && data.gameId === gameId) {
+    const seconds = 2
+    setInterval(async () => {
+      const response = await fetch(`/api/get-last-updated/${gameId}`)
+      const data = await response.json()
+      if (data.lastUpdated && (Date.now() - new Date(data.lastUpdated).getTime()) / 1000 <= seconds) {
         window.location.reload()
       }
-    }
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error)
-    }
+    }, seconds * 1000)
   }, [])
   
   function handleSelectPlayer(player: Player) {

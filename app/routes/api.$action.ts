@@ -1,5 +1,13 @@
-import {ActionFunction} from '@remix-run/node'
-import {draftItem, removeDraft, submitBans, submitVoting, updateMapImage, vote} from '~/data/data.server'
+import {ActionFunction, LoaderFunction} from '@remix-run/node'
+import {
+  draftItem,
+  getLastUpdated,
+  removeDraft,
+  submitBans,
+  submitVoting,
+  updateMapImage,
+  vote
+} from '~/data/data.server'
 
 export const action: ActionFunction = async ({params, request}) => {
   switch (params.action) {

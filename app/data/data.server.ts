@@ -1,12 +1,9 @@
 import {config} from 'dotenv'
 import mongoose from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
-import { WebSocketServer, WebSocket } from 'ws'
 import {Player, Map, DraftItem} from '~/global'
 import factions from './factions.json'
 import * as process from 'node:process'
-import express from 'express'
-import * as http from 'node:http'
 
 config()
 mongoose.connect(process.env.DB_URL as string)
@@ -26,37 +23,15 @@ const gameSchema = new mongoose.Schema({
   bannedFactions: { type: [String], default: [] },
   draftDirection: { type: String, default: 'forward' },
   currentPlayer: { type: Number, default: 0 },
+  lastUpdated: { type: Date, default: Date.now }
+})
+gameSchema.pre('save', function (next) {
+  this.lastUpdated = new Date()
+  next()
 })
 
-// delete mongoose.models.Game // uncomment this line to reset the model
+delete mongoose.models.Game // uncomment this line to reset the model
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
-
-const app = express()
-const server = http.createServer(app)
-const ws = new WebSocketServer({server})
-// server.listen(process.env.PORT, () => {
-//   console.log('Server running on port', process.env.PORT)
-// })
-// server.on('error', (e) => {
-//   if ((e as NodeJS.ErrnoException).code === 'EADDRINUSE') {
-//     console.error('Address in use, retrying...')
-//     setTimeout(() => {
-//       server.close()
-//       server.listen(process.env.PORT, () => {
-//         console.log('Server running on port', process.env.PORT)
-//       })
-//     }, 1000)
-//   }
-// })
-
-function broadcast(gameId: string | undefined) {
-  if (!ws) return
-  ws.clients.forEach((client: any)=> {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify({type: 'update', gameId}))
-    }
-  })
-}
 
 export async function startDraft(data: Record<string, any>) {
   const players: Player[] = []
@@ -140,13 +115,18 @@ export async function removeDraft(gameId: string | undefined) {
   await Game.deleteOne({gameId})
 }
 
+export async function getLastUpdated(gameId: string | undefined) {
+  const game = await Game.findOne({gameId})
+  if (!game) return null
+  return game.lastUpdated
+}
+
 export async function updateMapImage(gameId: string | undefined, index: number, image: ArrayBuffer) {
   const game = await Game.findOne({ gameId })
   if (!game) return
   if (index < 0 || index >= game.maps.length) return
   game.maps[index].image = image
   await game.save()
-  broadcast(gameId)
 }
 
 export async function vote(gameId: string | undefined, player: Player, mapIndex: number, breakTie = false) {
@@ -166,7 +146,6 @@ export async function vote(gameId: string | undefined, player: Player, mapIndex:
   game.players[game.players.findIndex((p: Player) => p.id === player.id)] = player
   
   await game.save()
-  if (!breakTie) broadcast(gameId)
 }
 
 export async function submitVoting(gameId: string | undefined) {
@@ -177,7 +156,6 @@ export async function submitVoting(gameId: string | undefined) {
   game.players.sort(() => Math.random() - 0.5)
   const newGame = game.state === 'banning' ? _distributeFactionsToBan(game) : game
   await newGame.save()
-  broadcast(gameId)
 }
 
 function getFactionPool(game: any) {
@@ -234,7 +212,6 @@ export async function submitBans(gameId: string | undefined, player: string, ban
   }
   game.bannedFactions = [...game.bannedFactions, ...bans]
   await game.save()
-  broadcast(gameId)
 }
 
 export async function draftItem(gameId: string | undefined, player: string, item: DraftItem) {
@@ -283,7 +260,6 @@ export async function draftItem(gameId: string | undefined, player: string, item
   
   game.markModified("players")
   await game.save()
-  broadcast(gameId)
 }
 
 function speakerChosen(game: any) {
