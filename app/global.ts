@@ -76,3 +76,7 @@ export async function extractMapImage(file: File | undefined) {
     reader.readAsDataURL(file)
   })
 }
+
+export function hasFactionsToBan(player: Player) {
+  return player.factions_to_ban.length > 0 && player.number_of_bans > 0
+}

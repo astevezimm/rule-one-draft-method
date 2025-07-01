@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {LinksFunction, LoaderFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import {loadDraft} from '~/data/data.server'
-import {isPlayerSelected, pageHeading, Player, playerKey, PlayerSelected} from '~/global'
+import {hasFactionsToBan, isPlayerSelected, pageHeading, Player, playerKey, PlayerSelected} from '~/global'
 import VotingPage from './VotingPage'
 import BanningPage from './BanningPage'
 import SnakeDraftPage from './SnakeDraftPage'
@@ -17,19 +17,18 @@ export const links: LinksFunction = () => {
 export const loader : LoaderFunction = async ({params}: LoaderFunctionArgs) => {
   const draft = await loadDraft(params.gameId)
   if (!draft) throw new Response("", {status: 404})
-  return Response.json({...draft, domain: process.env.DOMAIN})
+  return Response.json({...draft})
 }
 
 type DraftPageData = {
   gameId: string
   players: Player[]
-  domain: string
-  port: string
+  state: string
 }
 
 export default function DraftPage(){
   const [playerSelected, setPlayerSelected] = useState<PlayerSelected>('loading')
-  const {gameId, players, domain} = useLoaderData() as DraftPageData
+  const {gameId, players, state} = useLoaderData() as DraftPageData
   const playerSelectedKey = `${gameId}-playerSelected`
   
   const adminPlayer = players.find(player => player.admin)
@@ -55,7 +54,7 @@ export default function DraftPage(){
       }
     }
   }, [])
-
+  
   useEffect(() => {
     if (['admin', 'yes'].includes(playerSelected) && !selectedPlayer) {
       setSelectedPlayer(localStorage.getItem(playerKey(gameId)))
@@ -63,15 +62,23 @@ export default function DraftPage(){
   }, [playerSelected, selectedPlayer])
 
   useEffect(() => {
-    const seconds = 2
-    setInterval(async () => {
-      const response = await fetch(`/api/get-last-updated/${gameId}`)
-      const data = await response.json()
-      if (data.lastUpdated && (Date.now() - new Date(data.lastUpdated).getTime()) / 1000 <= seconds) {
-        window.location.reload()
-      }
-    }, seconds * 1000)
-  }, [])
+    let shouldPollServer = true
+    if (state === 'banning') {
+      const player = players.find(player => player.id === selectedPlayer)
+      if (player)
+        shouldPollServer = !hasFactionsToBan(player)
+    }
+    if (shouldPollServer) {
+      const seconds = 2
+      setInterval(async () => {
+        const response = await fetch(`/api/get-last-updated/${gameId}`)
+        const data = await response.json()
+        if (data.lastUpdated && (Date.now() - new Date(data.lastUpdated).getTime()) / 1000 <= seconds) {
+          window.location.reload()
+        }
+      }, seconds * 1000)
+    }
+  }, [state, players, selectedPlayer])
   
   function handleSelectPlayer(player: Player) {
     setPlayerSelected('yes')
@@ -97,7 +104,7 @@ export default function DraftPage(){
         onSelectPlayer={handleSelectPlayer}
         onCancelSelection={handleCancelSelection}
       />
-      <DraftPageContent playerSelected={playerSelected} selectedPlayer={selectedPlayer} />
+      <DraftPageContent playerSelected={playerSelected} selectedPlayer={selectedPlayer} state={state} />
     </>
   )
 }
@@ -105,17 +112,17 @@ export default function DraftPage(){
 export type DraftPageContentProps = {
   playerSelected: PlayerSelected
   selectedPlayer: string | null
+  state: string
 }
 
 function DraftPageContent(props: DraftPageContentProps)
 {
-  const {state} = useLoaderData() as {state: string}
-  switch (state) {
+  switch (props.state) {
     case 'voting': return <VotingPage {...props} />
     case 'banning': return <BanningPage {...props} />
     case 'drafting':
     case 'finished':
-      return <SnakeDraftPage state={state} {...props} />
+      return <SnakeDraftPage {...props} />
     default: return <ErrorPage />
   }
 }

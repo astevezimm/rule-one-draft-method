@@ -1,4 +1,4 @@
-import {Player, Map} from '~/global'
+import {Player, Map, hasFactionsToBan} from '~/global'
 import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useLoaderData} from '@remix-run/react'
 import {ChangeEvent, ChangeEventHandler, useState} from 'react'
@@ -56,7 +56,7 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
       <h2>Players are now listed in initiative order</h2>
       <div className="banning main-section card">
         {['yes', 'admin'].includes(playerSelected) && player ? (
-          player.factions_to_ban.length > 0 && player.number_of_bans > 0 ? (
+          hasFactionsToBan(player) ? (
             <>
               <h2>Ban <span>{player.number_of_bans}</span> factions from the following</h2>
               {map && (
