@@ -105,7 +105,7 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: 
     const choicesText = []
     if (!currentPlayer.faction) choicesText.push('faction')
     if (!currentPlayer.slice) choicesText.push('slice')
-    if (!currentPlayer.speaker) choicesText.push('speaker')
+    if (!players.find(p => p.speaker)) choicesText.push('speaker')
     choicesText[choicesText.length - 1] = `or ${choicesText[choicesText.length - 1]}!`
     h2Text = <><span>{currentPlayer?.name}:</span> Choose {choicesText.join(', ')}</>
   }
