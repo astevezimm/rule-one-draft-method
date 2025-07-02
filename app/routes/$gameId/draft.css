@@ -706,8 +706,10 @@ a:has(.map-image-placeholder) {
         }
         &.factions button {
             border: none;
-            background-color: transparent;
+            background-color: #7a017a;
             position: relative;
+            min-width: 15rem;
+            min-height: 10rem;
             &:hover::after {
                 content: 'Expand';
                 position: absolute;
