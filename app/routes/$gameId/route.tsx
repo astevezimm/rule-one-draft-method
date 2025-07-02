@@ -61,8 +61,10 @@ export default function DraftPage(){
     }
   }, [playerSelected, selectedPlayer])
 
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   useEffect(() => {
-    let shouldPollServer = true
+    let intervalId: NodeJS.Timeout | null = null
+    let shouldPollServer = state !== 'finished'
     if (state === 'banning') {
       const player = players.find(player => player.id === selectedPlayer)
       if (player)
@@ -70,14 +72,18 @@ export default function DraftPage(){
     }
     if (shouldPollServer) {
       const seconds = 2
-      setInterval(async () => {
+      intervalId = setInterval(async () => {
         const response = await fetch(`/api/get-last-updated/${gameId}`)
         const data = await response.json()
-        if (data.lastUpdated && (Date.now() - new Date(data.lastUpdated).getTime()) / 1000 <= seconds) {
+        if (!lastUpdated) {
+          if (data.lastUpdated) setLastUpdated(data.lastUpdated)
+        }
+        else if (data.lastUpdated && data.lastUpdated > lastUpdated) {
           window.location.reload()
         }
       }, seconds * 1000)
     }
+    return () => intervalId ? clearInterval(intervalId) : undefined
   }, [state, players, selectedPlayer])
   
   function handleSelectPlayer(player: Player) {
