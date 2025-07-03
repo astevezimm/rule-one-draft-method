@@ -10,7 +10,6 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: 
   const [expandedFaction, setExpandedFaction] = useState<{id: string, name: string, wiki: string} | null>(null)
   
   const isActivePlayer = ['admin', 'yes'].includes(playerSelected) && selectedPlayer === currentPlayer.id
-  const [mapHover, setMapHover] = useState(false)
   
   function handleSelection(type: string, value: string | number | null = null) {
     if (!isActivePlayer) return
@@ -37,7 +36,7 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: 
     return seatPlayer || null
   }
   
-  function generateSeats() {
+  function generateSeats(className: string) {
     const active = isActivePlayer && !currentPlayer.slice
     
     let seats: number[] = []
@@ -55,24 +54,28 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: 
       case 4: return (
         <>
           <SeatButton
+            className={className}
             fourPlayer seatPosition={1} seatNumber={1} active={active}
             onSelect={() => handleSelection('slice', 1)}
-            player={getSeatPlayer(1)} factionPool={factionPool}
+            player={getSeatPlayer(1)}
           />
           <SeatButton
+            className={className}
             fourPlayer seatPosition={2} seatNumber={2} active={active}
             onSelect={() => handleSelection('slice', 2)}
-            player={getSeatPlayer(2)} factionPool={factionPool}
+            player={getSeatPlayer(2)}
           />
           <SeatButton
+            className={className}
             fourPlayer seatPosition={3} seatNumber={3} active={active}
             onSelect={() => handleSelection('slice', 3)}
-            player={getSeatPlayer(3)} factionPool={factionPool}
+            player={getSeatPlayer(3)}
           />
           <SeatButton
+            className={className}
             fourPlayer seatPosition={4} seatNumber={4} active={active}
             onSelect={() => handleSelection('slice', 4)}
-            player={getSeatPlayer(4)} factionPool={factionPool}
+            player={getSeatPlayer(4)}
           />
         </>
       )
@@ -81,23 +84,14 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: 
     return seats.map((seat, index) => {
       return (
         <SeatButton
+          className={className}
           seatPosition={seat} seatNumber={index + 1} active={active}
           onSelect={() => handleSelection('slice', index + 1)}
           key={`seat-${seat}-${index}`}
           player={getSeatPlayer(index + 1)}
-          factionPool={factionPool}
         />
       )
     })
-  }
-
-  function handleMapEnter() {
-    setMapHover(true)
-  }
-
-  function handleMapLeave(event: MouseEvent) {
-    if ((event.relatedTarget as HTMLElement)?.closest('.seat-hex')) return
-    setMapHover(false)
   }
   
   let h2Text = null
@@ -105,7 +99,7 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: 
     const choicesText = []
     if (!currentPlayer.faction) choicesText.push('faction')
     if (!currentPlayer.slice) choicesText.push('slice')
-    if (!players.find(p => p.speaker)) choicesText.push('speaker')
+    if (!speaker) choicesText.push('speaker')
     choicesText[choicesText.length - 1] = `or ${choicesText[choicesText.length - 1]}!`
     h2Text = <><span>{currentPlayer?.name}:</span> Choose {choicesText.join(', ')}</>
   }
@@ -130,18 +124,21 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: 
       </div>
       {map && (
         <div className={`card slices ${playerCount >= 7 ? 'large' : ''}`}>
-          <h3>Slices</h3>
-          <a
-            href={map.url} target="_blank" rel="noopener noreferrer"
-            className={`${hasMapImage ? 'has-image' : ''} ${mapHover ? 'hover' : ''}`}
-            onMouseEnter={handleMapEnter} onMouseLeave={handleMapLeave}
-          >
+          <h3>
+            Slices
+            <span>
+              <a href={map.url} target="_blank" rel="noopener noreferrer">
+                Link to Map
+              </a>
+            </span>
+          </h3>
+          <div className={`${hasMapImage ? 'has-image' : ''}`}>
             {hasMapImage && map.image ?
               <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} /> :
               <div className="map-image-placeholder" />
             }
-          </a>
-          {generateSeats()}
+          </div>
+          {generateSeats(`${hasMapImage ? 'has-image' : ''}`)}
         </div>
       )}
       <div className="card factions">
@@ -220,21 +217,21 @@ function useDraftData() {
 }
 
 type SeatButtonProps = {
+  className: string
   fourPlayer?: boolean
   seatPosition: number
   seatNumber: number
   active: boolean
   onSelect: () => void
   player: Player | null
-  factionPool: {id: string, name: string}[]
 }
 
 function SeatButton({
-  fourPlayer = false, seatPosition, seatNumber, active, onSelect, player, factionPool
+  className: propClassName, fourPlayer = false, seatPosition, seatNumber, active, onSelect, player
 }: SeatButtonProps)
 {
   const occupiedClasses = player ? `occupied ${nameLengthClass(player.name)}` : ''
-  const className = `seat-hex ${fourPlayer ? 'p4-' : ''}seat-${seatPosition} ${occupiedClasses}`
+  const className = `seat-hex ${fourPlayer ? 'p4-' : ''}seat-${seatPosition} ${occupiedClasses} ${propClassName}`
   
   return (
     <button disabled={!active || !!player} className={className} onClick={onSelect}>
