@@ -30,7 +30,7 @@ gameSchema.pre('save', function (next) {
   next()
 })
 
-delete mongoose.models.Game // uncomment this line to reset the model
+// delete mongoose.models.Game // uncomment this line to reset the model
 const Game = mongoose.models.Game || mongoose.model("Game", gameSchema)
 
 export async function startDraft(data: Record<string, any>) {

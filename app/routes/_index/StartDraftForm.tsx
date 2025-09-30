@@ -148,6 +148,7 @@ export default function StartDraftForm() {
           <IncludeRaceType name='Base' id='base' />
           <IncludeRaceType name='Prohecy of Kings' id='pok' />
           <IncludeRaceType name='Keleres' id='keleres' />
+          <IncludeRaceType name="Thunder's Edge" id='thunder'/>
           <IncludeRaceType name='Discordant Stars' id='ds' />
           <IncludeRaceType name='Discordant Stars Plus' id='dsplus' />
         </section>

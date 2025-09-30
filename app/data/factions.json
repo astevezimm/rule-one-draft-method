@@ -140,6 +140,36 @@
     ]
   },
   {
+    "id": "thunder",
+    "factions": [
+      {
+        "id": "bastion",
+        "name": "Last Bastion",
+        "wiki": "https://twilight-imperium.fandom.com/wiki/Last_Bastion"
+      },
+      {
+        "id": "ralnel",
+        "name": "The Ral-Nel Consortium",
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Ral_Nel_Consortium"
+      },
+      {
+        "id": "scholarate",
+        "name": "The Deepwrought Scholarate",
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Deepwrought_Scholarate"
+      },
+      {
+        "id": "crimson",
+        "name": "Crimson Rebellion",
+        "wiki": "https://twilight-imperium.fandom.com/wiki/Crimson_Rebellion"
+      },
+      {
+        "id": "firmament",
+        "name": "The Firmament / The Obsidian",
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Firmament_/_The_Obsidian"
+      }
+    ]
+  },
+  {
     "id": "ds",
     "factions": [
       {
