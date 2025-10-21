@@ -1,0 +1,32 @@
+{
+  "abilityCards": [
+    {
+      "id": "",
+      "name": "",
+      "techColor": "",
+      "origin": "",
+      "ability": ""
+    }
+  ],
+  "unitUpgradeCards": [
+    {
+      "id": "",
+      "name": "",
+      "unitType": "",
+      "origin": "",
+      "cost": 1,
+      "combat": 9,
+      "move": 1,
+      "capacity": 0,
+      "ability": ""
+    }
+  ],
+  "genomeCards": [
+    {
+      "id": "",
+      "name": "",
+      "origin": "",
+      "ability": ""
+    }
+  ]
+}
