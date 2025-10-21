@@ -12,6 +12,7 @@ type Map = {
 
 export default function StartDraftForm() {
   const [playerNames, setPlayerNames] = useState<string[]>(["", "", ""])
+  const [gameType, setGameType] = useState<string>("regular")
   const [maps, setMaps] = useState<Map[]>([{name: "Map 1", url: ""}])
   const [checkboxError, setCheckboxError] = useState<string | null>(null)
 
@@ -25,6 +26,10 @@ export default function StartDraftForm() {
     const newNames = [...playerNames]
     newNames.splice(Number((event.target as HTMLButtonElement).dataset.index), 1)
     setPlayerNames(newNames)
+  }
+
+  function handleChangeGameType(event: ChangeEvent<HTMLInputElement>) {
+    setGameType(event.target.value)
   }
 
   function handleChangeMapName(event: ChangeEvent<HTMLInputElement>) {
@@ -141,20 +146,56 @@ export default function StartDraftForm() {
             </button>
           )}
         </section>
+        
+        <h2>Game Type</h2>
+        <section>
+          <label className="radio-label">
+            <input
+              type="radio"
+              id="game-type-regular"
+              name="game-type"
+              value="regular"
+              checked={gameType === "regular"}
+              onChange={handleChangeGameType}
+            />
+            Regular
+          </label>
+          <label className="radio-label">
+            <input
+              type="radio"
+              id="game-type-twilight"
+              name="game-type"
+              value="twilights-fall"
+              checked={gameType === "twilights-fall"}
+              onChange={handleChangeGameType}
+            />
+            Twilight's Fall
+          </label>
+        </section>
 
-        <h2>Included Factions</h2>
+        <h2>
+          {
+            gameType === "regular" ?
+              "Included Factions" :
+              "Included Home Systems & Start Units"
+          }
+        </h2>
         <section className="factions">
           {checkboxError && <p style={{color: 'red'}}>{checkboxError}</p>}
           <IncludeRaceType name='Base' id='base' />
           <IncludeRaceType name='Prohecy of Kings' id='pok' />
           <IncludeRaceType name='Keleres' id='keleres' />
           <IncludeRaceType name="Thunder's Edge" id='thunder'/>
-          <IncludeRaceType name='Discordant Stars' id='ds' />
-          <IncludeRaceType name='Discordant Stars Plus' id='dsplus' />
+          {gameType === "regular" && <IncludeRaceType name='Discordant Stars' id='ds' />}
+          {gameType === "regular" && <IncludeRaceType name='Discordant Stars Plus' id='dsplus' />}
         </section>
 
-        <h2>Faction Drafting Pool Size</h2>
-        <input type="number" min={playerNames.length} name="factionPoolSize" required />
+        {gameType === "regular" && (
+          <>
+            <h2>Faction Drafting Pool Size</h2>
+            <input type="number" min={playerNames.length} name="factionPoolSize" required />
+          </>
+        )}
 
         <h2>Maps</h2>
         <section>
