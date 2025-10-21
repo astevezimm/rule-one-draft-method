@@ -23,7 +23,8 @@ const gameSchema = new mongoose.Schema({
   bannedFactions: { type: [String], default: [] },
   draftDirection: { type: String, default: 'forward' },
   currentPlayer: { type: Number, default: 0 },
-  lastUpdated: { type: Date, default: Date.now }
+  lastUpdated: { type: Date, default: Date.now },
+  gameType: { type: String, default: 'regular' },
 })
 gameSchema.pre('save', function (next) {
   this.lastUpdated = new Date()
@@ -58,9 +59,20 @@ export async function startDraft(data: Record<string, any>) {
     }
   })
   
-  const state = maps.length > 1 ? "voting" : (banningNeeded(data) ? "banning" : "drafting")
+  let state
+  if (maps.length > 1) {
+    state = "voting"
+  } else if (data.gameType === 'twilights-fall') {
+    state = "refCardDrafting"
+  } else if (banningNeeded(data)) {
+    state = "banning"
+  } else {
+    state = "drafting"
+  }
   
-  if (state !== 'voting') players.sort(() => Math.random() - 0.5)
+  if (!['voting', 'refCardDrafting'].includes(state)) {
+    players.sort(() => Math.random() - 0.5)
+  }
   
   const gameData = {
     players,
@@ -73,6 +85,7 @@ export async function startDraft(data: Record<string, any>) {
     dsplus: !!data.dsplus,
     factionPoolSize: +data.factionPoolSize,
     initiativeSet: state !== 'voting',
+    gameType: data.gameType,
   }
   
   const game = new Game(state === 'banning' ? _distributeFactionsToBan(gameData) : gameData)

@@ -5,87 +5,104 @@
       {
         "id": "arborec",
         "name": "The Arborec",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Arborec"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Arborec",
+        "priority": 29
       },
       {
         "id": "barony",
         "name": "The Barony of Letnev",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Barony_of_Letnev"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Barony_of_Letnev",
+        "priority": -1
       },
       {
         "id": "saar",
         "name": "The Clan of Saar",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Clan_of_Saar"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Clan_of_Saar",
+        "priority": -1
       },
       {
         "id": "muaat",
         "name": "The Embers of Muaat",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Embers_of_Muaat"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Embers_of_Muaat",
+        "priority": 14
       },
       {
         "id": "hacan",
         "name": "The Emirates of Hacan",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Emirates_of_Hacan"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Emirates_of_Hacan",
+        "priority": 18
       },
       {
         "id": "sol",
         "name": "The Federation of Sol",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Federation_of_Sol"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Federation_of_Sol",
+        "priority": -1
       },
       {
         "id": "creuss",
         "name": "The Ghosts of Creuss",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Ghosts_of_Creuss"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Ghosts_of_Creuss",
+        "priority": 20
       },
       {
         "id": "l1z1x",
         "name": "The L1Z1X Mindnet",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_L1Z1X_Mindnet"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_L1Z1X_Mindnet",
+        "priority": -1
       },
       {
         "id": "mentak",
         "name": "The Mentak Coalition",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Mentak_Coalition"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Mentak_Coalition",
+        "priority": -1
       },
       {
         "id": "naalu",
         "name": "The Naalu Collective",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Naalu_Collective"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Naalu_Collective",
+        "priority": -1
       },
       {
         "id": "nekro",
         "name": "The Nekro Virus",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Nekro_Virus"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Nekro_Virus",
+        "priority": -1
       },
       {
         "id": "sardakk",
         "name": "The Sardakk N'orr",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Sardakk_N'orr"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Sardakk_N'orr",
+        "priority": -1
       },
       {
         "id": "jolnar",
         "name": "The Universities of Jol-Nar",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Universities_of_Jol-Nar"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Universities_of_Jol-Nar",
+        "priority": -1 
       },
       {
         "id": "winnu",
         "name": "The Winnu",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Winnu"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Winnu",
+        "priority": -1
       },
       {
         "id": "xxcha",
         "name": "The Xxcha Kingdom",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Xxcha_Kingdom"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Xxcha_Kingdom",
+        "priority": -1
       },
       {
         "id": "yin",
         "name": "The Yin Brotherhood",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Yin_Brotherhood"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Yin_Brotherhood",
+        "priority": -1
       },
       {
         "id": "yssaril",
         "name": "The Yssaril Tribes",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Yssaril_Tribes"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Yssaril_Tribes",
+        "priority": -1
       }
     ]
   },
@@ -95,37 +112,44 @@
       {
         "id": "argent",
         "name": "The Argent Flight",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Argent_Flight"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Argent_Flight",
+        "priority": 25
       },
       {
         "id": "empyrean",
         "name": "The Empyrean",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Empyrean"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Empyrean",
+        "priority": 9
       },
       {
         "id": "mahact",
         "name": "The Mahact Gene-Sorcerers",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Mahact_Gene-Sorcerers"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Mahact_Gene-Sorcerers",
+        "priority": -1
       },
       {
         "id": "naaz",
         "name": "The Naaz-Rokha Alliance",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Naaz-Rokha_Alliance"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Naaz-Rokha_Alliance",
+        "priority": -1
       },
       {
         "id": "nomad",
         "name": "The Nomad",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Nomad"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Nomad",
+        "priority": -1
       },
       {
         "id": "titans",
         "name": "The Titans of Ul",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Titans_of_Ul"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Titans_of_Ul",
+        "priority": -1
       },
       {
         "id": "vuilraith",
         "name": "The Vuil'Raith Cabal",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Vuil'Raith_Cabal"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Vuil'Raith_Cabal",
+        "priority": -1
       }
     ]
   },
@@ -135,7 +159,8 @@
       {
         "id": "keleres",
         "name": "The Council of Keleres",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Council_of_Keleres"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Council_of_Keleres",
+        "priority": -1
       }
     ]
   },
@@ -145,27 +170,32 @@
       {
         "id": "bastion",
         "name": "Last Bastion",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/Last_Bastion"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/Last_Bastion",
+        "priority": 21
       },
       {
         "id": "ralnel",
         "name": "The Ral-Nel Consortium",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Ral_Nel_Consortium"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Ral_Nel_Consortium",
+        "priority": -1
       },
       {
         "id": "scholarate",
         "name": "The Deepwrought Scholarate",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Deepwrought_Scholarate"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Deepwrought_Scholarate",
+        "priority": -1
       },
       {
         "id": "crimson",
         "name": "Crimson Rebellion",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/Crimson_Rebellion"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/Crimson_Rebellion",
+        "priority": 16
       },
       {
         "id": "firmament",
         "name": "The Firmament / The Obsidian",
-        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Firmament_/_The_Obsidian"
+        "wiki": "https://twilight-imperium.fandom.com/wiki/The_Firmament_/_The_Obsidian",
+        "priority": -1
       }
     ]
   },

@@ -70,7 +70,7 @@ export default function StartDraftForm() {
 
     const form = event.currentTarget.closest('form') as HTMLFormElement
     const formData = new FormData(form)
-    formData.set('customField', 'customValue')
+    formData.set('gameType', gameType)
     for (let i = 0; i < maps.length; i++) {
       const map = maps[i]
       if (map.image) {
