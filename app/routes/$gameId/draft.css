@@ -2,6 +2,12 @@ body > h2 {
     margin-bottom: 2rem;
 }
 
+body > h3 {
+    text-align: center;
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+}
+
 .players {
     display: flex;
     flex-wrap: wrap;
@@ -780,4 +786,8 @@ a:has(.map-image-placeholder) {
     @media (max-width: 527px) {
         max-width: 15rem;
     }
+}
+
+.ref-card-draft {
+    margin-bottom: 2rem;
 }
