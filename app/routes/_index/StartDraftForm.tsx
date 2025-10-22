@@ -96,14 +96,10 @@ export default function StartDraftForm() {
     let factionCount = 0
     checkboxes.forEach(checkbox => {
       if (!checkbox.checked) return
-      if (checkbox.id === 'base') factionCount += factions[0].factions.length
-      if (checkbox.id === 'pok') factionCount += factions[1].factions.length
-      if (checkbox.id === 'keleres') factionCount += factions[2].factions.length
-      if (checkbox.id === 'thunder') factionCount += factions[3].factions.length
-      if (gameType === 'regular') {
-        if (checkbox.id === 'ds') factionCount += factions[4].factions.length
-        if (checkbox.id === 'dsplus') factionCount += factions[5].factions.length
-      }
+      if (gameType === "twilights-fall" && ['ds', 'dsplus'].includes(checkbox.id)) return
+      const index = factions.findIndex(f => f.id === checkbox.id)
+      if (index < 0) return
+      factionCount += factions[index].factions.length
     })
 
     let factionsNeeded: number
