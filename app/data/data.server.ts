@@ -115,8 +115,9 @@ function banningNeeded(data: any) {
   if (data.base) includedFactions += factions[0].factions.length
   if (data.pok) includedFactions += factions[1].factions.length
   if (data.keleres) includedFactions += factions[2].factions.length
-  if (data.ds) includedFactions += factions[3].factions.length
-  if (data.dsplus) includedFactions += factions[4].factions.length
+  if (data.thunder) includedFactions += factions[3].factions.length
+  if (data.ds) includedFactions += factions[4].factions.length
+  if (data.dsplus) includedFactions += factions[5].factions.length
   return includedFactions > +data.factionPoolSize
 }
 
@@ -193,8 +194,9 @@ function getFactionPool(game: any) {
   if (game.base) factionPool.push(...factions[0].factions)
   if (game.pok) factionPool.push(...factions[1].factions)
   if (game.keleres) factionPool.push(...factions[2].factions)
-  if (game.ds) factionPool.push(...factions[3].factions)
-  if (game.dsplus) factionPool.push(...factions[4].factions)
+  if (game.thunder) factionPool.push(...factions[3].factions)
+  if (game.ds) factionPool.push(...factions[4].factions)
+  if (game.dsplus) factionPool.push(...factions[5].factions)
   return factionPool
 }
 

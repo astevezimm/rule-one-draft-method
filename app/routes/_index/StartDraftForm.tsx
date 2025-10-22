@@ -1,8 +1,9 @@
-import {ChangeEvent, MouseEvent, useState} from 'react'
+import {ChangeEvent, MouseEvent, useRef, useState} from 'react'
 import {Form} from '@remix-run/react'
 import UploadScreenshot from '~/components/UploadScreenshot'
 import {Buffer} from 'buffer'
 import {extractMapImage} from '~/global'
+import factions from '~/data/factions.json'
 
 type Map = {
   name: string,
@@ -15,6 +16,7 @@ export default function StartDraftForm() {
   const [gameType, setGameType] = useState<string>("regular")
   const [maps, setMaps] = useState<Map[]>([{name: "Map 1", url: ""}])
   const [checkboxError, setCheckboxError] = useState<string | null>(null)
+  const poolSizeRef = useRef<HTMLInputElement>(null)
 
   function handleChangePlayerName(event: ChangeEvent<HTMLInputElement>) {
     const newNames = [...playerNames]
@@ -90,24 +92,34 @@ export default function StartDraftForm() {
   }
 
   function validateCheckboxes(event: MouseEvent<HTMLButtonElement>) {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#keleres)')
-    const isChecked = Array.from(checkboxes).some(checkbox => (checkbox as HTMLInputElement).checked)
-    if (!isChecked) {
-      setCheckboxError('At least one race type must be selected beyond Keleres.')
-      return false
-    }
-    else {
-      if (playerNames.length === 8) {
-        const notPok = document.querySelectorAll('input[type="checkbox"]:not(#pok)')
-        const beyondPokChecked = Array.from(notPok).some(checkbox => (checkbox as HTMLInputElement).checked)
-        if (!beyondPokChecked) {
-          setCheckboxError('For 8 players, more than just POK factions must be selected.')
-          return false
-        }
+    const checkboxes = document.querySelectorAll<HTMLInputElement>('.factions input[type="checkbox"]')
+    let factionCount = 0
+    checkboxes.forEach(checkbox => {
+      if (!checkbox.checked) return
+      if (checkbox.id === 'base') factionCount += factions[0].factions.length
+      if (checkbox.id === 'pok') factionCount += factions[1].factions.length
+      if (checkbox.id === 'keleres') factionCount += factions[2].factions.length
+      if (checkbox.id === 'thunder') factionCount += factions[3].factions.length
+      if (gameType === 'regular') {
+        if (checkbox.id === 'ds') factionCount += factions[4].factions.length
+        if (checkbox.id === 'dsplus') factionCount += factions[5].factions.length
       }
-      if (checkboxError) setCheckboxError(null)
-      return true
+    })
+
+    let factionsNeeded: number
+    if (gameType === 'regular') {
+      if (!poolSizeRef.current) {
+        setCheckboxError('Faction pool size input is missing.')
+        return false
+      }
+      factionsNeeded = Number(poolSizeRef.current.value)
+    } else {
+      factionsNeeded = playerNames.length * 3
     }
+    
+    if (factionCount >= factionsNeeded) return true
+    setCheckboxError(`Options don't provide enough factions to cover at least ${factionsNeeded} needed.`)
+    return false
   }
 
   return (
@@ -193,7 +205,7 @@ export default function StartDraftForm() {
         {gameType === "regular" && (
           <>
             <h2>Faction Drafting Pool Size</h2>
-            <input type="number" min={playerNames.length} name="factionPoolSize" required />
+            <input type="number" min={playerNames.length} name="factionPoolSize" required ref={poolSizeRef} />
           </>
         )}
 
