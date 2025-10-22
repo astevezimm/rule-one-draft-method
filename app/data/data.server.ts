@@ -88,9 +88,26 @@ export async function startDraft(data: Record<string, any>) {
     gameType: data.gameType,
   }
   
-  const game = new Game(state === 'banning' ? _distributeFactionsToBan(gameData) : gameData)
+  const game = new Game(getGameDataForState(state, gameData))
   await game.save()
   return game.gameId
+}
+
+function getGameDataForState(state: string, gameData: any) {
+  if (state === 'banning') return _distributeFactionsToBan(gameData)
+  if (state === 'refCardDrafting') return distributeFactionsForTF(gameData)
+  return gameData
+}
+
+function distributeFactionsForTF(gameData: any) {
+  const factionPool = getFactionPool(gameData)
+  factionPool.sort(() => Math.random() - 0.5)
+  let index = 0
+  gameData.players.forEach((player: any) => {
+    player.tfFactions = factionPool.slice(index, index + 3)
+    index += 3
+  })
+  return gameData
 }
 
 function banningNeeded(data: any) {
