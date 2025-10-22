@@ -83,7 +83,7 @@ export async function startDraft(data: Record<string, any>) {
     keleres: !!data.keleres,
     ds: !!data.ds,
     dsplus: !!data.dsplus,
-    factionPoolSize: +data.factionPoolSize,
+    factionPoolSize: data.gameType === 'regular' ? +data.factionPoolSize : 0,
     initiativeSet: state !== 'voting',
     gameType: data.gameType,
   }

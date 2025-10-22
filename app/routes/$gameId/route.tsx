@@ -6,6 +6,7 @@ import {hasFactionsToBan, isPlayerSelected, pageHeading, Player, playerKey, Play
 import VotingPage from './VotingPage'
 import BanningPage from './BanningPage'
 import SnakeDraftPage from './SnakeDraftPage'
+import RefCardDraftPage from './RefCardDraftPage'
 import ErrorPage from './ErrorPage'
 import Players from './Players'
 import styles from './draft.css?url'
@@ -129,6 +130,8 @@ function DraftPageContent(props: DraftPageContentProps)
     case 'drafting':
     case 'finished':
       return <SnakeDraftPage {...props} />
+    case 'refCardDrafting':
+      return <RefCardDraftPage {...props} />
     default: return <ErrorPage />
   }
 }
