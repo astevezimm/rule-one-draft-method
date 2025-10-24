@@ -6,103 +6,300 @@
         "id": "arborec",
         "name": "The Arborec",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Arborec",
-        "priority": 29
+        "priority": 29,
+        "startUnits": {
+          "carrier": 1,
+          "cruiser": 1,
+          "fighter": 2,
+          "infantry": 4,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "AroborecHomeSystem.png",
+          "alt": "Nestphar: 3/2"
+        }
       },
       {
         "id": "barony",
         "name": "The Barony of Letnev",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Barony_of_Letnev",
-        "priority": -1
+        "priority": 8,
+        "startUnits": {
+          "dreadnought": 1,
+          "carrier": 1,
+          "destroyer": 1,
+          "fighter": 1,
+          "infantry": 3,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "LetnevHomeSystem.png",
+          "alt": "Arc Prime: 4/0\nWren Terra: 2/1"
+        }
       },
       {
         "id": "saar",
         "name": "The Clan of Saar",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Clan_of_Saar",
-        "priority": -1
+        "priority": 17,
+        "startUnits": {
+          "carrier": 2,
+          "cruiser": 1,
+          "fighter": 2,
+          "infantry": 4,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "SaarHomeSystem.png",
+          "alt": "Lisis II: 1/0\nRagh: 2/1"
+        }
       },
       {
         "id": "muaat",
         "name": "The Embers of Muaat",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Embers_of_Muaat",
-        "priority": 14
+        "priority": 14,
+        "startUnits": {
+          "war_sun": 1,
+          "fighter": 2,
+          "infantry": 4,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "MuaatHomeSystem.png",
+          "alt": "Muaat: 4/1"
+        }
       },
       {
         "id": "hacan",
         "name": "The Emirates of Hacan",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Emirates_of_Hacan",
-        "priority": 18
+        "priority": 18,
+        "startUnits": {
+          "carrier": 2,
+          "cruiser": 1,
+          "fighter": 2,
+          "infantry": 4,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "HacanHomeSystem.png",
+          "alt": "Arretze: 2/0\nHercant: 1/1\nKamdorn: 0/1"
+        }
       },
       {
         "id": "sol",
         "name": "The Federation of Sol",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Federation_of_Sol",
-        "priority": -1
+        "priority": 3,
+        "startUnits": {
+          "carrier": 2,
+          "destroyer": 1,
+          "fighter": 3,
+          "infantry": 5,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "SolHomeSystem.png",
+          "alt": "Jord: 4/2"
+        }
       },
       {
         "id": "creuss",
         "name": "The Ghosts of Creuss",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Ghosts_of_Creuss",
-        "priority": 20
+        "priority": 20,
+        "startUnits": {
+          "carrier": 1,
+          "destroyer": 2,
+          "fighter": 2,
+          "infantry": 4,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "Creuss-home-system.png",
+          "alt": "Creuss: 4/2\nDelta wormhole",
+          "echo": true
+        }
       },
       {
         "id": "l1z1x",
         "name": "The L1Z1X Mindnet",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_L1Z1X_Mindnet",
-        "priority": -1
+        "priority": 5,
+        "startUnits": {
+          "dreadnought": 1,
+          "carrier": 1,
+          "fighter": 3,
+          "infantry": 5,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "L1Z1XHomeSystem.png",
+          "alt": "[0.0.0]: 5/0"
+        }
       },
       {
         "id": "mentak",
         "name": "The Mentak Coalition",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Mentak_Coalition",
-        "priority": -1
+        "priority": 15,
+        "startUnits": {
+          "carrier": 1,
+          "cruiser": 2,
+          "fighter": 3,
+          "infantry": 4,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "MentakHomeSystem.png",
+          "alt": "Moll Primus: 4/1"
+        }
       },
       {
         "id": "naalu",
         "name": "The Naalu Collective",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Naalu_Collective",
-        "priority": -1
+        "priority": 28,
+        "startUnits": {
+          "carrier": 1,
+          "cruiser": 1,
+          "destroyer": 1,
+          "fighter": 3,
+          "infantry": 4,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "NaaluHomeSystem.png",
+          "alt": "Maaluuk: 0/2\nDruaa: 3/1"
+        }
       },
       {
         "id": "nekro",
         "name": "The Nekro Virus",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Nekro_Virus",
-        "priority": -1
+        "priority": 22,
+        "startUnits": {
+          "dreadnought": 1,
+          "carrier": 1,
+          "fighter": 2,
+          "infantry": 2,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "NekroHomeSystem.png",
+          "alt": "Mordai II: 4/0"
+        }
       },
       {
         "id": "sardakk",
         "name": "The Sardakk N'orr",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Sardakk_N'orr",
-        "priority": -1
+        "priority": 10,
+        "startUnits": {
+          "carrier": 2,
+          "cruiser": 1,
+          "infantry": 5,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "SardakkHomeSystem.png",
+          "alt": "Tren'lak: 1/0\nQuinarra: 3/1"
+        }
       },
       {
         "id": "jolnar",
         "name": "The Universities of Jol-Nar",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Universities_of_Jol-Nar",
-        "priority": -1 
+        "priority": 24,
+        "startUnits": {
+          "dreadnought": 1,
+          "carrier": 2,
+          "fighter": 1,
+          "infantry": 2,
+          "space_dock": 1,
+          "pds": 2
+        },
+        "startSystem": {
+          "img": "JolNarHomeSystem.png",
+          "alt": "Jol: 1/2\nNar: 2/3"
+        }
       },
       {
         "id": "winnu",
         "name": "The Winnu",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Winnu",
-        "priority": -1
+        "priority": 27,
+        "startUnits": {
+          "carrier": 1,
+          "cruiser": 1,
+          "fighter": 2,
+          "infantry": 2,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "WinnuHomeSystem.png",
+          "alt": "Winnu: 3/4"
+        }
       },
       {
         "id": "xxcha",
         "name": "The Xxcha Kingdom",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Xxcha_Kingdom",
-        "priority": -1
+        "priority": 26,
+        "startUnits": {
+          "carrier": 1,
+          "cruiser": 2,
+          "fighter": 3,
+          "infantry": 4,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "XxchaHomeSystem.png",
+          "alt": "Archon Ren: 2/3\nArchon Tau: 1/1"
+        }
       },
       {
         "id": "yin",
         "name": "The Yin Brotherhood",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Yin_Brotherhood",
-        "priority": -1
+        "priority": 5,
+        "startUnits": {
+          "carrier": 2,
+          "destroyer": 1,
+          "fighter": 4,
+          "infantry": 4,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "YinHomeSystem.png",
+          "alt": "Darien: 4/4"
+        }
       },
       {
         "id": "yssaril",
         "name": "The Yssaril Tribes",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Yssaril_Tribes",
-        "priority": -1
+        "priority": 11,
+        "startUnits": {
+          "carrier": 2,
+          "cruiser": 1,
+          "fighter": 2,
+          "infantry": 5,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "YssarilHomeSystem.png",
+          "alt": "Retillion: 2/3\nShalloq: 1/2"
+        }
       }
     ]
   },
@@ -113,43 +310,124 @@
         "id": "argent",
         "name": "The Argent Flight",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Argent_Flight",
-        "priority": 25
+        "priority": 25,
+        "startUnits": {
+          "carrier": 1,
+          "destroyer": 2,
+          "fighter": 2,
+          "infantry": 5,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "ArgentHomeSystem.png",
+          "alt": "Valk: 2/0\nAvar: 1/1\nYlir: 0/2"
+        }
       },
       {
         "id": "empyrean",
         "name": "The Empyrean",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Empyrean",
-        "priority": 9
+        "priority": 9,
+        "startUnits": {
+          "carrier": 2,
+          "destroyer": 1,
+          "fighter": 2,
+          "infantry": 4,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "EmpyreanHomeSystem.png",
+          "alt": "The Dark: 3/4\nNebula"
+        }
       },
       {
         "id": "mahact",
         "name": "The Mahact Gene-Sorcerers",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Mahact_Gene-Sorcerers",
-        "priority": -1
+        "priority": 1,
+        "startUnits": {
+          "dreadnought": 1,
+          "carrier": 1,
+          "fighter": 2,
+          "infantry": 3,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "MahactHomeSystem.png",
+          "alt": "Ixth: 3/5"
+        }
       },
       {
         "id": "naaz",
         "name": "The Naaz-Rokha Alliance",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Naaz-Rokha_Alliance",
-        "priority": -1
+        "priority": 19,
+        "startUnits": {
+          "carrier": 2,
+          "destroyer": 1,
+          "fighter": 2,
+          "mech": 1,
+          "infantry": 3,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "NRHomeSystem.png",
+          "alt": "Naaz: 2/1\nRokha: 1/2"
+        }
       },
       {
         "id": "nomad",
         "name": "The Nomad",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Nomad",
-        "priority": -1
+        "priority": 2,
+        "startUnits": {
+          "flagship": 1,
+          "carrier": 1,
+          "destroyer": 1,
+          "fighter": 3,
+          "infantry": 4,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "NomadHomeSystem.png",
+          "alt": "Arcturus: 4/4"
+        }
       },
       {
         "id": "titans",
         "name": "The Titans of Ul",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Titans_of_Ul",
-        "priority": -1
+        "priority": 13,
+        "startUnits": {
+          "dreadnought": 1,
+          "cruiser": 2,
+          "fighter": 2,
+          "infantry": 3,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "TitansHomeSystem.png",
+          "alt": "Elysium: 4/1"
+        }
       },
       {
         "id": "vuilraith",
         "name": "The Vuil'Raith Cabal",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Vuil'Raith_Cabal",
-        "priority": -1
+        "priority": 6,
+        "startUnits": {
+          "dreadnought": 1,
+          "carrier": 1,
+          "cruiser": 1,
+          "fighter": 3,
+          "infantry": 3,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "VuilRaithHomeSystem.png",
+          "alt": "Acheron: 4/0"
+        }
       }
     ]
   },
@@ -160,7 +438,17 @@
         "id": "keleres",
         "name": "The Council of Keleres",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Council_of_Keleres",
-        "priority": -1
+        "priority": 23,
+        "startUnits": {
+          "carrier": 2,
+          "cruiser": 1,
+          "fighter": 2,
+          "infantry": 2,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": false
+        }
       }
     ]
   },
@@ -171,31 +459,92 @@
         "id": "bastion",
         "name": "Last Bastion",
         "wiki": "https://twilight-imperium.fandom.com/wiki/Last_Bastion",
-        "priority": 21
+        "priority": 21,
+        "startUnits": {
+          "dreadnought": 1,
+          "carrier": 1,
+          "cruiser": 1,
+          "fighter": 2,
+          "infantry": 3,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "LastBastionHomeSystem.png",
+          "alt": "Ordinian(legendary): 0/0\nRevelation(space station): 1/2\nNebula"
+        }
       },
       {
         "id": "ralnel",
         "name": "The Ral-Nel Consortium",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Ral_Nel_Consortium",
-        "priority": -1
+        "priority": 12,
+        "startUnits": {
+          "dreadnought": 1,
+          "carrier": 1,
+          "destroyer": 1,
+          "fighter": 2,
+          "infantry": 4,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "RalNelHomeSystem.png",
+          "alt": "Mez Lo Orz Pei Zsha: 2/1\nRep Lo Orz Oet: 1/3"
+        }
       },
       {
         "id": "scholarate",
         "name": "The Deepwrought Scholarate",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Deepwrought_Scholarate",
-        "priority": -1
+        "priority": 7,
+        "startUnits": {
+          "dreadnought": 1,
+          "carrier": 1,
+          "fighter": 4,
+          "infantry": 3,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "ScholarateHomeSystem.png",
+          "alt": "Ikatena: 4/4"
+        }
       },
       {
         "id": "crimson",
         "name": "Crimson Rebellion",
         "wiki": "https://twilight-imperium.fandom.com/wiki/Crimson_Rebellion",
-        "priority": 16
+        "priority": 16,
+        "startUnits": {
+          "carrier": 1,
+          "destroyer": 2,
+          "fighter": 3,
+          "infantry": 4,
+          "space_dock": 1,
+          "pds": 1
+        },
+        "startSystem": {
+          "img": "CrimsonHomeSystem.png",
+          "alt": "Ahk Creuxx: 4/2\nEpsilon Wormhole",
+          "echo": true
+        }
       },
       {
         "id": "firmament",
         "name": "The Firmament / The Obsidian",
         "wiki": "https://twilight-imperium.fandom.com/wiki/The_Firmament_/_The_Obsidian",
-        "priority": -1
+        "priority": 30,
+        "startUnits": {
+          "carrier": 1,
+          "cruiser": 1,
+          "destroyer": 1,
+          "fighter": 3,
+          "infantry": 3,
+          "space_dock": 1
+        },
+        "startSystem": {
+          "img": "FirmamentHomeSystem.png",
+          "alt": "Cronos: 2/1\nTallin: 1/2"
+        }
       }
     ]
   },
