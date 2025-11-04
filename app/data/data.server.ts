@@ -89,17 +89,18 @@ export async function startDraft(data: Record<string, any>) {
   }
   
   const game = new Game(getGameDataForState(state, gameData))
+  game.markModified("players")
   await game.save()
   return game.gameId
 }
 
 function getGameDataForState(state: string, gameData: any) {
   if (state === 'banning') return _distributeFactionsToBan(gameData)
-  if (state === 'refCardDrafting') return distributeFactionsForTF(gameData)
+  if (state === 'refCardDrafting') return _distributeFactionsForTF(gameData)
   return gameData
 }
 
-function distributeFactionsForTF(gameData: any) {
+function _distributeFactionsForTF(gameData: any) {
   const factionPool = getFactionPool(gameData)
   factionPool.sort(() => Math.random() - 0.5)
   let index = 0
@@ -183,9 +184,17 @@ export async function submitVoting(gameId: string | undefined) {
   const game = await Game.findOne({gameId})
   if (!game) return
   if (game.state !== 'voting') return
-  game.state = banningNeeded(game) ? "banning" : "drafting"
-  game.players.sort(() => Math.random() - 0.5)
-  const newGame = game.state === 'banning' ? _distributeFactionsToBan(game) : game
+  let newGame
+  if (game.gameType === 'twilights-fall') {
+    newGame = _distributeFactionsForTF(game)
+    newGame.state = 'refCardDrafting'
+  }
+  else {
+    game.state = banningNeeded(game) ? "banning" : "drafting"
+    game.players.sort(() => Math.random() - 0.5)
+    newGame = game.state === 'banning' ? _distributeFactionsToBan(game) : game
+  }
+  newGame.markModified("players")
   await newGame.save()
 }
 

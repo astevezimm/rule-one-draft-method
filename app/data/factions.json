@@ -16,7 +16,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "AroborecHomeSystem.png",
+          "img": 5,
           "alt": "Nestphar: 3/2"
         }
       },
@@ -34,7 +34,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "LetnevHomeSystem.png",
+          "img": 10,
           "alt": "Arc Prime: 4/0\nWren Terra: 2/1"
         }
       },
@@ -51,7 +51,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "SaarHomeSystem.png",
+          "img": 11,
           "alt": "Lisis II: 1/0\nRagh: 2/1"
         }
       },
@@ -67,7 +67,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "MuaatHomeSystem.png",
+          "img": 4,
           "alt": "Muaat: 4/1"
         }
       },
@@ -84,7 +84,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "HacanHomeSystem.png",
+          "img": 16,
           "alt": "Arretze: 2/0\nHercant: 1/1\nKamdorn: 0/1"
         }
       },
@@ -101,7 +101,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "SolHomeSystem.png",
+          "img": 1,
           "alt": "Jord: 4/2"
         }
       },
@@ -118,7 +118,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "Creuss-home-system.png",
+          "img": 51,
           "alt": "Creuss: 4/2\nDelta wormhole",
           "echo": true
         }
@@ -137,7 +137,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "L1Z1XHomeSystem.png",
+          "img": 6,
           "alt": "[0.0.0]: 5/0"
         }
       },
@@ -155,7 +155,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "MentakHomeSystem.png",
+          "img": 2,
           "alt": "Moll Primus: 4/1"
         }
       },
@@ -174,7 +174,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "NaaluHomeSystem.png",
+          "img": 9,
           "alt": "Maaluuk: 0/2\nDruaa: 3/1"
         }
       },
@@ -191,7 +191,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "NekroHomeSystem.png",
+          "img": 8,
           "alt": "Mordai II: 4/0"
         }
       },
@@ -208,7 +208,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "SardakkHomeSystem.png",
+          "img": 13,
           "alt": "Tren'lak: 1/0\nQuinarra: 3/1"
         }
       },
@@ -226,7 +226,7 @@
           "pds": 2
         },
         "startSystem": {
-          "img": "JolNarHomeSystem.png",
+          "img": 12,
           "alt": "Jol: 1/2\nNar: 2/3"
         }
       },
@@ -244,7 +244,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "WinnuHomeSystem.png",
+          "img": 7,
           "alt": "Winnu: 3/4"
         }
       },
@@ -262,7 +262,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "XxchaHomeSystem.png",
+          "img": 14,
           "alt": "Archon Ren: 2/3\nArchon Tau: 1/1"
         }
       },
@@ -279,7 +279,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "YinHomeSystem.png",
+          "img": 3,
           "alt": "Darien: 4/4"
         }
       },
@@ -297,7 +297,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "YssarilHomeSystem.png",
+          "img": 15,
           "alt": "Retillion: 2/3\nShalloq: 1/2"
         }
       }
@@ -320,7 +320,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "ArgentHomeSystem.png",
+          "img": 58,
           "alt": "Valk: 2/0\nAvar: 1/1\nYlir: 0/2"
         }
       },
@@ -337,7 +337,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "EmpyreanHomeSystem.png",
+          "img": 56,
           "alt": "The Dark: 3/4\nNebula"
         }
       },
@@ -354,7 +354,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "MahactHomeSystem.png",
+          "img": 52,
           "alt": "Ixth: 3/5"
         }
       },
@@ -372,7 +372,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "NRHomeSystem.png",
+          "img": 57,
           "alt": "Naaz: 2/1\nRokha: 1/2"
         }
       },
@@ -390,7 +390,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "NomadHomeSystem.png",
+          "img": 53,
           "alt": "Arcturus: 4/4"
         }
       },
@@ -407,7 +407,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "TitansHomeSystem.png",
+          "img": 55,
           "alt": "Elysium: 4/1"
         }
       },
@@ -425,7 +425,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "VuilRaithHomeSystem.png",
+          "img": 54,
           "alt": "Acheron: 4/0"
         }
       }
@@ -469,7 +469,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "LastBastionHomeSystem.png",
+          "img": 92,
           "alt": "Ordinian(legendary): 0/0\nRevelation(space station): 1/2\nNebula"
         }
       },
@@ -488,7 +488,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "RalNelHomeSystem.png",
+          "img": 93,
           "alt": "Mez Lo Orz Pei Zsha: 2/1\nRep Lo Orz Oet: 1/3"
         }
       },
@@ -505,7 +505,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "ScholarateHomeSystem.png",
+          "img": 95,
           "alt": "Ikatena: 4/4"
         }
       },
@@ -523,7 +523,7 @@
           "pds": 1
         },
         "startSystem": {
-          "img": "CrimsonHomeSystem.png",
+          "img": 59,
           "alt": "Ahk Creuxx: 4/2\nEpsilon Wormhole",
           "echo": true
         }
@@ -542,7 +542,7 @@
           "space_dock": 1
         },
         "startSystem": {
-          "img": "FirmamentHomeSystem.png",
+          "img": 96,
           "alt": "Cronos: 2/1\nTallin: 1/2"
         }
       }

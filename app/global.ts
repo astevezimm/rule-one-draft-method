@@ -14,7 +14,19 @@ export type Player = {
   number_of_bans: number
   speaker?: boolean
   faction?: string
+  tfFactions?: TFFaction[]
   slice?: number
+}
+
+export type TFFaction = {
+  id: string
+  name: string
+  startUnits: {
+    flagship: number, warsun: number, carrier: number, dreadnought: number, cruiser: number,
+    destroyer: number, fighter: number, mech: number, infantry: number, pds: number, spaceDock: number
+  }
+  startSystem: {img: number, alt: string}
+  priority: number
 }
 
 export type PlayerSelected = 'yes' | 'no' | 'loading' | 'admin'
