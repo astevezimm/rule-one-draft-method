@@ -35,16 +35,19 @@ export default function RefCardDraftPage({playerSelected, selectedPlayer, state}
 
 function RefCard({faction} : {faction: TFFaction}) {
   return (
-    <li key={faction.id} className="ref-card">
+    <li key={faction.id} className="ref-card ref-card-selectable">
       <h3>{faction.name}</h3>
-      <p>Initiative: {faction.priority}</p>
+      <p className="initiative">Initiative: <span>{faction.priority}</span></p>
       <img
         src={`images/startSystems/ST_${faction.startSystem.img}.webp`}
         alt={faction.startSystem.alt}
       />
-      {Object.keys(faction.startUnits).map((unit) => (
-        <p key={`${faction.id}-${unit}`}>{unit}: {(faction.startUnits as any)[unit]}</p>
-      ))}
+      <h4>Starting Units:</h4>
+      <div className="start-units">
+        {Object.keys(faction.startUnits).map((unit) => (
+          <p key={`${faction.id}-${unit}`}>{unit}: {(faction.startUnits as any)[unit]}</p>
+        ))}
+      </div>
     </li>
   )
 }
