@@ -15,6 +15,7 @@ export type Player = {
   speaker?: boolean
   faction?: string
   tfFactions?: TFFaction[]
+  selectedTFFactions?: TFFaction[]
   slice?: number
 }
 

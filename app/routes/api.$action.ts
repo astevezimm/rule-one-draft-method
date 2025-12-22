@@ -1,7 +1,7 @@
-import {ActionFunction, LoaderFunction} from '@remix-run/node'
+import {ActionFunction} from '@remix-run/node'
 import {
   draftItem,
-  getLastUpdated,
+  draftTFFaction,
   removeDraft,
   submitBans,
   submitVoting,
@@ -37,6 +37,10 @@ export const action: ActionFunction = async ({params, request}) => {
     case 'draft-item':
       const {gameId: draftGameId, player: draftPlayer, type, value} = await request.json()
       await draftItem(draftGameId, draftPlayer, {type, value})
+      return new Response(null, {status: 204})
+    case 'draft-tffaction':
+      const {gameId: draftTFFactionGameId, player: draftTFFactionPlayer, factionId} = await request.json()
+      await draftTFFaction(draftTFFactionGameId, draftTFFactionPlayer, factionId)
       return new Response(null, {status: 204})
     default: return new Response(null, {status: 400, statusText: 'Bad Request'})
   }

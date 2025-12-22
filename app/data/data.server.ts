@@ -337,3 +337,7 @@ function populateLeftOverChoices(player: Player, game: any) {
   }
   return player
 }
+
+export async function draftTFFaction(gameId: string | undefined, player: string, factionId: string) {
+  
+}

@@ -7,6 +7,24 @@ export default function RefCardDraftPage({playerSelected, selectedPlayer, state}
   const player = players.find(player => player.id === selectedPlayer)
   const map = maps.length === 1 ? maps[0] :
     maps.find(map => map.votes = Math.max(...maps.map(m => m.votes)))
+
+  function handleSelect(factionId: string) {
+    fetch(`/api/draft-tffaction`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        gameId,
+        player: player?.id,
+        factionId
+      })
+    }).then(response => {
+      if (response.ok) {
+        window.location.reload()
+      }
+    })
+  }
   
   return (
     <>
@@ -15,27 +33,43 @@ export default function RefCardDraftPage({playerSelected, selectedPlayer, state}
           <h2>Select main game faction to draft. Rest will be passed.</h2>
           <h3>One choice for seating initiative (lowest is speaker), one for home system, and one for starting units.</h3>
           <div className="ref-card-draft card main-section">
-            <h2>Options</h2>
             {player.tfFactions ? (
-              <ul className="ref-card-list">
-                {player.tfFactions.map((faction) => <RefCard key={faction.id} faction={faction} />)}
-              </ul>
+              <>
+                <h2>Options</h2>
+                <ul className="ref-card-list">
+                  {player.tfFactions.map((faction) => (
+                    <RefCard key={faction.id} faction={faction} onSelect={handleSelect} />
+                  ))}
+                </ul>
+              </>
             ) : (
               <h3>Waiting for next cards to draft</h3>
             )}
           </div>
-          <div className="ref-card-draft card main-section">
-            <h2>Your Drafted Cards</h2>
-          </div>
+            {player.selectedTFFactions && (
+              <div className="ref-card-draft card main-section">
+                <h2>Your Drafted Cards</h2>
+                <ul className="ref-card-list">
+                  {player.selectedTFFactions.map((faction) => (
+                    <RefCard key={faction.id} faction={faction} />
+                  ))}
+                </ul>
+              </div>
+            )}
         </>
       ) : (<h2>Select name from above to proceed.</h2>)}
     </>
   )
 }
 
-function RefCard({faction} : {faction: TFFaction}) {
+function RefCard({faction, onSelect} : {faction: TFFaction, onSelect?: (factionId: string) => void}) {
+  
+  
   return (
-    <li key={faction.id} className="ref-card ref-card-selectable">
+    <li
+      key={faction.id} className={`ref-card ${onSelect ? "ref-card-selectable" : ""}`}
+      onClick={() => onSelect && onSelect(faction.id)}
+    >
       <h3>{faction.name}</h3>
       <p className="initiative">Initiative: <span>{faction.priority}</span></p>
       <img
