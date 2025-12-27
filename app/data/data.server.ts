@@ -338,6 +338,47 @@ function populateLeftOverChoices(player: Player, game: any) {
   return player
 }
 
-export async function draftTFFaction(gameId: string | undefined, player: string, factionId: string) {
+export async function draftTFFaction(gameId: string | undefined, playerId: string, factionId: string) {
+  const game = await Game.findOne({gameId})
+  if (!game) return
+  if (game.state !== 'refCardDrafting') return
   
+  const playerIndex = game.players.findIndex((p: Player) => p.id === playerId)
+  const player = game.players[playerIndex]
+  const draftedFactionIndex = player.tfFactions.findIndex((f: {id: string}) => f.id === factionId)
+  if (draftedFactionIndex === -1) return
+  
+  if (!player.selectedTFFactions) player.selectedTFFactions = []
+  player.selectedTFFactions.push(player.tfFactions[draftedFactionIndex])
+  player.tfFactions.splice(draftedFactionIndex, 1)
+  
+  if (game.players.every((p: Player) => (
+    p.selectedTFFactions && p.selectedTFFactions.length === player.selectedTFFactions.length
+  )))
+  {
+    player.waitingForDraft = false
+    if (player.tfFactions.length === 1) {
+      for (let i = 0; i < game.players.length; i++) {
+        const nextI = (i + 1) % game.players.length
+        if (!game.players[nextI].selectedTFFactions) game.players[nextI].selectedTFFactions = []
+        game.players[nextI].selectedTFFactions.push(game.players[i].tfFactions[0])
+        game.players[i].tfFactions = []
+      }
+    }
+    else {
+      const lastTfFactions = game.players[game.players.length - 1].tfFactions
+      for (let i = 0; i < game.players.length - 1; i++) {
+        game.players[i + 1].tfFactions = game.players[i].tfFactions
+      }
+      game.players[0].tfFactions = lastTfFactions
+    }
+  }
+  else {
+    player.waitingForDraft = true
+  }
+
+  game.players[playerIndex] = player
+  
+  game.markModified("players")
+  await game.save()
 }

@@ -16,6 +16,7 @@ export type Player = {
   faction?: string
   tfFactions?: TFFaction[]
   selectedTFFactions?: TFFaction[]
+  waitingForDraft?: boolean
   slice?: number
 }
 

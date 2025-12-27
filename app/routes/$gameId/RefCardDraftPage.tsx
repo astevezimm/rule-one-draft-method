@@ -33,7 +33,7 @@ export default function RefCardDraftPage({playerSelected, selectedPlayer, state}
           <h2>Select main game faction to draft. Rest will be passed.</h2>
           <h3>One choice for seating initiative (lowest is speaker), one for home system, and one for starting units.</h3>
           <div className="ref-card-draft card main-section">
-            {player.tfFactions ? (
+            {player.tfFactions && !player.waitingForDraft ? (
               <>
                 <h2>Options</h2>
                 <ul className="ref-card-list">
