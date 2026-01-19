@@ -38,7 +38,9 @@ export default function RefCardDraftPage({playerSelected, selectedPlayer, state}
                 <h2>Options</h2>
                 <ul className="ref-card-list">
                   {player.tfFactions.map((faction) => (
-                    <RefCard key={faction.id} faction={faction} onSelect={handleSelect} />
+                    <RefCard
+                      key={faction.id} faction={faction} onSelect={() => handleSelect(faction.id)}
+                    />
                   ))}
                 </ul>
               </>
@@ -63,8 +65,6 @@ export default function RefCardDraftPage({playerSelected, selectedPlayer, state}
 }
 
 function RefCard({faction, onSelect} : {faction: TFFaction, onSelect?: (factionId: string) => void}) {
-  
-  
   return (
     <li
       key={faction.id} className={`ref-card ${onSelect ? "ref-card-selectable" : ""}`}
