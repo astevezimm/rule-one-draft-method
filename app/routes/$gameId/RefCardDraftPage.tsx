@@ -1,12 +1,13 @@
 import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useLoaderData} from '@remix-run/react'
 import {Map, Player, TFFaction} from '~/global'
+import ReferenceMap from '~/routes/$gameId/ReferenceMap'
 
 export default function RefCardDraftPage({playerSelected, selectedPlayer, state}: DraftPageContentProps) {
   const {players, gameId, maps} = (useLoaderData() as {players: Player[], gameId: string, maps: Map[]})
   const player = players.find(player => player.id === selectedPlayer)
   const map = maps.length === 1 ? maps[0] :
-    maps.find(map => map.votes = Math.max(...maps.map(m => m.votes)))
+    maps.find(map => map.votes === Math.max(...maps.map(m => m.votes)))
 
   function handleSelect(factionId: string) {
     fetch(`/api/draft-tffaction`, {
@@ -32,6 +33,7 @@ export default function RefCardDraftPage({playerSelected, selectedPlayer, state}
         <>
           <h2>Select main game faction to draft. Rest will be passed.</h2>
           <h3>One choice for seating initiative (lowest is speaker), one for home system, and one for starting units.</h3>
+          {map && map.url && <div className='ref-card-draft-map'><ReferenceMap map={map} /></div>}
           <div className="ref-card-draft card main-section">
             {player.tfFactions && !player.waitingForDraft ? (
               <>

@@ -3,12 +3,13 @@ import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useLoaderData} from '@remix-run/react'
 import {ChangeEvent, ChangeEventHandler, useState} from 'react'
 import {Buffer} from 'buffer'
+import ReferenceMap from '~/routes/$gameId/ReferenceMap'
 
 export default function BanningPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
   const {players, gameId, maps} = (useLoaderData() as {players: Player[], gameId: string, maps: Map[]})
   const player = players.find(player => player.id === selectedPlayer)
   const map = maps.length === 1 ? maps[0] :
-    maps.find(map => map.votes = Math.max(...maps.map(m => m.votes)))
+    maps.find(map => map.votes === Math.max(...maps.map(m => m.votes)))
   
   const [banCount, setBanCount] = useState(0)
   const [bans, setBans] = useState<string[]>([])
@@ -59,18 +60,7 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
           hasFactionsToBan(player) ? (
             <>
               <h2>Ban <span>{player.number_of_bans}</span> factions from the following</h2>
-              {map && (
-                <div className="banning-reference-map">
-                  <a href={map.url} target="_blank" rel="noopener noreferrer"><h3>Map to reference</h3></a>
-                  {map.image && (
-                    <div className="banning-reference-image">
-                      {((map.image as unknown) as {data: {length: number}}).data.length > 0 &&
-                        <img src={`data:image/jpeg;base64,${Buffer.from(map.image).toString('base64')}`} alt={map.name} />
-                      }
-                    </div>
-                  )}
-                </div>
-              )}
+              {map && map.url && <ReferenceMap map={map} />}
               <ul>
                 {player.factions_to_ban.map((faction, index) => (
                   <li key={`ban-${index}`}>
