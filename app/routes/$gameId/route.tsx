@@ -6,7 +6,7 @@ import {hasFactionsToBan, isPlayerSelected, pageHeading, Player, playerKey, Play
 import VotingPage from './VotingPage'
 import BanningPage from './BanningPage'
 import SnakeDraftPage from './SnakeDraftPage'
-import RefCardDraftPage from './RefCardDraftPage'
+import RefCardDraftPage from './twilightsFall/RefCardDraftPage'
 import ErrorPage from './ErrorPage'
 import Players from './Players'
 import styles from './draft.css?url'

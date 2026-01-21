@@ -94,3 +94,20 @@ export async function extractMapImage(file: File | undefined) {
 export function hasFactionsToBan(player: Player) {
   return player.factions_to_ban.length > 0 && player.number_of_bans > 0
 }
+
+export async function post(url: string, data: any) {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    if (response.ok) {
+      window.location.reload()
+    }
+  } catch (error) {
+    return console.error('Error:', error)
+  }
+}

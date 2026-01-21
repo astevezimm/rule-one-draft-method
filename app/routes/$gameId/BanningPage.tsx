@@ -1,4 +1,4 @@
-import {Player, Map, hasFactionsToBan} from '~/global'
+import {Player, Map, hasFactionsToBan, post} from '~/global'
 import {DraftPageContentProps} from '~/routes/$gameId/route'
 import {useLoaderData} from '@remix-run/react'
 import {ChangeEvent, ChangeEventHandler, useState} from 'react'
@@ -33,19 +33,10 @@ export default function BanningPage({playerSelected, selectedPlayer}: DraftPageC
   
   function handleSubmitBans() {
     if (player) {
-      fetch(`/api/submit-bans`, {
-        method: 'POST',
-        body: JSON.stringify({
-          gameId,
-          player: player.id,
-          bans
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => {
-        if (response.ok) window.location.reload()
+      post(`/api/submit-bans`, {
+        gameId,
+        player: player.id,
+        bans
       })
     }
   }

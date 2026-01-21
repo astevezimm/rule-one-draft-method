@@ -1,29 +1,20 @@
-import {DraftPageContentProps} from '~/routes/$gameId/route'
+import {DraftPageContentProps} from '../route'
 import {useLoaderData} from '@remix-run/react'
-import {Map, Player, TFFaction} from '~/global'
-import ReferenceMap from '~/routes/$gameId/ReferenceMap'
+import {Map, Player, post} from '~/global'
+import ReferenceMap from '../ReferenceMap'
+import RefCard from './RefCard'
 
-export default function RefCardDraftPage({playerSelected, selectedPlayer, state}: DraftPageContentProps) {
+export default function RefCardDraftPage({playerSelected, selectedPlayer}: DraftPageContentProps) {
   const {players, gameId, maps} = (useLoaderData() as {players: Player[], gameId: string, maps: Map[]})
   const player = players.find(player => player.id === selectedPlayer)
   const map = maps.length === 1 ? maps[0] :
     maps.find(map => map.votes === Math.max(...maps.map(m => m.votes)))
 
   function handleSelect(factionId: string) {
-    fetch(`/api/draft-tffaction`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        gameId,
-        player: player?.id,
-        factionId
-      })
-    }).then(response => {
-      if (response.ok) {
-        window.location.reload()
-      }
+    post(`/api/draft-tffaction`, {
+      gameId,
+      player: player?.id,
+      factionId
     })
   }
   
@@ -63,27 +54,5 @@ export default function RefCardDraftPage({playerSelected, selectedPlayer, state}
         </>
       ) : (<h2>Select name from above to proceed.</h2>)}
     </>
-  )
-}
-
-function RefCard({faction, onSelect} : {faction: TFFaction, onSelect?: (factionId: string) => void}) {
-  return (
-    <li
-      key={faction.id} className={`ref-card ${onSelect ? "ref-card-selectable" : ""}`}
-      onClick={() => onSelect && onSelect(faction.id)}
-    >
-      <h3>{faction.name}</h3>
-      <p className="initiative">Initiative: <span>{faction.priority}</span></p>
-      <img
-        src={`images/startSystems/ST_${faction.startSystem.img}.webp`}
-        alt={faction.startSystem.alt}
-      />
-      <h4>Starting Units:</h4>
-      <div className="start-units">
-        {Object.keys(faction.startUnits).map((unit) => (
-          <p key={`${faction.id}-${unit}`}>{unit}: {(faction.startUnits as any)[unit]}</p>
-        ))}
-      </div>
-    </li>
   )
 }

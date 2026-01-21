@@ -1,5 +1,5 @@
 import {useLoaderData} from '@remix-run/react'
-import {extractMapImage, Map, Player, PlayerSelected} from '~/global'
+import {extractMapImage, Map, Player, PlayerSelected, post} from '~/global'
 import {Buffer} from 'buffer'
 import UploadScreenshot from '~/components/UploadScreenshot'
 import {ChangeEvent, MouseEvent, useState} from 'react'
@@ -28,9 +28,11 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
       player,
       mapIndex
     }
-    fetch('/api/vote', { method: 'POST', body: JSON.stringify(data) })
-      .then(() => window.location.reload())
-      .catch((error) => console.error('Error:', error))
+    post(`/api/vote`, {
+      gameId,
+      player,
+      mapIndex
+    })
   }
   
   function listPlayerVotes(map: Map) {
@@ -59,10 +61,7 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
   
   function submit(breakTie?: {player: Player, mapIndex: number}) {
     const data = {gameId, breakTie}
-    fetch('/api/submit-voting', { method: 'POST', body: JSON.stringify(data) })
-      .then(response => {
-        if (response.ok) window.location.reload()
-      })
+    post(`/api/vote`, data)
   }
   
   function handleBreakTie(map: Map) {

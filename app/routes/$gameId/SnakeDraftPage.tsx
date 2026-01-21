@@ -1,4 +1,4 @@
-import {Player, Map} from '~/global'
+import {Player, Map, post} from '~/global'
 import {useLoaderData} from '@remix-run/react'
 import factions from '~/data/factions.json'
 import {DraftPageContentProps} from '~/routes/$gameId/route'
@@ -13,21 +13,11 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: 
   
   function handleSelection(type: string, value: string | number | null = null) {
     if (!isActivePlayer) return
-    fetch("/api/draft-item", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        gameId,
-        player: currentPlayer.id,
-        type,
-        value
-      })
-    }).then(response => {
-      if (response.ok) {
-        window.location.reload()
-      }
+    post(`/api/draft-item`, {
+      gameId,
+      player: currentPlayer.id,
+      type,
+      value
     })
   }
   
