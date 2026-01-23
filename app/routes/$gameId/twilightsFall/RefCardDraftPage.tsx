@@ -23,7 +23,7 @@ export default function RefCardDraftPage({playerSelected, selectedPlayer}: Draft
       {['yes', 'admin'].includes(playerSelected) && player ? (
         <>
           <h2>Select main game faction to draft. Rest will be passed.</h2>
-          <h3>One choice for seating initiative (lowest is speaker), one for home system, and one for starting units.</h3>
+          <h3>One choice for seating initiative (lowest is speaker, but speaker goes last), one for home system, and one for starting units.</h3>
           {map && map.url && <div className='ref-card-draft-map'><ReferenceMap map={map} /></div>}
           <div className="ref-card-draft card main-section">
             {player.tfFactions && !player.waitingForDraft ? (

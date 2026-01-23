@@ -1,9 +1,17 @@
 import {TFFaction} from '~/global'
 
-export default function RefCard({faction, onSelect} : {faction: TFFaction, onSelect?: (factionId: string) => void}) {
+type RefCardProps = {
+  faction: TFFaction
+  onSelect?: (factionId: string) => void
+  selected?: boolean
+}
+
+export default function RefCard({faction, onSelect, selected} : RefCardProps) {
+  const className = `ref-card ${onSelect ? "ref-card-selectable" : ""} ${selected ? "ref-card-selected" : ""}`
+  
   return (
     <li
-      key={faction.id} className={`ref-card ${onSelect ? "ref-card-selectable" : ""}`}
+      key={faction.id} className={className}
       onClick={() => onSelect && onSelect(faction.id)}
     >
       <h3>{faction.name}</h3>

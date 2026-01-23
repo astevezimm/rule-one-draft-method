@@ -18,6 +18,7 @@ export type Player = {
   selectedTFFactions?: TFFaction[]
   waitingForDraft?: boolean
   slice?: number
+  tfPriority?: number
 }
 
 export type TFFaction = {

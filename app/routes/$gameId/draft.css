@@ -848,6 +848,12 @@ a:has(.map-image-placeholder) {
     transition: background-color 0.2s;
 }
 
+.ref-card-selected {
+    background-color: #770177;
+    border-width: 4px;
+    border-color: #4c004c;
+}
+
 .initiative {
     font-size: 1.2rem;
     margin-bottom: .5rem;
