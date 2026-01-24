@@ -365,7 +365,7 @@ export async function draftTFFaction(gameId: string | undefined, playerId: strin
           game.players[nextI].selectedTFFactions.push(game.players[i].tfFactions[0])
           game.players[i].tfFactions = []
         }
-        // time for next step
+        game.state = 'tfPrioritySelection'
       } else {
         const lastTfFactions = game.players[game.players.length - 1].tfFactions
         for (let i = game.players.length - 2; i >= 0; i--) {
@@ -380,6 +380,22 @@ export async function draftTFFaction(gameId: string | undefined, playerId: strin
   }
 
   game.players[playerIndex] = player
+  
+  game.markModified("players")
+  await game.save()
+}
+
+export async function selecTFPriority(gameId: string | undefined, playerId: string, priority: number) {
+  const game = await Game.findOne({gameId})
+  if (!game) return
+  if (game.state !== 'tfPrioritySelection') return
+  
+  const playerIndex = game.players.findIndex((p: Player) => p.id === playerId)
+  game.players[playerIndex].tfPriority = priority
+  
+  if (game.players.every((p: Player) => p.tfPriority !== undefined)) {
+    // time for next step
+  }
   
   game.markModified("players")
   await game.save()

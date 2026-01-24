@@ -2,7 +2,7 @@ import {ActionFunction} from '@remix-run/node'
 import {
   draftItem,
   draftTFFaction,
-  removeDraft,
+  removeDraft, selecTFPriority,
   submitBans,
   submitVoting,
   updateMapImage,
@@ -41,6 +41,10 @@ export const action: ActionFunction = async ({params, request}) => {
     case 'draft-tffaction':
       const {gameId: draftTFFactionGameId, player: draftTFFactionPlayer, factionId} = await request.json()
       await draftTFFaction(draftTFFactionGameId, draftTFFactionPlayer, factionId)
+      return new Response(null, {status: 204})
+    case 'select-tfpriority':
+      const {gameId: selectTFPriorityGameId, player: selectTFPriorityPlayer, priority} = await request.json()
+      await selecTFPriority(selectTFPriorityGameId, selectTFPriorityPlayer, priority)
       return new Response(null, {status: 204})
     default: return new Response(null, {status: 400, statusText: 'Bad Request'})
   }
