@@ -394,7 +394,19 @@ export async function selecTFPriority(gameId: string | undefined, playerId: stri
   game.players[playerIndex].tfPriority = priority
   
   if (game.players.every((p: Player) => p.tfPriority !== undefined)) {
-    // time for next step
+    const speaker = game.players.reduce((prev: Player | null, curr: Player) => {
+      if (!prev || (curr.tfPriority as number) < (prev.tfPriority as number)) {
+        return curr
+      }
+      return prev
+    }, null)
+    speaker.speaker = true
+    game.players.sort((a: Player, b: Player) => {
+      if (a.speaker && !b.speaker) return 1
+      if (!a.speaker && b.speaker) return -1
+      return (a.tfPriority ?? 0) - (b.tfPriority ?? 0)
+    })
+    game.state = 'tfSliceDraft'
   }
   
   game.markModified("players")
