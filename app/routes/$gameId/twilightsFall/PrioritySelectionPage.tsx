@@ -38,7 +38,7 @@ export default function PrioritySelectionPage({selectedPlayer}: DraftPageContent
             <RefCard
               key={faction.id} faction={faction}
               onSelect={
-                prioritySelected ? () => handleSelect(faction.id) : undefined
+                prioritySelected ? undefined : () => handleSelect(faction.id)
               }
               selected={player?.tfPriority === faction.priority}
             />
