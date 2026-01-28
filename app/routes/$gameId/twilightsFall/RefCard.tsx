@@ -16,10 +16,15 @@ export default function RefCard({faction, onSelect, selected} : RefCardProps) {
     >
       <h3>{faction.name}</h3>
       <p className="initiative">Initiative: <span>{faction.priority}</span></p>
-      <img
-        src={`images/startSystems/ST_${faction.startSystem.img}.webp`}
-        alt={faction.startSystem.alt}
-      />
+      {faction.id === 'keleres' ? (
+          <div className="start-system-keleres" />
+        ) : (
+          <img
+            src={`images/startSystems/ST_${faction.startSystem.img}.webp`}
+            alt={faction.startSystem.alt}
+          />
+        )
+      }
       <h4>Starting Units:</h4>
       <div className="start-units">
         {Object.keys(faction.startUnits).map((unit) => (

@@ -869,3 +869,22 @@ a:has(.map-image-placeholder) {
     text-align: left;
     justify-content: space-around;
 }
+
+.start-system-keleres {
+    width: 15.25rem;
+    height: 13.125rem;
+    background-color: #470047;
+    border-radius: 2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    &::after {
+        content: "If used for home system, pick random unused faction for home system instead.";
+        padding: 1rem;
+        font-family: "Roboto", sans-serif;
+        font-style: italic;
+        opacity: .8;
+    }
+}
