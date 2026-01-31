@@ -111,6 +111,7 @@ export default function DraftPage(){
         selectedPlayer={selectedPlayer}
         onSelectPlayer={handleSelectPlayer}
         onCancelSelection={handleCancelSelection}
+        blink={!['refCardDrafting', 'tfPrioritySelection', 'tfHomeSystemSelection'].includes(state)}
       />
       <DraftPageContent playerSelected={playerSelected} selectedPlayer={selectedPlayer} state={state} />
     </>
