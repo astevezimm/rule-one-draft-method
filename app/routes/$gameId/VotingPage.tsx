@@ -61,7 +61,7 @@ export default function VotingPage({playerSelected, selectedPlayer}: DraftPageCo
   
   function submit(breakTie?: {player: Player, mapIndex: number}) {
     const data = {gameId, breakTie}
-    post(`/api/vote`, data)
+    post(`/api/submit-voting`, data)
   }
   
   function handleBreakTie(map: Map) {

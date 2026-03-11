@@ -90,8 +90,10 @@ export default function SnakeDraftPage({playerSelected, selectedPlayer, state}: 
     if (!currentPlayer.faction) choicesText.push('faction')
     if (!currentPlayer.slice) choicesText.push('slice')
     if (!speaker) choicesText.push('speaker')
-    choicesText[choicesText.length - 1] = `or ${choicesText[choicesText.length - 1]}!`
-    h2Text = <><span>{currentPlayer?.name}:</span> Choose {choicesText.join(', ')}</>
+    if (choicesText.length > 1) {
+      choicesText[choicesText.length - 1] = `or ${choicesText[choicesText.length - 1]}`
+    }
+    h2Text = <><span>{currentPlayer?.name}:</span> Choose {choicesText.join(', ') + '!'}</>
   }
   else {
     h2Text = "The Draft is now DONE! Stick a fork in it!"
