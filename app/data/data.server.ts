@@ -25,6 +25,7 @@ const gameSchema = new mongoose.Schema({
   currentPlayer: { type: Number, default: 0 },
   lastUpdated: { type: Date, default: Date.now },
   gameType: { type: String, default: 'regular' },
+  showPlayerCancelSelection: { type: Boolean, default: true },
 })
 gameSchema.pre('save', function (next) {
   this.lastUpdated = new Date()
@@ -138,6 +139,7 @@ export async function loadDraft(gameId: string | undefined) {
     bannedFactions: game.bannedFactions,
     gameId,
     currentPlayer: game.currentPlayer,
+    showPlayerCancelSelection: game.showPlayerCancelSelection,
   }
 }
 
@@ -194,6 +196,7 @@ export async function submitVoting(gameId: string | undefined) {
     game.players.sort(() => Math.random() - 0.5)
     newGame = game.state === 'banning' ? _distributeFactionsToBan(game) : game
   }
+  newGame.showPlayerCancelSelection = false
   newGame.markModified("players")
   await newGame.save()
 }
@@ -254,6 +257,7 @@ export async function submitBans(gameId: string | undefined, player: string, ban
   game.markModified(`players.${playerIndex}.factions_to_ban`)
   if (!game.players.find((p: Player) => p.factions_to_ban.length > 0)) {
     game.state = 'drafting'
+    game.showPlayerCancelSelection = false
   }
   game.bannedFactions = [...game.bannedFactions, ...bans]
   await game.save()
@@ -299,6 +303,7 @@ export async function draftItem(gameId: string | undefined, player: string, item
     }
     if (nextPlayerAttempts >= maxNextPlayerAttempts) {
       game.state = 'finished'
+      game.showPlayerCancelSelection = false
       break
     }
   } while (playerFinishedDrafting(game.players[game.currentPlayer], speakerChosen(game)))
@@ -366,6 +371,7 @@ export async function draftTFFaction(gameId: string | undefined, playerId: strin
           game.players[i].tfFactions = []
         }
         game.state = 'tfPrioritySelection'
+        game.showPlayerCancelSelection = false
       } else {
         const lastTfFactions = game.players[game.players.length - 1].tfFactions
         for (let i = game.players.length - 2; i >= 0; i--) {
@@ -385,7 +391,7 @@ export async function draftTFFaction(gameId: string | undefined, playerId: strin
   await game.save()
 }
 
-export async function selecTFPriority(gameId: string | undefined, playerId: string, priority: number) {
+export async function selectTFPriority(gameId: string | undefined, playerId: string, priority: number) {
   const game = await Game.findOne({gameId})
   if (!game) return
   if (game.state !== 'tfPrioritySelection') return

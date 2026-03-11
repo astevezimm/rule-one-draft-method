@@ -13,6 +13,7 @@ type PlayersProps = {
 type PlayersData = {
   players: Player[]
   currentPlayer: number
+  showPlayerCancelSelection: boolean
 }
 
 export default function Players(
@@ -21,7 +22,7 @@ export default function Players(
   }: PlayersProps
 )
 {
-  const {players, currentPlayer} = useLoaderData() as PlayersData
+  const {players, currentPlayer, showPlayerCancelSelection} = useLoaderData() as PlayersData
   
   function selected(player: Player) {
     return !selectedPlayer || player.id === selectedPlayer ? 'selected' : ''
@@ -44,7 +45,7 @@ export default function Players(
           >
             {player.name}
           </button>
-          {playerSelected === "yes" && selectedPlayer === player.id && (
+          {showPlayerCancelSelection && playerSelected === "yes" && selectedPlayer === player.id && (
             <button className="cancel-selection" onClick={onCancelSelection}>x</button>
           )}
         </li>
