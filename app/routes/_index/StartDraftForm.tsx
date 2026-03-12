@@ -207,7 +207,7 @@ export default function StartDraftForm() {
 
         <h2>Maps</h2>
         <section>
-          <a href="https://keeganw.github.io/ti4/" target="_blank">
+          <a href="https://astevezimm.github.io/ti4/" target="_blank">
             Generate maps here and paste the links below
           </a>
           <ul className="maps">
