@@ -10,7 +10,10 @@ import RefCardDraftPage from './twilightsFall/RefCardDraftPage'
 import ErrorPage from './ErrorPage'
 import Players from './Players'
 import styles from './draft.css?url'
-import PrioritySelectionPage from '~/routes/$gameId/twilightsFall/PrioritySelectionPage'
+import PrioritySelectionPage from './twilightsFall/PrioritySelectionPage'
+import DraftSlicePage from './twilightsFall/DraftSlicePage'
+import HomeSystemSelectionPage from '~/routes/$gameId/twilightsFall/HomeSystemSelectionPage'
+import DraftKingPage from '~/routes/$gameId/twilightsFall/DraftKingPage'
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }]
@@ -136,6 +139,13 @@ function DraftPageContent(props: DraftPageContentProps)
       return <RefCardDraftPage {...props} />
     case 'tfPrioritySelection':
       return <PrioritySelectionPage {...props} />
+    case 'tfSliceDraft':
+      return <DraftSlicePage {...props} />
+    case 'tfHomeSystemSelection':
+      return <HomeSystemSelectionPage {...props} />
+    case 'tfKingDraft':
+    case 'tfFinished':
+      return <DraftKingPage {...props} />
     default: return <ErrorPage />
   }
 }
