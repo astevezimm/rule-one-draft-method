@@ -46,6 +46,10 @@ export const action: ActionFunction = async ({params, request}) => {
       const {gameId: selectTFPriorityGameId, player: selectTFPriorityPlayer, priority} = await request.json()
       await selectTFPriority(selectTFPriorityGameId, selectTFPriorityPlayer, priority)
       return new Response(null, {status: 204})
+    case 'draft-tfslice':
+      const {gameId: draftTFSliceGameId, player: draftTFSlicePlayer, value: draftTFSliceValue} = await request.json()
+      // await draftTFSlice(draftTFSliceGameId, draftTFSlicePlayer, draftTFSliceValue)
+      return new Response(null, {status: 204})
     default: return new Response(null, {status: 400, statusText: 'Bad Request'})
   }
 }
