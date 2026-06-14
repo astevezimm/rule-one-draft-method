@@ -16,6 +16,7 @@ const gameSchema = new mongoose.Schema({
   base: Boolean,
   pok: Boolean,
   keleres: Boolean,
+  thunder: Boolean,
   ds: Boolean,
   dsplus: Boolean,
   factionPoolSize: Number,
@@ -23,7 +24,9 @@ const gameSchema = new mongoose.Schema({
   bannedFactions: { type: [String], default: [] },
   draftDirection: { type: String, default: 'forward' },
   currentPlayer: { type: Number, default: 0 },
-  lastUpdated: { type: Date, default: Date.now }
+  lastUpdated: { type: Date, default: Date.now },
+  gameType: { type: String, default: 'regular' },
+  showPlayerCancelSelection: { type: Boolean, default: true },
 })
 gameSchema.pre('save', function (next) {
   this.lastUpdated = new Date()
@@ -58,9 +61,20 @@ export async function startDraft(data: Record<string, any>) {
     }
   })
   
-  const state = maps.length > 1 ? "voting" : (banningNeeded(data) ? "banning" : "drafting")
+  let state
+  if (maps.length > 1) {
+    state = "voting"
+  } else if (data.gameType === 'twilights-fall') {
+    state = "refCardDrafting"
+  } else if (banningNeeded(data)) {
+    state = "banning"
+  } else {
+    state = "drafting"
+  }
   
-  if (state !== 'voting') players.sort(() => Math.random() - 0.5)
+  if (!['voting', 'refCardDrafting'].includes(state)) {
+    players.sort(() => Math.random() - 0.5)
+  }
   
   const gameData = {
     players,
@@ -69,25 +83,45 @@ export async function startDraft(data: Record<string, any>) {
     base: !!data.base,
     pok: !!data.pok,
     keleres: !!data.keleres,
+    thunder: !!data.thunder,
     ds: !!data.ds,
     dsplus: !!data.dsplus,
-    factionPoolSize: +data.factionPoolSize,
+    factionPoolSize: data.gameType === 'regular' ? +data.factionPoolSize : 0,
     initiativeSet: state !== 'voting',
+    gameType: data.gameType,
   }
   
-  const game = new Game(state === 'banning' ? _distributeFactionsToBan(gameData) : gameData)
+  const game = new Game(getGameDataForState(state, gameData))
+  game.markModified("players")
   await game.save()
   return game.gameId
 }
 
+function getGameDataForState(state: string, gameData: any) {
+  if (state === 'banning') return _distributeFactionsToBan(gameData)
+  if (state === 'refCardDrafting') return _distributeFactionsForTF(gameData)
+  return gameData
+}
+
+function _distributeFactionsForTF(gameData: any) {
+  const factionPool = getFactionPool(gameData)
+  factionPool.sort(() => Math.random() - 0.5)
+  let index = 0
+  gameData.players.forEach((player: any) => {
+    player.tfFactions = factionPool.slice(index, index + 3)
+    index += 3
+  })
+  return gameData
+}
+
 function banningNeeded(data: any) {
   let includedFactions = 0
-  if (data.base) includedFactions += factions[0].factions.length
-  if (data.pok) includedFactions += factions[1].factions.length
-  if (data.keleres) includedFactions += factions[2].factions.length
-  if (data.thunder) includedFactions += factions[3].factions.length
-  if (data.ds) includedFactions += factions[4].factions.length
-  if (data.dsplus) includedFactions += factions[5].factions.length
+  if (data.base) includedFactions += factions[_idToIndex('base')].factions.length
+  if (data.pok) includedFactions += factions[_idToIndex('pok')].factions.length
+  if (data.keleres) includedFactions += factions[_idToIndex('keleres')].factions.length
+  if (data.thunder) includedFactions += factions[_idToIndex('thunder')].factions.length
+  if (data.ds) includedFactions += factions[_idToIndex('ds')].factions.length
+  if (data.dsplus) includedFactions += factions[_idToIndex('dsplus')].factions.length
   return includedFactions > +data.factionPoolSize
 }
 
@@ -101,12 +135,14 @@ export async function loadDraft(gameId: string | undefined) {
     base: game.base,
     pok: game.pok,
     keleres: game.keleres,
+    thunder: game.thunder,
     ds: game.ds,
     dsplus: game.dsplus,
     factionPoolSize: game.factionPoolSize,
     bannedFactions: game.bannedFactions,
     gameId,
     currentPlayer: game.currentPlayer,
+    showPlayerCancelSelection: game.showPlayerCancelSelection,
   }
 }
 
@@ -153,21 +189,34 @@ export async function submitVoting(gameId: string | undefined) {
   const game = await Game.findOne({gameId})
   if (!game) return
   if (game.state !== 'voting') return
-  game.state = banningNeeded(game) ? "banning" : "drafting"
-  game.players.sort(() => Math.random() - 0.5)
-  const newGame = game.state === 'banning' ? _distributeFactionsToBan(game) : game
+  let newGame
+  if (game.gameType === 'twilights-fall') {
+    newGame = _distributeFactionsForTF(game)
+    newGame.state = 'refCardDrafting'
+  }
+  else {
+    game.state = banningNeeded(game) ? "banning" : "drafting"
+    game.players.sort(() => Math.random() - 0.5)
+    newGame = game.state === 'banning' ? _distributeFactionsToBan(game) : game
+  }
+  newGame.showPlayerCancelSelection = false
+  newGame.markModified("players")
   await newGame.save()
 }
 
 function getFactionPool(game: any) {
   const factionPool = []
-  if (game.base) factionPool.push(...factions[0].factions)
-  if (game.pok) factionPool.push(...factions[1].factions)
-  if (game.keleres) factionPool.push(...factions[2].factions)
-  if (game.thunder) factionPool.push(...factions[3].factions)
-  if (game.ds) factionPool.push(...factions[4].factions)
-  if (game.dsplus) factionPool.push(...factions[5].factions)
+  if (game.base) factionPool.push(...factions[_idToIndex('base')].factions)
+  if (game.pok) factionPool.push(...factions[_idToIndex('pok')].factions)
+  if (game.keleres) factionPool.push(...factions[_idToIndex('keleres')].factions)
+  if (game.thunder) factionPool.push(...factions[_idToIndex('thunder')].factions)
+  if (game.ds) factionPool.push(...factions[_idToIndex('ds')].factions)
+  if (game.dsplus) factionPool.push(...factions[_idToIndex('dsplus')].factions)
   return factionPool
+}
+
+function _idToIndex(id: string) {
+  return factions.findIndex(f => f.id === id)
 }
 
 function _distributeFactionsToBan(game: any) {
@@ -211,6 +260,7 @@ export async function submitBans(gameId: string | undefined, player: string, ban
   game.markModified(`players.${playerIndex}.factions_to_ban`)
   if (!game.players.find((p: Player) => p.factions_to_ban.length > 0)) {
     game.state = 'drafting'
+    game.showPlayerCancelSelection = false
   }
   game.bannedFactions = [...game.bannedFactions, ...bans]
   await game.save()
@@ -256,6 +306,7 @@ export async function draftItem(gameId: string | undefined, player: string, item
     }
     if (nextPlayerAttempts >= maxNextPlayerAttempts) {
       game.state = 'finished'
+      game.showPlayerCancelSelection = false
       break
     }
   } while (playerFinishedDrafting(game.players[game.currentPlayer], speakerChosen(game)))
@@ -293,4 +344,80 @@ function populateLeftOverChoices(player: Player, game: any) {
     }
   }
   return player
+}
+
+export async function draftTFFaction(gameId: string | undefined, playerId: string, factionId: string) {
+  const game = await Game.findOne({gameId})
+  if (!game) return
+  if (game.state !== 'refCardDrafting') return
+  
+  const playerIndex = game.players.findIndex((p: Player) => p.id === playerId)
+  const player = game.players[playerIndex]
+  const draftedFactionIndex = player.tfFactions.findIndex((f: {id: string}) => f.id === factionId)
+  if (draftedFactionIndex === -1) return
+  
+  if (!player.selectedTFFactions) player.selectedTFFactions = []
+  player.selectedTFFactions.push(player.tfFactions[draftedFactionIndex])
+  player.tfFactions.splice(draftedFactionIndex, 1)
+  
+  if (game.players.every((p: Player) => (
+    p.selectedTFFactions && p.selectedTFFactions.length === player.selectedTFFactions.length
+  )))
+  {
+    const wasWaiting = player.waitingForDraft
+    game.players.forEach((p: Player) => p.waitingForDraft = false)
+    if (!wasWaiting) {
+      if (player.tfFactions.length === 1) {
+        for (let i = 0; i < game.players.length; i++) {
+          const nextI = (i + 1) % game.players.length
+          game.players[nextI].selectedTFFactions.push(game.players[i].tfFactions[0])
+          game.players[i].tfFactions = []
+        }
+        game.state = 'tfPrioritySelection'
+        game.showPlayerCancelSelection = false
+      } else {
+        const lastTfFactions = game.players[game.players.length - 1].tfFactions
+        for (let i = game.players.length - 2; i >= 0; i--) {
+          game.players[i + 1].tfFactions = game.players[i].tfFactions
+        }
+        game.players[0].tfFactions = lastTfFactions
+      }
+    }
+  }
+  else {
+    player.waitingForDraft = true
+  }
+
+  game.players[playerIndex] = player
+  
+  game.markModified("players")
+  await game.save()
+}
+
+export async function selectTFPriority(gameId: string | undefined, playerId: string, priority: number) {
+  const game = await Game.findOne({gameId})
+  if (!game) return
+  if (game.state !== 'tfPrioritySelection') return
+  
+  const playerIndex = game.players.findIndex((p: Player) => p.id === playerId)
+  game.players[playerIndex].tfPriority = priority
+  
+  if (game.players.every((p: Player) => p.tfPriority !== undefined)) {
+    const speaker = game.players.reduce((prev: Player | null, curr: Player) => {
+      if (!prev || (curr.tfPriority as number) < (prev.tfPriority as number)) {
+        return curr
+      }
+      return prev
+    }, null)
+    speaker.speaker = true
+    game.players.sort((a: Player, b: Player) => {
+      if (a.speaker && !b.speaker) return 1
+      if (!a.speaker && b.speaker) return -1
+      return (a.tfPriority ?? 0) - (b.tfPriority ?? 0)
+    })
+    game.state = 'tfSliceDraft'
+  }
+  
+  game.markModified("players")
+  await game.save()
 }

@@ -14,7 +14,22 @@ export type Player = {
   number_of_bans: number
   speaker?: boolean
   faction?: string
+  tfFactions?: TFFaction[]
+  selectedTFFactions?: TFFaction[]
+  waitingForDraft?: boolean
   slice?: number
+  tfPriority?: number
+}
+
+export type TFFaction = {
+  id: string
+  name: string
+  startUnits: {
+    flagship: number, warsun: number, carrier: number, dreadnought: number, cruiser: number,
+    destroyer: number, fighter: number, mech: number, infantry: number, pds: number, spaceDock: number
+  }
+  startSystem: {img: number, alt: string}
+  priority: number
 }
 
 export type PlayerSelected = 'yes' | 'no' | 'loading' | 'admin'
@@ -79,4 +94,21 @@ export async function extractMapImage(file: File | undefined) {
 
 export function hasFactionsToBan(player: Player) {
   return player.factions_to_ban.length > 0 && player.number_of_bans > 0
+}
+
+export async function post(url: string, data: any) {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    if (response.ok) {
+      window.location.reload()
+    }
+  } catch (error) {
+    return console.error('Error:', error)
+  }
 }

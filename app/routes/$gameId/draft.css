@@ -2,6 +2,12 @@ body > h2 {
     margin-bottom: 2rem;
 }
 
+body > h3 {
+    text-align: center;
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+}
+
 .players {
     display: flex;
     flex-wrap: wrap;
@@ -281,34 +287,56 @@ a:has(.map-image-placeholder) {
             }
         }
     }
-    & .banning-reference-map {
+    & .reference-map {
         position: absolute;
         top: 1rem;
         right: 1rem;
-        text-decoration: underline;
-        & .banning-reference-image {
-            opacity: 0;
-            display: none;
-            margin-top: 1.3rem;
-            transition: opacity 0.3s 0.2s;
-            .banning-reference-image:hover {
-                opacity: 1;
-                display: block;
-            }
-        }
         & a {
             position: absolute;
-            right: 0;
-            display: inline-block;
-            width: max-content;
-            &:hover + .banning-reference-image {
-                opacity: 1;
-                display: block;
-            }
         }
         @media (max-width: 1184px) {
             top: -1.3rem;
         }
+    }
+}
+
+.reference-map {
+    position: relative;
+    text-decoration: underline;
+    text-align: center;
+    & .reference-image {
+        opacity: 0;
+        display: none;
+        margin-top: 1.3rem;
+        transition: opacity 0.3s 0.2s;
+        .reference-image:hover {
+            opacity: 1;
+            display: block;
+        }
+    }
+    & a {
+        position: relative;
+        right: 0;
+        display: inline-block;
+        width: max-content;
+        &:hover + .reference-image {
+            opacity: 1;
+            display: block;
+        }
+    }
+    & img {
+        border-radius: 20px;
+        width: 100%;
+    }
+}
+
+.ref-card-draft-map {
+    margin-bottom: 1rem;
+    & .reference-map .reference-image {
+        position: absolute;
+        left: 50%;
+        translate: -50% 0;
+        top: .5rem;
     }
 }
 
@@ -779,5 +807,84 @@ a:has(.map-image-placeholder) {
     margin: 0 auto;
     @media (max-width: 527px) {
         max-width: 15rem;
+    }
+}
+
+.ref-card-draft {
+    margin-bottom: 2rem;
+}
+
+.ref-card-list {
+    display: flex;
+    gap: 1rem;
+    @media (max-width: 976px) {
+        flex-direction: column;
+    }
+}
+
+.ref-card {
+    width: 17.5rem;
+    border: #650165 solid 2px;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    & h3 {
+        margin-bottom: 1rem;
+    }
+    & h4 {
+        margin-bottom: .5rem;
+    }
+    & img {
+        width: 100%;
+        margin-bottom: .7rem;
+    }
+}
+
+.ref-card-selectable {
+    cursor: pointer;
+    &:hover {
+        background-color: #650165;
+    }
+    transition: background-color 0.2s;
+}
+
+.ref-card-selected {
+    background-color: #770177;
+    border-width: 4px;
+    border-color: #4c004c;
+}
+
+.initiative {
+    font-size: 1.2rem;
+    margin-bottom: .5rem;
+    & span {
+        font-size: 1.5rem;
+    }
+}
+
+.start-units {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .2rem;
+    text-align: left;
+    justify-content: space-around;
+}
+
+.start-system-keleres {
+    width: 15.25rem;
+    height: 13.125rem;
+    background-color: #470047;
+    border-radius: 2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    &::after {
+        content: "If used for home system, pick random unused faction for home system instead.";
+        padding: 1rem;
+        font-family: "Roboto", sans-serif;
+        font-style: italic;
+        opacity: .8;
     }
 }

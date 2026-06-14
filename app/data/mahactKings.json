@@ -1,0 +1,42 @@
+[
+  {
+    "id": "ruby",
+    "name": "The Ruby Monarch",
+    "wiki": "https://twilight-imperium.fandom.com/wiki/The_Ruby_Monarch_(Twilight%27s_Fall)"
+  },
+  {
+    "id": "radiant",
+    "name": "Radiant Aur",
+    "wiki": "https://twilight-imperium.fandom.com/wiki/Radiant_Aur_(Twilight%27s_Fall)"
+  },
+  {
+    "id": "avarice",
+    "name": "Avarice Rex",
+    "wiki": "https://twilight-imperium.fandom.com/wiki/Avarice_Rex_(Twilight%27s_Fall)"
+  },
+  {
+    "id": "thorns",
+    "name": "Il Sai Lakoe, Herald of Thorns",
+    "wiki": "https://twilight-imperium.fandom.com/wiki/Il_Sai_Lakoe,_Herald_of_Thorns_(Twilight%27s_Fall)"
+  },
+  {
+    "id": "saint",
+    "name": "The Saint of Swords",
+    "wiki": "https://twilight-imperium.fandom.com/wiki/The_Saint_of_Swords_(Twilight%27s_Fall)"
+  },
+  {
+    "id": "viroset",
+    "name": "Il Na Viroset",
+    "wiki": "https://twilight-imperium.fandom.com/wiki/Il_Na_Viroset_(Twilight%27s_Fall)"
+  },
+  {
+    "id": "janovet",
+    "name": "El Nen Janovet",
+    "wiki": "https://twilight-imperium.fandom.com/wiki/El_Nen_Janovet_(Twilight%27s_Fall)"
+  },
+  {
+    "id": "lurch",
+    "name": "A Sickening Lurch",
+    "wiki": "https://twilight-imperium.fandom.com/wiki/A_Sickening_Lurch_(Twilight%27s_Fall)"
+  }
+]

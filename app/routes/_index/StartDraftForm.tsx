@@ -1,8 +1,9 @@
-import {ChangeEvent, MouseEvent, useState} from 'react'
+import {ChangeEvent, MouseEvent, useRef, useState} from 'react'
 import {Form} from '@remix-run/react'
 import UploadScreenshot from '~/components/UploadScreenshot'
 import {Buffer} from 'buffer'
 import {extractMapImage} from '~/global'
+import factions from '~/data/factions.json'
 
 type Map = {
   name: string,
@@ -12,8 +13,10 @@ type Map = {
 
 export default function StartDraftForm() {
   const [playerNames, setPlayerNames] = useState<string[]>(["", "", ""])
+  const [gameType, setGameType] = useState<string>("regular")
   const [maps, setMaps] = useState<Map[]>([{name: "Map 1", url: ""}])
   const [checkboxError, setCheckboxError] = useState<string | null>(null)
+  const poolSizeRef = useRef<HTMLInputElement>(null)
 
   function handleChangePlayerName(event: ChangeEvent<HTMLInputElement>) {
     const newNames = [...playerNames]
@@ -25,6 +28,10 @@ export default function StartDraftForm() {
     const newNames = [...playerNames]
     newNames.splice(Number((event.target as HTMLButtonElement).dataset.index), 1)
     setPlayerNames(newNames)
+  }
+
+  function handleChangeGameType(event: ChangeEvent<HTMLInputElement>) {
+    setGameType(event.target.value)
   }
 
   function handleChangeMapName(event: ChangeEvent<HTMLInputElement>) {
@@ -65,7 +72,7 @@ export default function StartDraftForm() {
 
     const form = event.currentTarget.closest('form') as HTMLFormElement
     const formData = new FormData(form)
-    formData.set('customField', 'customValue')
+    formData.set('gameType', gameType)
     for (let i = 0; i < maps.length; i++) {
       const map = maps[i]
       if (map.image) {
@@ -85,24 +92,30 @@ export default function StartDraftForm() {
   }
 
   function validateCheckboxes(event: MouseEvent<HTMLButtonElement>) {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#keleres)')
-    const isChecked = Array.from(checkboxes).some(checkbox => (checkbox as HTMLInputElement).checked)
-    if (!isChecked) {
-      setCheckboxError('At least one race type must be selected beyond Keleres.')
-      return false
-    }
-    else {
-      if (playerNames.length === 8) {
-        const notPok = document.querySelectorAll('input[type="checkbox"]:not(#pok)')
-        const beyondPokChecked = Array.from(notPok).some(checkbox => (checkbox as HTMLInputElement).checked)
-        if (!beyondPokChecked) {
-          setCheckboxError('For 8 players, more than just POK factions must be selected.')
-          return false
-        }
+    const checkboxes = document.querySelectorAll<HTMLInputElement>('.factions input[type="checkbox"]')
+    let factionCount = 0
+    checkboxes.forEach(checkbox => {
+      if (!checkbox.checked) return
+      if (gameType === "twilights-fall" && ['ds', 'dsplus'].includes(checkbox.id)) return
+      const index = factions.findIndex(f => f.id === checkbox.id)
+      if (index < 0) return
+      factionCount += factions[index].factions.length
+    })
+
+    let factionsNeeded: number
+    if (gameType === 'regular') {
+      if (!poolSizeRef.current) {
+        setCheckboxError('Faction pool size input is missing.')
+        return false
       }
-      if (checkboxError) setCheckboxError(null)
-      return true
+      factionsNeeded = Number(poolSizeRef.current.value)
+    } else {
+      factionsNeeded = playerNames.length * 3
     }
+    
+    if (factionCount >= factionsNeeded) return true
+    setCheckboxError(`Options don't provide enough factions to cover at least ${factionsNeeded} needed.`)
+    return false
   }
 
   return (
@@ -141,24 +154,60 @@ export default function StartDraftForm() {
             </button>
           )}
         </section>
+        
+        {/*<h2>Game Type</h2>
+        <section>
+          <label className="radio-label">
+            <input
+              type="radio"
+              id="game-type-regular"
+              name="game-type"
+              value="regular"
+              checked={gameType === "regular"}
+              onChange={handleChangeGameType}
+            />
+            Regular
+          </label>
+          <label className="radio-label">
+            <input
+              type="radio"
+              id="game-type-twilight"
+              name="game-type"
+              value="twilights-fall"
+              checked={gameType === "twilights-fall"}
+              onChange={handleChangeGameType}
+            />
+            Twilight's Fall
+          </label>
+        </section>*/}
 
-        <h2>Included Factions</h2>
+        <h2>
+          {
+            gameType === "regular" ?
+              "Included Factions" :
+              "Included Home Systems & Start Units"
+          }
+        </h2>
         <section className="factions">
           {checkboxError && <p style={{color: 'red'}}>{checkboxError}</p>}
           <IncludeRaceType name='Base' id='base' />
           <IncludeRaceType name='Prohecy of Kings' id='pok' />
           <IncludeRaceType name='Keleres' id='keleres' />
           <IncludeRaceType name="Thunder's Edge" id='thunder'/>
-          <IncludeRaceType name='Discordant Stars' id='ds' />
-          <IncludeRaceType name='Discordant Stars Plus' id='dsplus' />
+          {gameType === "regular" && <IncludeRaceType name='Discordant Stars' id='ds' />}
+          {gameType === "regular" && <IncludeRaceType name='Discordant Stars Plus' id='dsplus' />}
         </section>
 
-        <h2>Faction Drafting Pool Size</h2>
-        <input type="number" min={playerNames.length} name="factionPoolSize" required />
+        {gameType === "regular" && (
+          <>
+            <h2>Faction Drafting Pool Size</h2>
+            <input type="number" min={playerNames.length} name="factionPoolSize" required ref={poolSizeRef} />
+          </>
+        )}
 
         <h2>Maps</h2>
         <section>
-          <a href="https://keeganw.github.io/ti4/" target="_blank">
+          <a href="https://astevezimm.github.io/ti4/" target="_blank">
             Generate maps here and paste the links below
           </a>
           <ul className="maps">

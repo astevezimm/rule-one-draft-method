@@ -23,6 +23,14 @@ label {
     font-family: "Roboto", sans-serif;
 }
 
+.radio-label {
+    margin-right: 1.5rem;
+}
+
+input[type="radio"] {
+    margin-right: .3rem;
+}
+
 input[type="checkbox"] {
     margin-left: .3rem;
 }

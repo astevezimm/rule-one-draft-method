@@ -6,9 +6,14 @@ import {hasFactionsToBan, isPlayerSelected, pageHeading, Player, playerKey, Play
 import VotingPage from './VotingPage'
 import BanningPage from './BanningPage'
 import SnakeDraftPage from './SnakeDraftPage'
+import RefCardDraftPage from './twilightsFall/RefCardDraftPage'
 import ErrorPage from './ErrorPage'
 import Players from './Players'
 import styles from './draft.css?url'
+import PrioritySelectionPage from './twilightsFall/PrioritySelectionPage'
+import DraftSlicePage from './twilightsFall/DraftSlicePage'
+import HomeSystemSelectionPage from '~/routes/$gameId/twilightsFall/HomeSystemSelectionPage'
+import DraftKingPage from '~/routes/$gameId/twilightsFall/DraftKingPage'
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }]
@@ -109,6 +114,7 @@ export default function DraftPage(){
         selectedPlayer={selectedPlayer}
         onSelectPlayer={handleSelectPlayer}
         onCancelSelection={handleCancelSelection}
+        blink={!['refCardDrafting', 'tfPrioritySelection', 'tfHomeSystemSelection'].includes(state)}
       />
       <DraftPageContent playerSelected={playerSelected} selectedPlayer={selectedPlayer} state={state} />
     </>
@@ -129,6 +135,17 @@ function DraftPageContent(props: DraftPageContentProps)
     case 'drafting':
     case 'finished':
       return <SnakeDraftPage {...props} />
+    case 'refCardDrafting':
+      return <RefCardDraftPage {...props} />
+    case 'tfPrioritySelection':
+      return <PrioritySelectionPage {...props} />
+    case 'tfSliceDraft':
+      return <DraftSlicePage {...props} />
+    case 'tfHomeSystemSelection':
+      return <HomeSystemSelectionPage {...props} />
+    case 'tfKingDraft':
+    case 'tfFinished':
+      return <DraftKingPage {...props} />
     default: return <ErrorPage />
   }
 }

@@ -1,8 +1,8 @@
-import {ActionFunction, LoaderFunction} from '@remix-run/node'
+import {ActionFunction} from '@remix-run/node'
 import {
   draftItem,
-  getLastUpdated,
-  removeDraft,
+  draftTFFaction,
+  removeDraft, selectTFPriority,
   submitBans,
   submitVoting,
   updateMapImage,
@@ -37,6 +37,18 @@ export const action: ActionFunction = async ({params, request}) => {
     case 'draft-item':
       const {gameId: draftGameId, player: draftPlayer, type, value} = await request.json()
       await draftItem(draftGameId, draftPlayer, {type, value})
+      return new Response(null, {status: 204})
+    case 'draft-tffaction':
+      const {gameId: draftTFFactionGameId, player: draftTFFactionPlayer, factionId} = await request.json()
+      await draftTFFaction(draftTFFactionGameId, draftTFFactionPlayer, factionId)
+      return new Response(null, {status: 204})
+    case 'select-tfpriority':
+      const {gameId: selectTFPriorityGameId, player: selectTFPriorityPlayer, priority} = await request.json()
+      await selectTFPriority(selectTFPriorityGameId, selectTFPriorityPlayer, priority)
+      return new Response(null, {status: 204})
+    case 'draft-tfslice':
+      const {gameId: draftTFSliceGameId, player: draftTFSlicePlayer, value: draftTFSliceValue} = await request.json()
+      // await draftTFSlice(draftTFSliceGameId, draftTFSlicePlayer, draftTFSliceValue)
       return new Response(null, {status: 204})
     default: return new Response(null, {status: 400, statusText: 'Bad Request'})
   }

@@ -7,22 +7,29 @@ type PlayersProps = {
   selectedPlayer: string | null
   onSelectPlayer: (player: Player) => void
   onCancelSelection: () => void
+  blink: boolean
 }
 
 type PlayersData = {
   players: Player[]
   currentPlayer: number
+  showPlayerCancelSelection: boolean
 }
 
-export default function Players({playerSelected, selectedPlayer, onSelectPlayer, onCancelSelection}: PlayersProps) {
-  const {players, currentPlayer} = useLoaderData() as PlayersData
+export default function Players(
+  {
+    playerSelected, selectedPlayer, onSelectPlayer, onCancelSelection, blink
+  }: PlayersProps
+)
+{
+  const {players, currentPlayer, showPlayerCancelSelection} = useLoaderData() as PlayersData
   
   function selected(player: Player) {
     return !selectedPlayer || player.id === selectedPlayer ? 'selected' : ''
   }
   
   function current(player: Player) {
-    return player.id === players[currentPlayer].id ? 'current' : ''
+    return blink && player.id === players[currentPlayer].id ? 'current' : ''
   }
   
   const selectionDone = ['admin', 'yes'].includes(playerSelected)
@@ -38,7 +45,7 @@ export default function Players({playerSelected, selectedPlayer, onSelectPlayer,
           >
             {player.name}
           </button>
-          {playerSelected === "yes" && selectedPlayer === player.id && (
+          {showPlayerCancelSelection && playerSelected === "yes" && selectedPlayer === player.id && (
             <button className="cancel-selection" onClick={onCancelSelection}>x</button>
           )}
         </li>
