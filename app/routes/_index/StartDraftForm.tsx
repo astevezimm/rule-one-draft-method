@@ -155,7 +155,7 @@ export default function StartDraftForm() {
           )}
         </section>
         
-        <h2>Game Type</h2>
+        {/*<h2>Game Type</h2>
         <section>
           <label className="radio-label">
             <input
@@ -179,7 +179,7 @@ export default function StartDraftForm() {
             />
             Twilight's Fall
           </label>
-        </section>
+        </section>*/}
 
         <h2>
           {
